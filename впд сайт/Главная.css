@@ -1,0 +1,125 @@
+body {
+color: black;
+background:#fff;
+font-size:20px;
+}
+
+#wraper
+{
+margin: 0px auto;
+width: 100%;
+height: 40px;
+}
+
+#panel
+{
+margin: 0px 0px 0px 0px;
+float:justify;
+width: 100%;
+height: 40px;
+background:#D1A49E;
+}
+
+#TextPanel
+{
+margin:0px 0px 0px 0px;
+float:left;
+width: 220px;
+height: 40px;
+line-height:0px;
+text-align:center;
+background:#D1A49E;
+}
+
+#header
+{
+float:right;
+margin: 8px 8px 8px 8px;
+width: 20px
+height: 20px
+top: 20px
+}
+
+#panelWhite {
+margin:200px 0px 0px 300px;
+width: 900px;
+height: 350px;
+left: 500px;
+border-radius: 2px;
+radius:20px;
+background: #F7F8FACC;
+display: inline-block;
+
+}
+
+#H2
+{
+font-family: Rubik;
+font-size: 40px;
+font-weight: 600;
+line-height: 58px;
+letter-spacing: 0px;
+text-align: center;
+}
+
+a { text-decoration: none;
+color:#FFFFFF; }
+
+select {
+  border: none;
+background-color:rgba(255,255,255,0);
+color:#FFFFFF;
+font-size:17px;
+}
+
+option{
+background:#CD853F;
+}
+
+
+
+.container {
+  margin: 0px auto;
+  width: 100%;
+  height: 690px;
+  background-image: url('фон.PNG');
+  background-size: cover; /* размер одного повторяющегося изображения */
+}
+
+#H21
+{
+margin: 10px auto;
+font-family: Rubik;
+font-size: 22px;
+font-weight: 400;
+line-height: 31px;
+text-align: center;
+
+width: 735px;
+height: 92px;
+top: 429px;
+left: 624px;
+}
+
+button {
+width: 226px;
+height: 46px;
+top: 569px;
+left: 634px;
+padding: 8px, 44px, 8px, 44px;
+border-radius: 4px;
+gap: 10px;
+background: #FF7A69;
+font-family: Rubik;
+font-size: 22px;
+color:#FFFFFF;
+margin: 8px 20px 10px 140px;
+float:left;
+}
+
+
+
+
+
+
+
