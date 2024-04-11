@@ -1,0 +1,270 @@
+body{
+  background: white;
+  font-family: "Rubik", sans-serif;
+}
+
+*,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+#panel
+{
+margin: 0px 0px 0px 0px;
+float:justify;
+width: 100%;
+height: 40px;
+background:#D1A49E;
+}
+
+#TextPanel
+{
+margin:0px 0px 0px 0px;
+float:left;
+width: 220px;
+height: 40px;
+line-height:0px;
+text-align:center;
+background:#D1A49E;
+}
+
+a { text-decoration: none;
+color:#FFFFFF; }
+
+select {
+  border: none;
+background-color:rgba(255,255,255,0);
+color:#FFFFFF;
+font-size:17px;
+}
+
+option{
+background:#CD853F;
+}
+
+
+.container_k 
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+
+  background: url("../images/фон.jpg") center
+  no-repeat;
+  background-size: cover; /* размер одного повторяющегося изображения */
+}
+
+#panelWhite 
+{
+  width: 900px;
+  height: 350px;
+  left: 500px;
+  border-radius: 10px;
+  padding:20px;
+  background: #F7F8FACC;
+  display: inline-block;
+  margin: 0 auto; 
+}
+
+#H2 {
+font-size: 40px;
+font-weight: 700;
+line-height: 58px;
+letter-spacing: 0px;
+text-align: center;
+margin-top: 15px;
+}
+
+#H21 {
+margin: 10px auto;
+font-size: 22px;
+font-weight: 400;
+line-height: 31px;
+text-align: center;
+width: 735px;
+height: 92px;
+top: 429px;
+left: 624px;
+margin-top: 25px;
+}
+
+button {
+width: 226px;
+height: 46px;
+top: 569px;
+left: 634px;
+border-radius: 4px;
+border: 0px;
+gap: 10px;
+background: #FF7A69;
+font-family: Rubik;
+font-size: 22px;
+color:#FFFFFF;
+margin-top: 25px;
+}
+
+.butt {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+/*PapaPeva*/
+.container_usl {
+  width: 100%; 
+  height: auto;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center; 
+  background-color: white;
+
+ 
+}
+#SM1 {
+  
+  width: 33%;
+  text-align: center;
+  display: inline;
+  overflow: hidden;
+  padding: 8px;
+  float: left;
+  background-color: white;
+}
+#SM2 {
+
+  width: 33%;
+  text-align: center;
+  display: inline;
+  overflow: hidden;
+  padding: 8px;
+  float: left;
+  background-color: white;
+}
+#SM3 {
+  width: 33%;
+  text-align: center;
+  display: inline;
+  overflow: hidden;
+  padding: 8px;
+  float: left;
+  background-color: white;
+}
+
+#klaviatura {
+  width: 1340px;
+  text-align: center;
+  display: inline;
+  overflow: hidden;
+  padding: 30px 0;
+  float: left;
+  background-color: white;
+}
+  
+.button {
+  width: 130px;
+  height: 30px;
+  font-family: Rubik;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid black;
+  
+  border-color: #272727;
+  top: 50%;
+  color: black;
+  margin: 0 auto;
+  background: transparent;
+}
+
+table {
+  float: left;
+  margin: 10 px;
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+#contr {
+  width: 100%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  background-color: #efebeb; 
+    
+}
+.pysto {
+  width: 1200px;  
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto; 
+}
+
+#SM5 {
+  width: 100%;
+  text-align: left;
+}
+#SM5 h3 {
+  font-size: 24px;
+}
+
+.about {
+  margin-top: 15px;
+  width: 1200px;
+  display: flex;
+  align-items:flex-start;
+  justify-content: space-between;
+}
+
+.text_about {
+  width: 750px;
+  height: 280px;
+  display: flex;
+  align-items:flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+}
+  
+.SM4 {
+  display: inline;
+  overflow: hidden;
+  float: left; 
+}
+.SM4 p {
+  padding: 6px 0;
+  width: 750px;
+  font-size: 19px;
+  text-align: justify;
+}
+
+#SM6 {
+  width: auto;
+  text-align: center;
+  display: inline;
+  overflow: hidden;
+  
+  border-radius: 10% ;
+  float: right; 
+}
+
+.butt1 {
+  margin: 0 auto;
+  display: flex;
+
+}

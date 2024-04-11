@@ -1,0 +1,167 @@
+body {
+  background-color: #E7E7E7;
+  font-family: "Rubik", sans-serif;
+}
+  
+  *,
+  *:before,
+  *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
+  
+  a { text-decoration: none;
+  color:#FFFFFF; }
+  
+.container_KTovara {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 160vh;
+}
+  
+  
+#panelTovar {
+  width: 1340px;
+  font-size: 19;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.baza {
+  margin-top: 150px;
+  display: flex;
+}
+
+.prod_info {
+  height: 425px;
+  margin-left: 50px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+  
+.prod_name {
+  color: #000;
+  font-size: 28px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.knopki {
+  margin: 5px 0;
+}
+
+.price {
+  color: #FF7A69;
+  font-size: 30px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.butt {
+  width: 450px;
+  height: 42px;
+  display: flex;
+  justify-content: space-between;
+  vertical-align: bottom; 
+}
+
+.butt button {
+  width: 226px;
+  height: 42px;
+  border-radius: 4px;
+  border: 0px;
+  background: #FF7A69;
+}
+.deliver {
+  width: 200px;
+  height: 42px;
+  font-size: 16px;
+}
+
+.form {
+  margin-top: 10px;
+}
+
+.button1 {
+  width: 100px;
+  height: 30px;
+  font-family: Rubik;
+  font-size: 15px;
+  border-radius: 10px;
+  background: transparent;
+  border-color: #272727;
+  top: 50%;
+}
+.button1:focus{
+  outline-color: transparent;
+  outline-style: solid;
+  border-color:  #FF533C;
+  transition: 0.4s;
+}
+
+.button {
+  width: 130px;
+  height: 30px;
+  font-family: Rubik;
+  font-size: 15px;
+  border-radius: 10px;
+  background: transparent;
+  border-color: #272727;
+  top: 50%;
+}
+
+.button:focus{
+  outline-color: transparent;
+  outline-style: solid;
+  border-color:  #FF533C;
+  transition: 0.4s;
+}
+
+.container_k {
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+}
+  
+  #panelWhite {
+    width: 1300px;
+    height: 450px;
+    left: 500px;
+    border-radius: 10px;
+    padding:20px;
+    background: #F7F8FACC;
+    display: inline-block;
+    margin: 0 auto; 
+  }
+  
+  #H2 {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 58px;
+  letter-spacing: 0px;
+  text-align: left;
+  margin-top: 25px;
+  }
+  
+  #H21 {
+  margin: 10px auto;
+  font-size: 20px;
+  text-align: left;
+  margin-top: 25px;
+  }
+  
+  
+
