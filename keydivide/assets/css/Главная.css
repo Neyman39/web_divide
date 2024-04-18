@@ -17,8 +17,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
-#panel
-{
+#panel {
 margin: 0px 0px 0px 0px;
 float:justify;
 width: 100%;
@@ -26,15 +25,14 @@ height: 40px;
 background:#D1A49E;
 }
 
-#TextPanel
-{
-margin:0px 0px 0px 0px;
-float:left;
-width: 220px;
-height: 40px;
-line-height:0px;
-text-align:center;
-background:#D1A49E;
+#TextPanel {
+  margin:0px 0px 0px 0px;
+  float:left;
+  width: 220px;
+  height: 40px;
+  line-height:0px;
+  text-align:center;
+  background:#D1A49E;
 }
 
 a { text-decoration: none;
@@ -42,18 +40,16 @@ color:#FFFFFF; }
 
 select {
   border: none;
-background-color:rgba(255,255,255,0);
-color:#FFFFFF;
-font-size:17px;
+  background-color:rgba(255,255,255,0);
+  color:#FFFFFF;
+  font-size:17px;
 }
 
 option{
-background:#CD853F;
+  background:#CD853F;
 }
 
-
-.container_k 
-{
+.container_k {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -65,8 +61,7 @@ background:#CD853F;
   background-size: cover; /* размер одного повторяющегося изображения */
 }
 
-#panelWhite 
-{
+#panelWhite {
   width: 900px;
   height: 350px;
   left: 500px;
@@ -78,40 +73,46 @@ background:#CD853F;
 }
 
 #H2 {
-font-size: 40px;
-font-weight: 700;
-line-height: 58px;
-letter-spacing: 0px;
-text-align: center;
-margin-top: 15px;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 58px;
+  letter-spacing: 0px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.butt p a {
+  width: 226px;
+  height: 46px;
 }
 
 #H21 {
-margin: 10px auto;
-font-size: 22px;
-font-weight: 400;
-line-height: 31px;
-text-align: center;
-width: 735px;
-height: 92px;
-top: 429px;
-left: 624px;
-margin-top: 25px;
+  height: 1000px;
+  margin: 10px auto;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 31px;
+  text-align: center;
+  width: 735px;
+  height: 92px;
+  top: 429px;
+  left: 624px;
+  margin-top: 25px;
 }
 
 button {
-width: 226px;
-height: 46px;
-top: 569px;
-left: 634px;
-border-radius: 4px;
-border: 0px;
-gap: 10px;
-background: #FF7A69;
-font-family: Rubik;
-font-size: 22px;
-color:#FFFFFF;
-margin-top: 25px;
+  width: 226px;
+  height: 46px;
+  top: 569px;
+  left: 634px;
+  border-radius: 4px;
+  border: 0px;
+  gap: 10px;
+  background: #FF7A69;
+  font-family: Rubik;
+  font-size: 22px;
+  color:#FFFFFF;
+  margin-top: 25px;
 }
 
 .butt {
@@ -123,7 +124,7 @@ margin-top: 25px;
 }
 
 
-/*PapaPeva*/
+/*Каталог*/
 .container_usl {
   width: 100%; 
   height: auto;
@@ -133,9 +134,25 @@ margin-top: 25px;
   flex-direction: column;
   align-items: center; 
   background-color: white;
-
- 
 }
+
+#klaviatura {
+  margin-top: 20px;
+  width: 1340px;
+  display: flex;
+  padding: 40px 0;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+}
+
+.filter {
+  width: 1340px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 #SM1 {
   text-align: center;
   display: inline;
@@ -154,13 +171,27 @@ margin-top: 25px;
   padding: 8px;
 }
 
-#klaviatura {
-  width: 1340px;
+.product_card {
+  width: 400px;
   display: flex;
-  padding: 50px 0;
+  align-items:baseline;
+}
+.in_card {
+  height: 350px;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white;
+  justify-content: space-between;
+}
+
+.brend {
+  font-size: 20px;
+  color: #000000;
+}
+
+.price {
+  font-size: 19px;
+  color: #FF7A69;
 }
   
 .button {
@@ -179,17 +210,17 @@ margin-top: 25px;
 }
 
 table {
-  float: left;
-  margin: 10 px;
+  margin: 10px;
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
   background-color: white;
 }
 
+/*О нас*/
 #contr {
   width: 100%;
-  height: 500px;
+  height: 900px;
   display: flex;
   align-items: center;
   background-color: #efebeb; 
@@ -251,7 +282,20 @@ table {
 }
 
 .butt1 {
+  width: 650px;
   margin: 0 auto;
   display: flex;
+  justify-content: space-between;
+}
 
+.photo {
+  margin-top: 70px;
+  width: 1150px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.redact {
+  border-radius: 20px;
 }
