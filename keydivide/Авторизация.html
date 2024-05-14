@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>KeyDivide Сайт по продаже клавиатур</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="stylesRegistr.css">
+    <title>Авторизация</title>
+</head>
+<body>
+   <div class="login-container">
+        <h2>Авторизация</h2>
+        <form>
+             <input type="text" id="login" name="login" placeholder="Введите логин" >
+           <div class="password_container">
+             <input type="password" id="password" name="password" placeholder="Введите пароль">
+             <span class="password-toggle" onclick="togglePassword()">&#128065;</span>
+             </div>
+            <div class="butt">
+                <button TYPE="submit"> Войти </button>    
+            </div>            
+        </form>
+        <p >Не можете войти? <a href="Регистрация.html"> Загеристируйтесь! </a></p>   
+    </div>
+
+    <script>
+        function 
+        togglePassword() {
+            const passImput = document.getElementById('password');
+            const passTogg = document.querySelector('.password-toggle');
+            if (passImput.type == 'password'){
+                passImput.type = 'text';
+                passTogg.innerHTML ='&#128066';
+            }else{
+                passImput.type = 'password'
+                passTogg.innerHTML ='&#128065';
+            }
+        }
+        </script>
+</body>
+</html>

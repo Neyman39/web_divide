@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>KeyDivide Сайт по продаже клавиатур</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="stylesRegistr.css">
+    <title>Авторизация</title>
+</head>
+<body>
+   <div class="login-container">
+        <h2>Регистрация</h2>
+        <form>
+            <input type="text" id="login" name="login" placeholder="Введите логин" > 
+            <input type="text" id="email" name="email" placeholder="Введите Email" >
+            <input type="text" id="surname" name="surname" placeholder="Введите фамилию" >
+            <input type="text" id="name" name="name" placeholder="Введите имя" >
+            <div class="password_container">
+             <input type="password" id="password" name="password" placeholder="Введите пароль">
+             <span class="password-toggle" onclick="togglePassword()">&#128065;</span>
+             </div>
+             <input type="password" id="password2" name="password2" placeholder="Повторите пароль">
+             <div id="message"></div>
+            <div class="butt"> <button TYPE="submit"> Зарегистироваться </button></div> 
+            <a href="Авторизация.html"><div class="butt"><button TYPE="submit" > Назад </button></div> </a>        
+        </form>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('password2');
+        const messageDiv = document.getElementById('message');
+
+        function 
+        togglePassword() {
+            const passImput = document.getElementById('password');
+            const passTogg = document.querySelector('.password-toggle');
+            if (passImput.type == 'password'){
+                passImput.type = 'text';
+                passTogg.innerHTML ='&#128066';
+            }else{
+                passImput.type = 'password'
+                passTogg.innerHTML ='&#128065';
+            }
+        }
+
+confirmPasswordInput.addEventListener('input', function() {
+  if (passwordInput.value === confirmPasswordInput.value) {
+    messageDiv.textContent = 'Пароли совпадают';
+    messageDiv.style.color = 'green';
+  } else {
+    messageDiv.textContent = 'Пароли не совпадают';
+    messageDiv.style.color = 'red';
+  }
+});
+
+        </script>
+</body>
+</html>
