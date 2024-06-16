@@ -21,9 +21,11 @@ h1, h2, h3, h4, h5, h6 {
 .intro {
     background-color: #E7E7E7;
     width: 100%;
-    margin: 0;
-    height: 1200px; 
+    margin: 0 auto;
+    height: 1250px; 
     display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .card {
@@ -34,8 +36,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .baza {
+    margin-top: 130px;
     display: flex;
     justify-content: space-between;
+    width: 1420px;
 }
 
 .prod_photo {   
@@ -43,9 +47,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .prod_info {
-    margin-top: 150px;
-    margin-left: 50px;
-    height: 390px;
+    height: 440px;
+    width: 530px;
     text-decoration: none;
     display: flex;
     flex-direction: column;
@@ -124,7 +127,7 @@ button {
 
 /*Характеристики*/
 .specs {
-    margin-top: 80px;
+    margin-top: 30px;
     width: 1340px;
     height: 420px;
     background-color: white;
