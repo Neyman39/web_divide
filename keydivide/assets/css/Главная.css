@@ -202,6 +202,9 @@ button {
   justify-content: space-between;
   transition: 0.2s;
 }
+.in_card:hover {
+  transform: scale(1.02);
+}
 .in_card1 {
   width: 400px;
   height: 315px;
@@ -214,8 +217,8 @@ button {
 .in_card1 img {
   border-radius: 20px;
 }
-.in_card:hover {
-  transform: scale(1.02);
+.in_card1:hover {
+  transform: scale(1.01);
 }
 
 .brend {
@@ -287,7 +290,7 @@ table {
 
 .text_about {
   width: 750px;
-  height: 280px;
+  height: 300px;
   display: flex;
   align-items:flex-start;
   flex-direction: column;
@@ -295,11 +298,14 @@ table {
 }
   
 .SM4 {
-  display: inline;
-  overflow: hidden;
+  height: 200px;
+  display: flex;
   float: left; 
+  flex-direction: column;
+  justify-content: space-between;
 }
 .SM4 p {
+  display: flex;
   padding: 6px 0;
   width: 750px;
   font-size: 19px;
