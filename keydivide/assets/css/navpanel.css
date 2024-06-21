@@ -94,11 +94,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .url {
     position: absolute;
-    top: 57px;
+    top: 47px;
     left: 0;
     width: 150px;
     background-color: #D1A49E;
     display: none;
+    border-radius: 10px;
 }   
 
 .two_link {
