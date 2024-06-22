@@ -23,8 +23,9 @@ body {
 .container_KTovara {
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
-  height: 160vh;
+  height: 130vh;
 }
   
   
@@ -37,28 +38,39 @@ body {
 }
 
 .baza {
-  margin-top: 150px;
+  margin-top: 130px;
   display: flex;
+  justify-content: space-between;
+  width: 1340px;
 }
 
 .prod_info {
-  height: 425px;
-  margin-left: 50px;
+  height: 440px;
+  width: 480px;
   text-decoration: none;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-  
-.prod_name {
-  color: #000;
-  font-size: 28px;
-  font-weight: 700;
-  text-decoration: none;
+ 
+.typing-demo {
+  width: 22ch;
+  animation: typing 2.5s steps(22), blink .5s step-end infinite alternate;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid;
+  font-family: monospace;
+  font-weight: 730;
+  font-size: 32px;
+}
+@keyframes typing {
+  from {width: 0;}}
+@keyframes blink {
+  50% {border-color: transparent;}
 }
 
 .form {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .knopki {
@@ -77,7 +89,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid rgb(96, 96, 96);
+  border: 1px solid rgb(96, 96, 96);
   margin-right: 5px;
 }
 
@@ -90,7 +102,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid rgb(96, 96, 96);
+  border: 1px solid rgb(96, 96, 96);
   margin-right: 5px;
 }
 
@@ -119,7 +131,7 @@ body {
 .butt button {
   width: 226px;
   height: 42px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 0px;
   background: #FF7A69;
 }
@@ -129,40 +141,37 @@ body {
   font-size: 16px;
 }
 
+/*Описание*/
 .container_k {
   margin-top: 80px;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100vh;
+  width: 1340px;
+  height: 450px;
 }
   
-  #panelWhite {
-    width: 1300px;
-    height: 450px;
-    left: 500px;
-    border-radius: 10px;
-    padding:20px;
-    background: #F7F8FACC;
-    display: inline-block;
-    margin: 0 auto; 
-  }
+#panelWhite {
+  border-radius: 20px;
+  padding:30px;
+  background: #F7F8FACC;
+  display: inline-block;
   
-  #H2 {
+}
+
+#H2 {
   font-size: 30px;
   font-weight: 700;
   line-height: 58px;
   letter-spacing: 0px;
   text-align: left;
-  margin-top: 25px;
-  }
-  
-  #H21 {
+}
+
+#H21 {
   margin: 10px auto;
   font-size: 20px;
   text-align: left;
-  margin-top: 25px;
-  }
+  margin-top: 20px;
+}
   
   
 

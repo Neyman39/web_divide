@@ -201,6 +201,9 @@ button {
   justify-content: space-between;
   transition: 0.2s;
 }
+.in_card img {
+  border-radius: 20px;
+}
 .in_card:hover {
   transform: scale(1.02);
 }
