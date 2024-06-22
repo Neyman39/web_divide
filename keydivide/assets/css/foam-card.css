@@ -1,0 +1,269 @@
+body{
+    margin: 0;
+    font-family: "Rubik", sans-serif;
+}
+
+*,
+*:before,
+*:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+/*Intro*/
+.intro {
+    background-color: #E7E7E7;
+    width: 100%;
+    margin: 0 auto;
+    height: 1700px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card {
+    width: 1340px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-bottom: 50px;
+}
+
+.baza {
+    margin-top: 130px;
+    display: flex;
+    justify-content: space-between;
+    width: 1420px;
+}
+
+.prod_photo {   
+    margin-top: 150px;
+}
+
+.prod_info {
+    height: 440px;
+    width: 530px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/*.prod_name {
+    color: #000;
+    font-size: 28px;
+    font-weight: 700;
+    text-decoration: none;
+}*/
+
+.typing-demo {
+    width: 22ch;
+    animation: typing 2.5s steps(22), blink .5s step-end infinite alternate;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid;
+    font-family: monospace;
+    font-weight: 730;
+    font-size: 32px;
+}
+  @keyframes typing {
+    from {width: 0;}}
+  @keyframes blink {
+    50% {border-color: transparent;}
+}
+
+h2 {
+    font-weight: 500;
+}
+
+.prod {
+    color: #000;
+    font-size: 22px;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.switches {
+    margin-top: 25px;
+    width: 500px;
+}
+
+.swbox {
+    display: inline-block;
+    position: relative;
+    height: 25px;
+    margin-top: 15px;
+    margin-right: 10px;
+}
+.switch {
+    padding: 5px 10px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    color: #000;
+    text-decoration: none;
+}
+
+.about_sw {
+    margin-top: 7px;
+    margin-left: 7px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.box-price {
+    margin-top: 20px;
+}
+.price {
+    color: #FF7A69;
+    font-size: 30px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.butt {
+    width: 450px;
+    height: 42px;
+    display: flex;
+    justify-content: space-between;
+    vertical-align: bottom; 
+}
+
+.button {
+    width: 226px;
+    height: 42px;
+    border-radius: 10px;
+    border: 0px;
+    background: #FF7A69;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.button p {
+    color: white;
+    font-size: 22px;
+    font-family: "Rubik";
+    margin-right: 10px;
+}
+
+.deliver {
+    width: 200px;
+    height: 42px;
+}
+
+
+/*Характеристики*/
+.specs {
+    margin-top: 55px;
+    width: 1340px;
+    height: 420px;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.bombom {
+    margin-left: 30px;
+    margin-right: 20px;
+    width: 720px;
+}
+
+.bombom2 {
+    width: 500px;
+}
+.bombom2 h3 {
+    width: 500px;
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+.spectitle {
+    width: 620px;
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+.haracter {
+    width: 675px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.li_line {
+	padding: 0;
+	height: 0;
+	border: none;
+	border-top: 1.2px dashed #ddd;
+}
+
+.spectext {
+    padding-top: 12px;
+    padding-bottom: 2px;
+    width: 325px;
+    font-size: 17px;
+}
+
+.spectext2 {
+    padding-top: 10px;
+    padding-bottom: 2px;
+    width: 350px;
+    font-size: 17px;
+}
+
+.complect {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.complect p {
+    font-size: 17px;
+    padding: 6px 10px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #656565;
+}
+
+/*Описание*/
+.container_k {
+    margin-top: 55px;
+    display: flex;
+    flex-direction: column;
+    width: 1340px;
+    height: 500px;
+  }
+    
+  #panelWhite {
+    border-radius: 20px;
+    padding:30px;
+    background: #F7F8FACC;
+    display: inline-block;
+    
+  }
+  
+  #H2 {
+    letter-spacing: 0px;
+    text-align: left;
+    font-size: 17px;
+  }
+  
+  #H21 {
+    margin-top: 10px;
+    text-align: left;
+    margin-top: 20px;
+    font-size: 17px;
+  }
