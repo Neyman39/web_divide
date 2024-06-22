@@ -27,3 +27,11 @@ thumbnails.forEach((thumbnail, index) => {
     showImage(currentIndex);
   });
 });
+
+const images = document.querySelectorAll('.main-image');
+images.forEach(image => {
+    image.addEventListener('click', function() {
+        const enlargedSrc = this.src.replace('thumbnail', 'large');
+        open(enlargedSrc, '_blank');
+    });
+});
