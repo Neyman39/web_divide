@@ -79,43 +79,41 @@ h1, h2, h3, h4, h5, h6 {
     50% {border-color: transparent;}
 }
 
-h2 {
-    font-weight: 500;
-}
+.form {
+    margin-top: 15px;
+    margin-bottom: -10px;
+    font-size: 19px;
+
+  }
+  
+  .knopki {
+    width: 500px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
+  }
+  
+  .config-button {
+    height: 28px;
+    padding: 0 15px;
+    font-family: Rubik;
+    font-size: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(96, 96, 96);
+    margin-right: 5px;
+    margin-top: 10px;
+  }
 
 .prod {
     color: #000;
     font-size: 22px;
     font-weight: 400;
     text-decoration: none;
-}
-
-.switches {
-    margin-top: 25px;
-    width: 500px;
-}
-
-.swbox {
-    display: inline-block;
-    position: relative;
-    height: 25px;
-    margin-top: 15px;
-    margin-right: 10px;
-}
-.switch {
-    padding: 5px 10px;
-    border: 1px solid #000;
-    border-radius: 10px;
-    color: #000;
-    text-decoration: none;
-}
-
-.about_sw {
-    margin-top: 7px;
-    margin-left: 7px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
 }
 
 .box-price {
@@ -157,85 +155,6 @@ h2 {
 .deliver {
     width: 200px;
     height: 42px;
-}
-
-
-/*Характеристики*/
-.specs {
-    margin-top: 55px;
-    width: 1340px;
-    height: 420px;
-    background-color: white;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.bombom {
-    margin-left: 30px;
-    margin-right: 20px;
-    width: 720px;
-}
-
-.bombom2 {
-    width: 500px;
-}
-.bombom2 h3 {
-    width: 500px;
-    padding-top: 30px;
-    padding-bottom: 20px;
-}
-
-.spectitle {
-    width: 620px;
-    padding-top: 30px;
-    padding-bottom: 20px;
-}
-
-.haracter {
-    width: 675px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.li_line {
-	padding: 0;
-	height: 0;
-	border: none;
-	border-top: 1.2px dashed #ddd;
-}
-
-.spectext {
-    padding-top: 12px;
-    padding-bottom: 2px;
-    width: 325px;
-    font-size: 17px;
-}
-
-.spectext2 {
-    padding-top: 10px;
-    padding-bottom: 2px;
-    width: 350px;
-    font-size: 17px;
-}
-
-.complect {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-.complect p {
-    font-size: 17px;
-    padding: 6px 10px;
-}
-
-.dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: #656565;
 }
 
 /*Описание*/

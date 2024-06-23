@@ -50,30 +50,33 @@
                 <div class="about-services">
                     <p class="form">Размер клавиатуры:</p>
                     <div class="knopki">
-                        <div class="butto2" onclick="chco1()" id="100"> 100% </div>
-                        <div class="butto2" onclick="chco2()" id="80"> 80-75% </div>
-                        <div class="butto2" onclick="chco3()" id="60"> 65-60% </div>
-                        <div class="butto2" onclick="chco4()" id="40"> 40% </div>
+                        <button class="config-button" data-category="категория1" data-config="конфигурация1"> 100% </button>
+                        <button class="config-button" data-category="категория1" data-config="конфигурация2"> 80-75% </button>
+                        <button class="config-button" data-category="категория1" data-config="конфигурация3"> 65-60% </button>
+                        <button class="config-button" data-category="категория1" data-config="конфигурация4"> 40% </button>
                     </div>
                     <p class="form">Film мод:</p>
                     <div class="knopki">
-                        <div class="button" onclick="chco5()" id="without"> Без установки </div>
-                        <div class="button" onclick="chco6()" id="with"> С установкой </div>
+                        <button class="config-button" data-category="категория2" data-config="конфигурация1"> Без установки </button>
+                        <button class="config-button" data-category="категория2" data-config="конфигурация2"> С установкой </button>
                     </div>
                     <p class="form">Тип монтажа переключателей:</p>
                     <div class="knopki">
-                        <div class="button" onclick="chco7()" id="paika"> Пайка </div>
-                        <div class="button" onclick="chco8()" id="hots"> Hot-Swap </div>
+                        <button class="config-button" data-category="категория3" data-config="конфигурация1"> Пайка </button>
+                        <button class="config-button" data-category="категория3" data-config="конфигурация2"> Hot-Swap </button>
                     </div>
                     <p class="form">Тип диодов:</p>
                     <div class="knopki">
-                        <div class="button" onclick="chco9()" id="smd"> SMD/нет диодов </div>
-                        <div class="button" onclick="chco10()" id="dip"> DIP </div>
+                        <button class="config-button" data-category="категория4" data-config="конфигурация1"> SMD/нет диодов </button>
+                        <button class="config-button" data-category="категория4" data-config="конфигурация2"> DIP </button>
                     </div>
                 </div>
-                <div class="box-price"><p class="price">стоимость ₽</p></div>
+                <div class="box-price"><p class="price" id="price"> 2200 ₽</p></div>
                 <div class="butt">
-                    <div href="#"><button TYPE="button"><img src="assets/images/бутвкорзину.png" width="140" height="28"></button></div>
+                    <div href="#" class="button">
+                        <p>В корзину</p>
+                        <img src="assets/images/корзина.png" alt="" width="26" height="24"> 
+                    </div>
                     <div class="deliver"><p>Бесплатная доставка от 4 дней 🚚</p></div>
                 </div> 
             </div>
@@ -131,7 +134,7 @@
         </div>
     </div>
 </div>
-<script src="js-style.js"></script>
+<script src="Educ-price-swlub.js"></script>
 </body>
 
 
