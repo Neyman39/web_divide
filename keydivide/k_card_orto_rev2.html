@@ -57,25 +57,79 @@
                 <div><h1 class="typing-demo" style="width: 26ch;">CacaoSplit Ortomini Black </h1></div>
             </div>
             <div class="box-prod"><p class="prod" href="#">Маленькая клавиатура даже без ряда цифр, с ортолинейным строением на основе двух контроллеров <em>arduino pro micro</em></p></div>
+            <h2 class="form">Переключатели</h2>
             <div class="switches">
-                <h2>Переключатели</h2>
-                <div class="swbox"><a class="switch" href="#">Akko V3 Cream Yellow</a>
+                <button class="config-button" data-config="config1"><div class="swbox">Akko V3 Cream Yellow
                     <div class="overlay">
-                        <div class="about_sw">
-                            <img src="assets/images/стрелка.png" alt="oo" width="60" height="60">
-                            <p>Akko V3 Cream Yellow</p>
+                        <div style="padding: 15px;">
+                            <div class="about_sw">
+                                <div class="sw-image"><img src="assets/images/akko-yellow.png" alt="" width="80" height="80"></div>
+                                <div class="name-sw">
+                                    <p style="font-size: 19px;">Akko V3 Cream Yellow</p>
+                                    <div class="type">линейные</div>
+                                </div>
+                            </div>
+                            <div class="swith-specs">
+                                <div class="spec-line"><p>Сила срабатывания</p><p>48g</p></div>
+                                <div class="li_line"></div>
+                                <div class="spec-line"><p>Сила до упора</p><p>60g</p></div>
+                                <div class="li_line"></div>
+                                <div class="spec-line"><p>Сила тактильности</p><p>none</p></div>
+                                <div class="li_line"></div>
+                                <div class="spec-line"><p>Длина пути</p><p>2.0mm / 3.3mm</p></div>
+                                <div class="li_line"></div>
+                            </div>
                         </div>
-                        <p>Dava Geva</p>
                     </div>
-                </div>
-                <div class="swbox"><a class="switch" href="#">Akko V3 Cream Blue</a>
-                    <div class="overlay"><p>Papa Peva</p></div>
-                </div>
-                <div class="swbox"><a class="switch" href="#">Outemu Silent Peach</a>
-                    <div class="overlay"><p>Geva Faka</p></div>
-                </div>
+                </div></button>
+                <button class="config-button" data-config="config2"><div class="swbox">Akko V3 Cream Blue
+                    <div class="overlay">
+                        <div style="padding: 15px;">
+                            <div class="about_sw">
+                                <div class="sw-image"><img src="assets/images/akko-blue.png" alt="" width="80" height="80"></div>
+                                <div class="name-sw">
+                                    <p style="font-size: 19px;">Akko V3 Cream Blue</p>
+                                    <div class="type">тактильные</div>
+                                </div>
+                            </div>
+                            <div class="swith-specs">
+                                <div class="spec-line"><p>Сила срабатывания</p><p>45g</p></div>
+                                <div class="li_line"></div>
+                                <div class="spec-line"><p>Сила до упора</p><p>60g</p></div>
+                                <div class="li_line"></div>
+                                <div class="spec-line"><p>Сила тактильности</p><p>55g</p></div>
+                                <div class="li_line"></div>
+                                <div class="spec-line"><p>Длина пути</p><p>2.2mm / 3.3mm</p></div>
+                                <div class="li_line"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div></button>
+                <button class="config-button" data-config="config3"><div class="swbox">Outemu Silent Peach
+                    <div class="overlay">
+                        <div style="padding: 15px;">
+                            <div class="about_sw">
+                                <img src="assets/images/outemu-peach.png" alt="oo" width="80" height="80" style="border-radius: 10px;">
+                                <div class="name-sw">
+                                    <p style="font-size: 19px;">Outemu Silent Peach</p>
+                                    <div class="type" style="width: 150px;">линейные тихие</div>
+                                </div>
+                            </div>
+                            <div class="swith-specs">
+                                <div class="spec-line"><p>Сила срабатывания</p><p>45g</p></div>
+                                <div class="li_line"></div>
+                                <div class="spec-line"><p>Сила до упора</p><p>55g</p></div>
+                                <div class="li_line"></div>
+                                <div class="spec-line"><p>Сила тактильности</p><p>none</p></div>
+                                <div class="li_line"></div>
+                                <div class="spec-line"><p>Длина пути</p><p>2.0mm / 3.3mm</p></div>
+                                <div class="li_line"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div></button>
             </div>
-            <div class="box-price"><p class="price">9450 ₽</p></div>
+            <div class="box-price"><p class="price" id="price">9890 ₽</p></div>
             <div class="butt">
                 <div href="#" class="button">
                     <p>В корзину</p>
@@ -210,5 +264,44 @@
     </div>
 </div>
 <script src="script.js"></script>
+<script>
+    // Определяем объект с различными конфигурациями и их ценами
+    const configurations = {
+      'config1': 9890,
+      'config2': 9890,
+      'config3': 9450
+    };
+
+    // Получаем элементы на странице
+    const configButtons = document.querySelectorAll('.config-button');
+    const priceElement = document.getElementById('price');
+
+    // Выбранная конфигурация по умолчанию
+    let selectedConfig = 'config1';
+
+    // Функция для обновления обводки кнопок
+    function updateButtonBorder() {
+      configButtons.forEach(button => {
+        button.style.border = button.getAttribute('data-config') === selectedConfig ? '1.5px solid rgb(255, 122, 105)' : '1.5px solid rgb(96, 96, 96)';
+      });
+    }
+
+    // Обработчик нажатия на кнопки конфигурации
+    configButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Получаем выбранную конфигурацию из атрибута data-config
+        selectedConfig = this.getAttribute('data-config');
+
+        // Обновляем цену на странице
+        priceElement.textContent = configurations[selectedConfig] + ' ₽';
+
+        // Обновляем обводку кнопок
+        updateButtonBorder();
+      });
+    });
+
+    // Инициализация обводки кнопок при загрузке страницы
+    updateButtonBorder();
+</script>
 </body>
 </html>
