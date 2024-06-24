@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="assets/css/navpanel.css">
 	<link rel="stylesheet" href="assets/css/Главная copy.css">
 	<link rel="stylesheet" href="assets/css/footer.css">
+    <link rel="stylesheet" href="assets/css/services-filt.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
@@ -57,10 +58,10 @@
     <a name="keyboards"></a>
     <div id="klaviatura">
         <div class="filter">
-            <div id="SM1"><button type="button" class="button"> Фильтры </button></div>
+            <div style="width: 180px;"></div>
             <div id="SM2"><h3> Клавиатуры </h3></div>
             <div class="filter-container">
-                <button class="filter-btn" onclick="toggleFilterDropdown()"> <span class="filter-text">Рекомендуемые</span></button>
+                <button class="filter-btn" onclick="toggleFilterDropdown()"> <span class="filter-text">Рекомендуемые</span><img src="assets/images/n-стрелка.png" alt="" width="12" height="12"></button>
                 <div class="filter-dropdown">
                     <div class="filter-option" onclick="applyFilter('all')">Рекомендуемые</div>
                     <div class="filter-option" onclick="applyFilter('asc')">По возрастанию цены</div>
@@ -77,38 +78,24 @@
 
     <div id="klaviatura">
         <div class="filter">
-            <div id="SM1"><button type="button" class="button"> Фильтры </button></div>
+            <div style="width: 180px;"></div>
             <div id="SM2"><h3> Услуги </h3></div>
-            <div id="SM3"><button type="button" class="button"> Рекомендуемые</button></div>
+            <div class="filter-container3">
+                <button class="filter-btn3" onclick="toggleFilterDropdowne()"> <span class="filter-text3">Рекомендуемые</span><img src="assets/images/n-стрелка.png" alt="" width="12" height="12"></button>
+                <div class="filter-dropdown3">
+                    <div class="filter-option3" onclick="applyFilterD('allo')">Рекомендуемые</div>
+                    <div class="filter-option3" onclick="applyFilterD('asce')">По возрастанию цены</div>
+                    <div class="filter-option3" onclick="applyFilterD('desce')">По убыванию цены</div>
+                </div>
+            </div>
         </div>
         
-        <table style="width: 1340px; height: 580px;">  
-            <tr class="row">
-                <th class="cell">
-                    <div class="in_card1"><a class="in_card1" href="Карточка товара.html">
-                        <img src = "assets/images/lubsw-main.png" alt = "AAA"  width="370" height="250">
-                        <p class="brend">Смазка переключателей</p>
-                        <p class="price">1.400р</p>
-                    </a></div>
-                </th>
-                <th class="cell">
-                    <div class="in_card1"><a class="in_card1" href="card_foam.html">
-                        <img src = "assets/images/foam-main.png" alt = "AAA"  width="370" height="250">
-                        <p class="brend">Шумоизоляция</p>
-                        <p class="price">540р</p>
-                    </a></div>
-                </th>
-                <th class="cell">
-                    <div class="in_card1"><a class="in_card1" href="card-stablub.html">
-                        <img src = "assets/images/stablub-main.png" alt = "AAA"  width="370" height="250">
-                        <p class="brend">CacaoSplit Ortomini52</p>
-                        <p class="price">1.250р</p>
-                    </a></div>
-                </th>
-            </tr>  
-        </table>
-        <a name="aboutus"></a>
+        <div class="product-container3">
+            <!-- Карточки товаров будут динамически добавляться здесь -->
+        </div>
     </div>
+
+    <a name="aboutus"></a>
 </div>
 
 
@@ -136,20 +123,6 @@
                 </div>
             </div>
             <div id="SM6"><img src="https://giffun.ru/wp-content/uploads/2022/08/bongo-cat-typing.gif" width="390" height="300" alt="почему так"></div>
-        </div>
-        <div class="photo">
-            <div>
-                <img class="redact" src="assets/images/катя.jpg" width="250" alt="gg">
-                <p>Катя Московских</p>
-            </div>
-            <div>
-                <img class="redact" src="assets/images/андрей.jpg" width="250" alt="gg">
-                <p>Андрей Новиченков</p>
-            </div>
-            <div>
-                <img class="redact" src="assets/images/инна.jpg" width="250" alt="gg">
-                <p>Инна Морошкина</p>
-            </div>
         </div>
     </div>
 </div>
@@ -270,5 +243,6 @@ function toggleFilterDropdown() {
 // Инициальное отображение всех товаров
 applyFilter('all');
 </script>
+<script src="services-fil.js"></script>
 </body>
 </html>

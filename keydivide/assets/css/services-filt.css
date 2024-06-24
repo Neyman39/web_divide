@@ -1,0 +1,87 @@
+.in_card13 {
+    width: 400px;
+    height: 315px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.2s;
+  }
+  .in_card13 img {
+    width: 370px;
+    height: 250px;
+    border-radius: 20px;
+  }
+  .in_card13 h5 {
+    font-size: 19px;
+    color: #FF7A69;
+    font-weight: 700;
+  }
+  .in_card13 h4 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000000;
+  }
+  .in_card13:hover {
+    transform: scale(1.01);
+  }
+
+  
+.product-container3 {
+    margin-top: 78px;
+    width: 1340px;
+    height: 420px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-flow: row wrap;
+  }
+  
+  .product-card3 {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .filter-container3 {
+    display: inline-block;
+    position: relative;
+  }
+  
+  .filter-btn3 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 205px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    color: #000;
+    border: 1px solid black;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+  
+  .filter-text3 {
+    margin-right: 6px;
+  }
+  
+  .filter-dropdown3 {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .filter-dropdown3 .filter-option3 {
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .filter-dropdown3 .filter-option3:hover {
+    background-color: #aaaaaa;
+  }
