@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>KeyDivide Сайт по продаже клавиатур</title>
 	<link rel="stylesheet" href="assets/css/navpanel.css">
-	<link rel="stylesheet" href="assets/css/Главная.css">
+	<link rel="stylesheet" href="assets/css/Главная copy.css">
 	<link rel="stylesheet" href="assets/css/footer.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,57 +59,19 @@
         <div class="filter">
             <div id="SM1"><button type="button" class="button"> Фильтры </button></div>
             <div id="SM2"><h3> Клавиатуры </h3></div>
-            <div id="SM3"><button type="button" class="button"> Рекомендуемые</button></div>
+            <div class="filter-container">
+                <button class="filter-btn" onclick="toggleFilterDropdown()"> <span class="filter-text">Рекомендуемые</span></button>
+                <div class="filter-dropdown">
+                    <div class="filter-option" onclick="applyFilter('all')">Рекомендуемые</div>
+                    <div class="filter-option" onclick="applyFilter('asc')">По возрастанию цены</div>
+                    <div class="filter-option" onclick="applyFilter('desc')">По убыванию цены</div>
+                </div>
+            </div>
         </div>
-         
-        <table style="width: 1340px; height: 780px;">  
-            <tr class="row">
-                <th class="cell">
-                    <div class="in_card1"><a class="in_card1" href="k_card_orto.html">
-                        <img src = "assets/images/ortomini_main.jpg" alt = "AAA"  width="370" height="250">
-                        <p class="brend">CacaoSplit Ortomini52</p>
-                        <p class="price">8.940р</p>
-                    </a></div>
-                </th>
-                <th class="cell">
-                    <div class="in_card1"><a class="in_card1" href="k_card_founder.html">
-                        <img src = "assets/images/founder_main.jpg" alt = "AAA"  width="370" height="250">
-                        <p class="brend">CacaoSplit Founder64</p>
-                        <p class="price">10.140р</p>
-                    </a></div>
-                </th>
-                <th class="cell">
-                    <div class="in_card1"><a class="in_card1" href="k_card_orto_rev2.html">
-                        <img src = "assets/images/ortoblack_main.png" alt = "AAA"  width="370" height="250">
-                        <p class="brend">CacaoSplit Ortomini Black</p>
-                        <p class="price">9.890р</p>
-                    </a></div>
-                </th>
-            </tr>
-            <tr class="row">
-                <th class="cell">
-                    <div class="in_card">
-                        <img src = "assets/images/sw_pink.png" alt = "AAA"  width="370" height="295">
-                        <p class="brend">CacaoSplit Ortomini52</p>
-                        <p class="price">8.940р</p>
-                    </div>
-                </th>
-                <th class="cell">
-                    <div class="in_card">
-                        <img src = "assets/images/sw_pink.png" alt = "AAA"  width="370" height="295">
-                        <p class="brend">CacaoSplit Ortomini52</p>
-                        <p class="price">8.940р</p>
-                    </div>
-                </th>
-                <th class="cell">
-                    <div class="in_card">
-                        <img src = "assets/images/sw_pink.png" alt = "AAA"  width="370" height="295">
-                        <p class="brend">CacaoSplit Ortomini52</p>
-                        <p class="price">8.940р</p>
-                    </div>
-                </th>
-            </tr>    
-        </table>
+        
+        <div class="product-container">
+            <!-- Карточки товаров будут динамически добавляться здесь -->
+        </div>
     </div>
     <a name="services"></a>
 
@@ -120,7 +82,7 @@
             <div id="SM3"><button type="button" class="button"> Рекомендуемые</button></div>
         </div>
         
-        <table style="width: 1340px; height: 780px;">  
+        <table style="width: 1340px; height: 580px;">  
             <tr class="row">
                 <th class="cell">
                     <div class="in_card1"><a class="in_card1" href="Карточка товара.html">
@@ -143,30 +105,7 @@
                         <p class="price">1.250р</p>
                     </a></div>
                 </th>
-            </tr>
-            <tr class="row">
-                <th class="cell">
-                    <div class="in_card">
-                        <img src = "assets/images/sw_pink.png" alt = "AAA"  width="370" height="295">
-                        <p class="brend">CacaoSplit Ortomini52</p>
-                        <p class="price">8.940р</p>
-                    </div>
-                </th>
-                <th class="cell">
-                    <div class="in_card">
-                        <img src = "assets/images/sw_pink.png" alt = "AAA"  width="370" height="295">
-                        <p class="brend">CacaoSplit Ortomini52</p>
-                        <p class="price">8.940р</p>
-                    </div>
-                </th>
-                <th class="cell">
-                    <div class="in_card">
-                        <img src = "assets/images/sw_pink.png" alt = "AAA"  width="370" height="295">
-                        <p class="brend">CacaoSplit Ortomini52</p>
-                        <p class="price">8.940р</p>
-                    </div>
-                </th>
-            </tr>    
+            </tr>  
         </table>
         <a name="aboutus"></a>
     </div>
@@ -253,5 +192,83 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Массив с товарами
+const products = [
+  { id: 1, name: 'CacaoSplit Ortomini52', price: 8.940, img: 'assets/images/ortomini_main.jpg', link: "k_card_orto.html" },
+  { id: 2, name: 'CacaoSplit Founder64', price: 10.140, img: 'assets/images/founder_main.jpg', link: "k_card_founder.html" },
+  { id: 3, name: 'CacaoSplit Ortomini Black', price: 9.890, img: 'assets/images/ortoblack_main.png', link: "k_card_orto_rev2.html" },
+  { id: 4, name: 'HHKB Professional 2', price: 27.590, img: 'assets/images/pink-switch.png' },
+  { id: 5, name: 'CacaoSplit', price: 1.590, img: 'assets/images/pink-switch.png' },
+  { id: 6, name: 'CacaoSplit', price: 1.590, img: 'assets/images/pink-switch.png' }
+];
+
+// Функция для отображения товаров в карточках
+function displayProducts(filteredProducts) {
+  const productContainer = document.querySelector('.product-container');
+  productContainer.innerHTML = '';
+
+  filteredProducts.forEach(product => {
+
+    const in_card1 = document.createElement('div');
+    in_card1.classList.add('in_card1');
+
+    const aLink = document.createElement('a');
+    aLink.href = product.link;
+    aLink.classList.add('in_card1');
+
+    const productImg = document.createElement('img');
+    productImg.src = product.img;
+    aLink.appendChild(productImg);
+    
+    const productName = document.createElement('h4');
+    productName.textContent = product.name;
+    aLink.appendChild(productName);
+
+    const productPrice = document.createElement('h5');
+    productPrice.textContent = `${product.price.toFixed(3)} ₽`;
+    aLink.appendChild(productPrice);
+
+    in_card1.appendChild(aLink)
+    productContainer.appendChild(in_card1);
+    
+
+  });
+}
+
+// Функция для сортировки и фильтрации товаров
+function applyFilter(filterType) {
+  let filteredProducts;
+  const filterBtn = document.querySelector('.filter-btn .filter-text');
+
+  switch (filterType) {
+    case 'asc':
+      filteredProducts = [...products].sort((a, b) => a.price - b.price);
+      filterBtn.textContent = 'По возрастанию цены';
+      break;
+    case 'desc':
+      filteredProducts = [...products].sort((a, b) => b.price - a.price);
+      filterBtn.textContent = 'По убыванию цены';
+      break;
+    case 'recommended':
+    default:
+      filteredProducts = [...products];
+      filterBtn.textContent = 'Рекомендуемые';
+  }
+
+  displayProducts(filteredProducts);
+  toggleFilterDropdown();
+}
+
+// Функция для переключения выпадающего списка фильтрации
+function toggleFilterDropdown() {
+  const filterDropdown = document.querySelector('.filter-dropdown');
+  filterDropdown.style.display = filterDropdown.style.display === 'none' ? 'block' : 'none';
+}
+
+// Инициальное отображение всех товаров
+applyFilter('all');
+</script>
 </body>
 </html>
