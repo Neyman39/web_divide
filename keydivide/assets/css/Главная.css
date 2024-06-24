@@ -177,11 +177,6 @@ button {
   padding: 8px;
 }
 
-.table-style {
-  width: 1340px;
-  height: 780px;
-}
-
 .row {
   height: 450px;
   display: flex;
