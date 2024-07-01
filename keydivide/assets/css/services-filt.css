@@ -85,3 +85,15 @@
   .filter-dropdown3 .filter-option3:hover {
     background-color: #aaaaaa;
   }
+
+  @media (max-width: 767px) {
+    .product-container3 {
+      margin-top: 78px;
+      width: 767px;
+      height: 1110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }

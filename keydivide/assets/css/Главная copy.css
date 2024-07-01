@@ -363,14 +363,14 @@ option{
   text-align: justify;
 }
 
-#SM6 {
+.SM6 {
   width: auto;
   text-align: center;
   display: inline;
   overflow: hidden;
   
   border-radius: 10% ;
-  float: right; 
+  float: right;
 }
 
 .butt1 {

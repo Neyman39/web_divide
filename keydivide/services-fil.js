@@ -1,7 +1,7 @@
 // Массив с товарами
 const productes = [
     { id: 7, name: 'Смазка переключателей', price: 1.400, img: 'assets/images/lubsw-main.png', link: "Карточка товара.html" },
-    { id: 8, name: 'Шумоизоляция', price: 540, img: 'assets/images/foam-main.png', link: "card_foam.html" },
+    { id: 8, name: 'Шумоизоляция', price: 0.540, img: 'assets/images/foam-main.png', link: "card_foam.html" },
     { id: 9, name: 'Апгрейд стабилизаторов', price: 9.890, img: 'assets/images/stablub-main.png', link: "card-stablub.html" }
 ];
       
