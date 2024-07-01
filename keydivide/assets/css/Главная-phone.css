@@ -64,13 +64,13 @@
   }
   
   #panelWhite {
-    width: 350px;
-    height: 500px;
-    left: 500px;
+    width: 75%;
     border-radius: 10px;
-    padding:20px;
+    padding: 20px;
     background: #F7F8FACC;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 0 auto; 
   }
   
@@ -85,33 +85,28 @@
   
   .butt p a {
     width: 190px;
-    height: 30px;
+    height: 35px;
   }
   
   #H21 {
+    width: 90%;
     margin: 10px auto;
     font-size: 18px;
     font-weight: 380;
     line-height: 31px;
     text-align: center;
-    width: 290px;
-    height: 190px;
-    top: 429px;
-    left: 624px;
     margin-top: 25px;
   }
   
-  .button {
-    width: 190px;
-    height: 30px;
-    top: 569px;
-    left: 634px;
+  button {
+    width: 180px;
+    height: 25px;
     border-radius: 4px;
     border: 0px;
     gap: 10px;
     background: #FF7A69;
     font-family: Rubik;
-    font-size: 18px;
+    font-size: 17px;
     color:#FFFFFF;
     margin-top: 25px;
   }
@@ -119,7 +114,7 @@
   .butt {
     width: 100%;
     max-width: 650px;
-    margin: 0 auto;
+    margin: 20px 0px; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -203,8 +198,7 @@
     align-items:baseline;
   }
   .in_card1 {
-    width: 400px;
-    height: 315px;
+    width: 72%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -212,8 +206,7 @@
     transition: 0.2s;
   }
   .in_card1 img {
-    width: 370px;
-    height: 250px;
+    width: 100%;
     border-radius: 20px;
   }
   .in_card1 h5 {
@@ -304,7 +297,7 @@
 
   .product-container {
     margin-top: 78px;
-    width: 767px;
+    width: 90%;
     height: 2220px;
     display: flex;
     flex-direction: column;
