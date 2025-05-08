@@ -52,7 +52,7 @@
   .thumbnail-container {
 
     margin-top: 15px;
-    width: 1325px;
+    width: 100%;
     overflow-x: auto;
     white-space: nowrap;
   }
