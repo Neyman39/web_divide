@@ -87,8 +87,8 @@ h1, h2, h3, h4, h5, h6 {
         overflow: hidden;
         border-right: 3px solid;
         font-family: monospace;
-        font-weight: 700;
-        font-size: 29px;
+        font-weight: 710;
+        font-size: 26px;
     }
       @keyframes typing {
         from {width: 0;}}
@@ -98,7 +98,8 @@ h1, h2, h3, h4, h5, h6 {
 
     .form {
         margin-top: 15px;
-        margin-bottom: -30px;
+        margin-bottom: -20px;
+        height: 30px;
     }
 
     .config-button {
@@ -125,13 +126,14 @@ h1, h2, h3, h4, h5, h6 {
 
     .prod {
         color: #000;
-        font-size: 21px;
+        font-size: 20px;
         font-weight: 400;
         text-decoration: none;
     }
 
     .switches {
         width: 100%;
+        margin: 0;
         box-sizing: border-box;
         display: flex;
         align-items: center;
@@ -304,6 +306,7 @@ h1, h2, h3, h4, h5, h6 {
         padding-bottom: 2px;
         width: 45%;
         font-size: 15px;
+        margin-left: 10px;
     }
 
     .complect {
