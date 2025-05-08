@@ -31,7 +31,6 @@ a {
     }
     
     .colums {
-        margin-left: 10px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -41,6 +40,7 @@ a {
     }
     
     .colinfo {
+        margin-left: 20px;
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
@@ -50,12 +50,12 @@ a {
     }
     
     .colinfo > * {
-        min-width: 150px; /* Минимальная ширина перед переносом */
-        max-width: 200px; /* Максимальная ширина элемента */
+        min-width: 115px; /* Минимальная ширина перед переносом */
+        max-width: 165px; /* Максимальная ширина элемента */
     }
 
     .coltext {
-        padding: 14px 0;
+        padding: 10px 0;
         transition: 0s;
         font-size: 16px;
     }
@@ -86,12 +86,6 @@ a {
         padding: 14px 10px;
         margin-left: 10px;
         width: 150px;
-    }
-    
-    .col5 p {
-        font-size: 16px;
-        padding: 14px 0;
-        line-height: 24px;
     }
     
     .by {
