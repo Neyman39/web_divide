@@ -63,6 +63,12 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none;
 }*/
 
+.think_about_title{
+    display: flex; 
+    align-items: end; 
+    width: 890px;
+}
+
 .typing-demo {
     width: 22ch;
     animation: typing 2.5s steps(22), blink .5s step-end infinite alternate;
