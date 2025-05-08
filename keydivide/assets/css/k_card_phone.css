@@ -32,9 +32,10 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .card {
-        width: 480px;
+        width: 100%;
         display: flex;
         flex-direction: column;
+        align-items: center;
         margin: 0 auto;
         margin-bottom: 50px;
     }
@@ -60,8 +61,9 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .prod_info {
+        margin-left: 10px;
         height: 440px;
-        width: 470px;
+        width: 100%;
         text-decoration: none;
         display: flex;
         flex-direction: column;
@@ -127,7 +129,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .switches {
-        width: 480px;
+        width: 100%;
         margin: 5px 0;
         box-sizing: border-box;
         display: flex;
@@ -244,7 +246,7 @@ h1, h2, h3, h4, h5, h6 {
     /*Характеристики*/
     .specs {
         margin-top: 55px;
-        width: 470px;
+        width: 98%;
         height: 620px;
         background-color: white;
         border-radius: 20px;
