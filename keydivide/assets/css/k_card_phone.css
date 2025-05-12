@@ -13,7 +13,7 @@ body{
     text-decoration: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h3, h4, h5, h6 {
     margin: 0;
 }
 
@@ -64,6 +64,7 @@ h1, h2, h3, h4, h5, h6 {
         margin-top: 20px;
         margin-left: 10px;
         width: 100%;
+        height: auto;
         text-decoration: none;
         display: flex;
         flex-direction: column;
@@ -78,29 +79,33 @@ h1, h2, h3, h4, h5, h6 {
     }*/
 
     .wrapper {
-        width: 70%;
+        width: 95%;
     }
 
     .typing-demo {
-        width: 20ch;
-        animation: typing 2.5s steps(22), blink .5s step-end infinite alternate;
-        white-space: nowrap;
+        white-space: collapse;
+        word-wrap: break-word;
+        animation: typing 2.5s steps(26) forwards, blink .5s step-end infinite alternate;
         overflow: hidden;
         border-right: 3px solid;
         font-family: monospace;
         font-weight: 710;
         font-size: 26px;
+        display: inline-block;
+        max-width: 100%;
+        width: 26ch;
     }
+
       @keyframes typing {
-        from {width: 0;}}
+        from {width: 0;}
+    }
       @keyframes blink {
         50% {border-color: transparent;}
     }
 
     .form {
-        margin-top: 15px;
-        margin-bottom: -20px;
-        height: 30px;
+        height: auto;
+        margin-top: 10px;
     }
 
     .config-button {
@@ -205,6 +210,10 @@ h1, h2, h3, h4, h5, h6 {
         justify-content: space-between;
     }
 
+    .box-price {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
     .price {
         color: #FF7A69;
         font-size: 30px;
