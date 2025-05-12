@@ -22,7 +22,7 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #E7E7E7;
     width: 100%;
     margin: 0 auto;
-    height: 1700px; 
+    height: auto; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -162,7 +162,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     width: 1340px;
-    height: 480px;
+    height: auto;
   }
     
   #panelWhite {

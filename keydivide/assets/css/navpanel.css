@@ -32,9 +32,6 @@ h1, h3, h4, h5, h6 {
     height: 58px;
     width: 100%;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
     z-index: 1000;
     background-color: #D1A49E;
     align-items: baseline;
