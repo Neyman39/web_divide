@@ -61,6 +61,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .prod_info {
+        margin-top: 20px;
         margin-left: 10px;
         width: 100%;
         text-decoration: none;
