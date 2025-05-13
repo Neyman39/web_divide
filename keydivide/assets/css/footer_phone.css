@@ -42,6 +42,7 @@ a {
     
     .colinfo {
         margin-left: 20px;
+        margin-right: 0;
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
@@ -58,6 +59,7 @@ a {
     .coltext {
         padding: 10px 0;
         transition: 0s;
+        width: 100%;
         font-size: 16px;
     }
     .coltext:hover {

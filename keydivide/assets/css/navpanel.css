@@ -37,6 +37,16 @@ h1, h3, h4, h5, h6 {
     align-items: baseline;
 }
 
+.header_phone {
+        display: none;
+        height: 58px;
+        width: 100%;
+        position: fixed;
+        z-index: 1000;
+        background-color: #D1A49E;
+        align-items: baseline;
+    }
+
 .header__inner {
     display: flex;
     justify-content: left;
