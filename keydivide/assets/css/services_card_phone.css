@@ -1,0 +1,176 @@
+body{
+    margin: 0;
+    font-family: "Rubik", sans-serif;
+}
+
+@media (max-width: 487px) {
+    /*Intro*/
+    .intro {
+        background-color: #E7E7E7;
+        width: 100%;
+        margin: 0 auto;
+        height: auto; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .baza {
+        margin-top: 130px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 1420px;
+    }
+    
+    .prod_photo {   
+        margin-top: 150px;
+    }
+    
+    .prod_info {
+        height: 440px;
+        width: 530px;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    /*.prod_name {
+        color: #000;
+        font-size: 28px;
+        font-weight: 700;
+        text-decoration: none;
+    }*/
+    
+    .typing-demo {
+        width: 22ch;
+        animation: typing 2.5s steps(22), blink .5s step-end infinite alternate;
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: 3px solid;
+        font-family: monospace;
+        font-weight: 730;
+        font-size: 32px;
+    }
+      @keyframes typing {
+        from {width: 0;}}
+      @keyframes blink {
+        50% {border-color: transparent;}
+    }
+    
+    .form {
+        margin-top: 15px;
+        margin-bottom: -10px;
+        font-size: 19px;
+    }
+    
+    .knopki {
+      width: 500px;
+      margin: 5px 0;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      flex-flow: row wrap;
+    }
+    
+    .config-button {
+      height: 28px;
+      padding: 0 15px;
+      font-family: Rubik;
+      font-size: 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid rgb(96, 96, 96);
+      margin-right: 5px;
+      margin-top: 10px;
+    }
+    
+    .prod {
+        color: #000;
+        font-size: 22px;
+        font-weight: 400;
+        text-decoration: none;
+    }
+    
+    .box-price {
+        margin-top: 20px;
+    }
+    .price {
+        color: #FF7A69;
+        font-size: 30px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    
+    .butt {
+        width: 450px;
+        height: 42px;
+        display: flex;
+        justify-content: space-between;
+        vertical-align: bottom; 
+    }
+    
+    .button {
+        width: 226px;
+        height: 42px;
+        border-radius: 10px;
+        border: 0px;
+        background: #FF7A69;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+    .button p {
+        color: white;
+        font-size: 22px;
+        font-family: "Rubik";
+        margin-right: 10px;
+    }
+    
+    .deliver {
+        width: 200px;
+        height: 42px;
+    }
+    
+    /*Описание*/
+    .card {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        margin-bottom: 50px;
+    }
+
+    .container_k {
+        margin-top: 55px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+    } 
+    
+    #panelWhite {
+        width: 98%;
+        border-radius: 20px;
+        padding: 20px 10px;
+        background: #F7F8FACC;
+        display: inline-block;
+    }
+  
+    #H2 {
+        letter-spacing: 0px;
+        text-align: left;
+        font-size: 17px;
+    }
+  
+    #H21 {
+        margin-top: 20px;
+        text-align: left;
+        font-size: 17px;
+    }
+}
