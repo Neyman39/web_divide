@@ -1,40 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>KeyDivide Сайт по продаже клавиатур</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="assets/css/stylesRegistr.css">
-    <title>Авторизация</title>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Авторизация</title>
+<link rel="stylesheet" type="text/css" href="assets/css/stylesRegistr.css">
 </head>
 <body>
-   <div class="login-container">
-        <h2>Авторизация</h2>
-        <form class="form-box"> 
-            <input type="text" id="login" name="login" placeholder="Введите логин" >
-           <div class="password_container">
-                <input type="password" id="password" name="password" placeholder="Введите пароль">
-                <span class="password-toggle" onclick="togglePassword()">&#128065;</span>
-            </div>
-            <div class="butt"><button TYPE="submit"> Войти </button></div>
-            <div style="margin-top: 16px;">Впервые у нас? <a href="Регистрация.html"> Загеристируйтесь! </p></div>
-            <a href="Главная.html"><div class="forbutt" style="margin-top: 10px;"> Назад </div></a>            
-        </form>   
-    </div>
+<div class="login-container">
+    <h2>Авторизация</h2>
+    <form class="form-box" id="loginForm"> 
+        <input type="text" id="login" name="login" placeholder="Введите логин" required>
+        <div class="password_container">
+            <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+            <span class="password-toggle" onclick="togglePassword()">&#128065;</span>
+        </div>
+        <div id="errorMessage" style="color:red; margin-top:10px;"></div>
+        <div class="butt"><button type="submit"> Войти </button></div>
+        <div style="margin-top: 16px;">Впервые у нас? <a href="Регистрация.html">Загеристируйтесь!</a></div>
+        <a href="Главная.html"><div class="forbutt" style="margin-top: 10px;"> Назад </div></a>            
+    </form>   
+</div>
 
-    <script>
-        function 
-        togglePassword() {
-            const passImput = document.getElementById('password');
-            const passTogg = document.querySelector('.password-toggle');
-            if (passImput.type == 'password'){
-                passImput.type = 'text';
-                passTogg.innerHTML ='&#128066';
-            }else{
-                passImput.type = 'password'
-                passTogg.innerHTML ='&#128065';
-            }
-        }
-        </script>
+<script>
+  // Переключение видимости пароля
+  function togglePassword() {
+    const passInput = document.getElementById('password');
+    const passToggle = document.querySelector('.password-toggle');
+    if (passInput.type === 'password') {
+      passInput.type = 'text';
+      passToggle.innerHTML = '&#128066;';
+    } else {
+      passInput.type = 'password';
+      passToggle.innerHTML = '&#128065;';
+    }
+  }
+
+  // Фикс: сохраняем пользователя только при успешном входе
+  const validUser = {
+    username: "Иван Иванов",
+    phone: "+7 999 123-45-67",
+    email: "ivan@example.com",
+    login: "admin",
+    password: "1234",
+    address: "г. Москва, ул. Примерная, д. 1"
+  };
+
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const login = document.getElementById('login').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const errorMessage = document.getElementById('errorMessage');
+
+    errorMessage.textContent = '';
+
+    if (login === validUser.login && password === validUser.password) {
+      // Сохраняем данные пользователя по логину
+      localStorage.setItem(`user_${login}`, JSON.stringify(validUser));
+      localStorage.setItem("username", login);
+      localStorage.setItem("isAuthenticated", "true");
+      window.location.href = 'login copy.html';
+    } else {
+      errorMessage.textContent = 'Неверный логин или пароль';
+    }
+  });
+</script>
+
 </body>
 </html>
