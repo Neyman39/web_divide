@@ -96,4 +96,33 @@
       align-items: center;
       justify-content: space-between;
     }
+
+    .in_card13 {
+      width: 100%;
+      max-width: 400px;
+      height: 315px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      transition: 0.2s;
+    }
+    .in_card13 img {
+      width: 100%;
+      height: 79%;
+      border-radius: 20px;
+    }
+    .in_card13 h5 {
+      font-size: 19px;
+      color: #FF7A69;
+      font-weight: 700;
+    }
+    .in_card13 h4 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #000000;
+    }
+    .in_card13:hover {
+      transform: scale(1.01);
+    }
   }

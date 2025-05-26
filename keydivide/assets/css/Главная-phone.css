@@ -292,6 +292,12 @@
     display: flex;
     justify-content: space-between;
   }
+
+  .butt1 button {
+    width: 140px;
+    max-width: 160px;
+    
+  }
   
   .redact {
     border-radius: 20px;
