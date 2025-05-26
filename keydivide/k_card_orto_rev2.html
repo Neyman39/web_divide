@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="assets/css/k_card_style.css">
     <link rel="stylesheet" href="assets/css/k_card_phone.css">
     <link rel="stylesheet" href="assets/css/navpanel.css">
-    <link rel="stylesheet" href="assets/css/navpanel_phone.css">
     <link rel="stylesheet" href="assets/css/footer.css">
     <link rel="stylesheet" href="assets/css/footer_phone.css">
     <link rel="stylesheet" href="assets/css/slider.css">
@@ -38,36 +37,12 @@
                 </ul>   
             </nav>
         </div>
+         <!-- Блок для приветствия -->
+<div id="authStatus" style="text-align: right; margin: 10px; font-weight: bold;"></div>
 		<div>
 			<a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
 			<a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
 		</div>
-    </div>
-</header>
-
-<header class="header_phone">
-    <div class="container">
-        <div class="header__inner">
-            <nav class="nav">
-                <ul>
-                    <li class="_link"><a class="nav__link" href="#" style="font-size: 30px;">=</a>
-                        <ul class="url">
-                            <li class="two_link"><a class="nav__link" href="Главная.html#keyboards">Клавиатуры</a></li>
-                            <li class="two_link"><a class="nav__link" href="Главная.html#services">Услуги</a></li>
-                            <li class="two_link"><a class="nav__link" href="Главная.html#aboutus">О нас</a></li>
-                            <li class="two_link" style="margin-top: 10px;"><a class="nav__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
-                            <li class="two_link"><a class="nav__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
-                            <li class="two_link"><a class="nav__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
-                        </ul>
-                    </li>					
-                </ul>   
-            </nav>
-            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
-            <div>
-    		    <a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-    		    <a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
-    	    </div>
-        </div>
     </div>
 </header>
 
@@ -173,11 +148,11 @@
             </div>
             <div class="box-price"><p class="price" id="price">9890 ₽</p></div>
             <div class="butt">
-                <div href="#" class="button">
-                    <p>В корзину</p>
-                    <img src="assets/images/корзина.png" alt="" width="26" height="24"> 
-                </div>
-                <div class="deliver"><p>Бесплатная доставка от 4 дней 🚚</p></div>
+               <div id="addToCartBtn" class="button" >
+                  <p>В корзину</p>
+                  <img src="assets/images/корзина.png" alt="" width="26" height="24"> 
+               </div>
+               <div class="deliver"><p>Бесплатная доставка от 4 дней 🚚</p></div>
             </div>
         </div>
     </div>
@@ -263,7 +238,7 @@
             </div>
         </div>
     </div> 
-    <iframe width="70%" height="50%" src="https://www.youtube.com/embed/_RS06SZoUDM?si=otiXJAgLO96BYoYi" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/_RS06SZoUDM?si=otiXJAgLO96BYoYi" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
         
     </iframe> 
 </div>
@@ -306,6 +281,73 @@
     </div>
 </div>
 <script src="script.js"></script>
+
+
+<script>
+     // Проверка авторизации
+  window.onload = function() {
+    const isAuth = localStorage.getItem('isAuthenticated');
+    const username = localStorage.getItem('username');
+
+    const authDiv = document.getElementById('authStatus');
+
+    if (isAuth === 'true' && username) {
+      authDiv.innerHTML = `Добро пожаловать, ${username}! <a href="#" id="logoutLink" style="color: red;">Выйти</a>`;
+      
+      document.getElementById('logoutLink').onclick = function() {
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('username');
+        location.reload();
+      };
+    } 
+  }
+
+
+  
+  document.getElementById('addToCartBtn').addEventListener('click', () => {
+    const isAuth = localStorage.getItem('isAuthenticated');
+    const username = localStorage.getItem('username');
+
+    if (isAuth !== 'true' || !username) {
+      alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
+      window.location.href = 'Авторизация.html'; // редирект на вход
+      return;
+    }
+
+    // Получаем текущую цену товара (может понадобиться чуть более сложная логика)
+    const priceText = document.getElementById('price').textContent; // например, "8940 ₽"
+    const price = parseFloat(priceText.replace(/[^\d.-]/g, '')); // извлекаем число
+
+    // Название товара 
+    const productName = "CacaoSplit Ortomini Black"; 
+
+    // Название или описание выбранного товара, если есть
+    const productDescription = " "; // или динамически
+
+    // Ключ корзины для этого пользователя
+    const cartKey = `cart_${username}`;
+    let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+    // Можно хранить один товар или делать уникальный ключ для комбинации товара + цена — тут пример по имени
+    const existingItem = cart.find(item => item.productName === productName);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({
+        productName: productName,
+        description: productDescription,
+        price: price,
+        quantity: 1
+      });
+    }
+
+    localStorage.setItem(cartKey, JSON.stringify(cart));
+    alert('Товар добавлен в корзину!');
+  });
+</script>
+
+
 <script>
     // Определяем объект с различными конфигурациями и их ценами
     const configurations = {

@@ -4,11 +4,9 @@
 	<meta charset="UTF-8">
 	<title>KeyDivide Сайт по продаже клавиатур</title>
     <link rel="stylesheet" href="assets/css/navpanel.css">
-    <link rel="stylesheet" href="assets/css/navpanel_phone.css">
-    <link rel="stylesheet" href="assets/css/basket.css">
-    <link rel="stylesheet" href="assets/css/basket_phone.css">
     <link rel="stylesheet" href="assets/css/footer.css">
     <link rel="stylesheet" href="assets/css/footer_phone.css">
+    <link rel="stylesheet" href="assets/css/basket.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
@@ -44,38 +42,15 @@
     </div>
 </header>
 
-<header class="header_phone">
-    <div class="container">
-        <div class="header__inner">
-            <nav class="nav">
-                <ul>
-                    <li class="_link"><a class="nav__link" href="#" style="font-size: 30px;">=</a>
-                        <ul class="url">
-                            <li class="two_link"><a class="nav__link" href="Главная.html#keyboards">Клавиатуры</a></li>
-                            <li class="two_link"><a class="nav__link" href="Главная.html#services">Услуги</a></li>
-                            <li class="two_link"><a class="nav__link" href="Главная.html#aboutus">О нас</a></li>
-                            <li class="two_link" style="margin-top: 10px;"><a class="nav__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
-                            <li class="two_link"><a class="nav__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
-                            <li class="two_link"><a class="nav__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
-                        </ul>
-                    </li>					
-                </ul>   
-            </nav>
-            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
-            <div>
-    		    <a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-    		    <a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
-    	    </div>
-        </div>
-    </div>
-</header>
-
-<div class="box">
-    <div class="nonein">
-        <p>В корзине пока пусто, но в каталоге есть интересные клавиатуры</p>
-        <a href="Главная.html#keyboards" class="button"> Перейти к выбору </a>
-    </div>
+<div class="box" id="cartContainer">
+  <!-- Здесь будут отображаться товары либо сообщение об отсутствии -->
 </div>
+<div style="margin-top: 20px; text-align: center;">
+  <button id="orderBtn" class="button" style="padding: 10px 20px; font-size: 16px;">Заказать</button>
+</div>
+
+
+
 
 <div class="footer">
     <div class="footbox">
@@ -116,5 +91,202 @@
     </div>
 </div>
 <script src="modalw.js"></script>
+
+<script>
+
+
+
+  window.onload = function() {
+    const isAuth = localStorage.getItem('isAuthenticated');
+    const username = localStorage.getItem('username');
+    const cartContainer = document.getElementById('cartContainer');
+
+    if (isAuth !== 'true' || !username) {
+      cartContainer.innerHTML = `
+        <p>Пожалуйста, <a href="Авторизация.html">войдите</a>, чтобы просмотреть корзину.</p>
+      `;
+      return;
+    }
+
+    const cartKey = `cart_${username}`;
+    const cart = JSON.parse(localStorage.getItem(cartKey));
+
+    if (!cart || cart.length === 0) {
+      // Корзина пустая — показываем сообщение вашего блока .nonein
+      cartContainer.innerHTML = `
+        <div class="nonein">
+          <p>В корзине пока пусто, но в каталоге есть интересные клавиатуры</p>
+          <a href="Главная.html#keyboards" class="button">Перейти к выбору</a>
+        </div>
+      `;
+      return;
+    }
+
+    // Есть товары — строим список
+    let html = '<h2>Ваша корзина:</h2><ul class="cart-list" style="list-style:none; padding:0;">';
+
+    let totalPrice = 0;
+
+    cart.forEach(item => {
+      const itemTotal = (item.price || 0) * (item.quantity || 1);
+      totalPrice += itemTotal;
+
+      html += `
+        <li style="border-bottom:1px solid #ccc; padding:10px 0;">
+          <strong>${item.productName || 'Товар'}</strong><br/>
+          ${item.switchName ? `<em>Переключатель: ${item.switchName}</em><br/>` : ''}
+          Кол-во: ${item.quantity || 1}<br/>
+          Цена за шт: ${item.price ? item.price.toLocaleString('ru-RU') + ' ₽' : '–'}<br/>
+          Итог: ${itemTotal.toLocaleString('ru-RU')} ₽
+        </li>
+      `;
+    });
+
+    html += `</ul>`;
+    html += `<p style="font-weight:bold; margin-top:10px;">Общая сумма: ${totalPrice.toLocaleString('ru-RU')} ₽</p>`;
+
+    cartContainer.innerHTML = html;
+  };
+</script>
+
+<script>
+  // Функция отрисовки корзины
+  function renderCart() {
+    const isAuth = localStorage.getItem('isAuthenticated');
+    const username = localStorage.getItem('username');
+    const cartContainer = document.getElementById('cartContainer');
+
+    if (isAuth !== 'true' || !username) {
+      cartContainer.innerHTML = `
+        <p>Пожалуйста, <a href="Авторизация.html">войдите</a>, чтобы просмотреть корзину.</p>
+      `;
+      return;
+    }
+
+    const cartKey = `cart_${username}`;
+    let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+    if (cart.length === 0) {
+      cartContainer.innerHTML = `
+        <div class="nonein">
+          <p>В корзине пока пусто, но в каталоге есть интересные клавиатуры</p>
+          <a href="Главная.html#keyboards" class="button">Перейти к выбору</a>
+        </div>
+      `;
+      return;
+    }
+
+    let totalPrice = 0;
+    let html = '<h2>Ваша корзина:</h2><ul class="cart-list" style="list-style:none; padding:0;">';
+
+    cart.forEach((item, index) => {
+      const itemTotal = (item.price || 0) * (item.quantity || 1);
+      totalPrice += itemTotal;
+
+      html += `
+        <li style="border-bottom:1px solid #ccc; padding:10px 0; display:flex; align-items:center; justify-content: space-between;">
+          <div>
+            <strong>${item.productName || 'Товар'}</strong><br/>
+            ${item.switchName ? `<em>Переключатель: ${item.switchName}</em><br/>` : ''}
+            Цена за шт: ${item.price ? item.price.toLocaleString('ru-RU') + ' ₽' : '–'}
+          </div>
+          <div style="display:flex; align-items:center;">
+            <button data-index="${index}" class="btn-decrease" style="margin-right:5px;">−</button>
+            <span style="width:30px; text-align:center;">${item.quantity || 1}</span>
+            <button data-index="${index}" class="btn-increase" style="margin-left:5px;">+</button>
+            <button data-index="${index}" class="btn-remove" style="margin-left:15px; color:red;" title="Удалить">🗑️</button>
+          </div>
+          <div style="min-width:80px; text-align:right;">
+            <strong>${itemTotal.toLocaleString('ru-RU')} ₽</strong>
+          </div>
+        </li>
+      `;
+    });
+
+    html += `</ul>`;
+    html += `<p style="font-weight:bold; margin-top:10px;">Общая сумма: ${totalPrice.toLocaleString('ru-RU')} ₽</p>`;
+
+    cartContainer.innerHTML = html;
+
+    // Навешиваем обработчики на кнопки
+    cartContainer.querySelectorAll('.btn-increase').forEach(button => {
+      button.onclick = () => {
+        const idx = +button.getAttribute('data-index');
+        cart[idx].quantity = (cart[idx].quantity || 1) + 1;
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+        renderCart();
+      };
+    });
+
+    cartContainer.querySelectorAll('.btn-decrease').forEach(button => {
+      button.onclick = () => {
+        const idx = +button.getAttribute('data-index');
+        if ((cart[idx].quantity || 1) > 1) {
+          cart[idx].quantity -= 1;
+          localStorage.setItem(cartKey, JSON.stringify(cart));
+          renderCart();
+        } else {
+          // Можно предложить удалить товар, если количество 1 и нажата кнопка "−"
+          if (confirm('Удалить товар из корзины?')) {
+            cart.splice(idx, 1);
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+            renderCart();
+          }
+        }
+      };
+    });
+
+    cartContainer.querySelectorAll('.btn-remove').forEach(button => {
+      button.onclick = () => {
+        const idx = +button.getAttribute('data-index');
+        if (confirm('Удалить товар из корзины?')) {
+          cart.splice(idx, 1);
+          localStorage.setItem(cartKey, JSON.stringify(cart));
+          renderCart();
+        }
+      };
+    });
+  }
+
+  window.onload = renderCart;
+
+
+  // Обработчик для кнопки "Заказать"
+  document.getElementById('orderBtn').onclick = () => {
+  const isAuth = localStorage.getItem('isAuthenticated');
+  const username = localStorage.getItem('username');
+
+  if (isAuth !== 'true' || !username) {
+    alert('Пожалуйста, войдите или зарегистрируйтесь для оформления заказа.');
+    window.location.href = 'Авторизация.html';
+    return;
+  }
+
+  const cartKey = `cart_${username}`;
+  const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+  if (cart.length === 0) {
+    alert('Корзина пуста.');
+    return;
+  }
+
+  // Добавляем товары в заказы
+  const orderKey = `orders_${username}`;
+  const existingOrders = JSON.parse(localStorage.getItem(orderKey)) || [];
+
+  const updatedOrders = [...existingOrders, ...cart];
+  localStorage.setItem(orderKey, JSON.stringify(updatedOrders));
+
+  // Очищаем корзину
+  localStorage.removeItem(cartKey);
+
+  alert(`Спасибо за заказ! Вы заказали ${cart.length} товаров на сумму ${cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0).toLocaleString('ru-RU')} ₽`);
+
+  // Перенаправляем в профиль
+  window.location.href = 'login copy.html';
+};
+
+  
+</script>
 </body>
 </html>

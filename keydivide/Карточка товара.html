@@ -32,6 +32,8 @@
                 </ul>   
             </nav>
         </div>
+         <!-- Блок для приветствия -->
+<div id="authStatus" style="text-align: right; margin: 10px; font-weight: bold;"></div>
 		<div>
 			<a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
 			<a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
@@ -73,12 +75,12 @@
                 </div>
                 <div class="box-price"><p class="price" id="price"> 2200 ₽</p></div>
                 <div class="butt">
-                    <div href="#" class="button">
-                        <p>В корзину</p>
-                        <img src="assets/images/корзина.png" alt="" width="26" height="24"> 
-                    </div>
-                    <div class="deliver"><p>Бесплатная доставка от 4 дней 🚚</p></div>
-                </div> 
+               <div id="addToCartBtn" class="button" >
+                  <p>В корзину</p>
+                  <img src="assets/images/корзина.png" alt="" width="26" height="24"> 
+               </div>
+               <div class="deliver"><p>Бесплатная доставка от 4 дней 🚚</p></div>
+            </div> 
             </div>
         </div>
     </div>
@@ -135,6 +137,69 @@
     </div>
 </div>
 <script src="Educ-price-swlub.js"></script>
+<script>
+     // Проверка авторизации
+  window.onload = function() {
+    const isAuth = localStorage.getItem('isAuthenticated');
+    const username = localStorage.getItem('username');
+
+    const authDiv = document.getElementById('authStatus');
+
+    if (isAuth === 'true' && username) {
+      authDiv.innerHTML = `Добро пожаловать, ${username}! <a href="#" id="logoutLink" style="color: red;">Выйти</a>`;
+      
+      document.getElementById('logoutLink').onclick = function() {
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('username');
+        location.reload();
+      };
+    } 
+  }
+
+
+  
+  document.getElementById('addToCartBtn').addEventListener('click', () => {
+    const isAuth = localStorage.getItem('isAuthenticated');
+    const username = localStorage.getItem('username');
+
+    if (isAuth !== 'true' || !username) {
+      alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
+      window.location.href = 'Авторизация.html'; // редирект на вход
+      return;
+    }
+
+    // Получаем текущую цену товара (может понадобиться чуть более сложная логика)
+    const priceText = document.getElementById('price').textContent; // например, "8940 ₽"
+    const price = parseFloat(priceText.replace(/[^\d.-]/g, '')); // извлекаем число
+
+    // Название товара 
+    const productName = "Смазка переключателей"; 
+
+    // Название или описание выбранного товара, если есть
+    const productDescription = " "; // или динамически
+
+    // Ключ корзины для этого пользователя
+    const cartKey = `cart_${username}`;
+    let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+    // Можно хранить один товар или делать уникальный ключ для комбинации товара + цена — тут пример по имени
+    const existingItem = cart.find(item => item.productName === productName);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({
+        productName: productName,
+        description: productDescription,
+        price: price,
+        quantity: 1
+      });
+    }
+
+    localStorage.setItem(cartKey, JSON.stringify(cart));
+    alert('Товар добавлен в корзину!');
+  });
+</script>
 </body>
 
 

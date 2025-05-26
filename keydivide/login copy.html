@@ -1,105 +1,145 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>KeyDivide Сайт по продаже клавиатур</title>
-    <link rel="stylesheet" href="assets/css/navpanel.css">
-    <link rel="stylesheet" href="assets/css/Главная.css">
-    <link rel="stylesheet" href="assets/css/footer.css">
-    <link rel="stylesheet" href="assets/css/login.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+  <meta charset="UTF-8" />
+  <title>Профиль | KeyDivide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/css/navpanel.css" />
+  <link rel="stylesheet" href="assets/css/footer.css" />
+  <link rel="stylesheet" href="assets/css/login.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    .box {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      font-family: 'Rubik', sans-serif;
+    }
 
+    .user_card {
+      background-color: #f5f5f5;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user_info {
+      display: flex;
+      align-items: center;
+    }
+
+    .data {
+      margin-left: 20px;
+    }
+
+    .data h1 {
+      font-size: 24px;
+      margin: 0;
+       color: black;
+    }
+
+    .data p {
+      margin: 4px 0;
+      color: #666;
+    }
+
+    .orders_info p {
+      margin: 8px 0;
+    }
+
+    .logout {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .logout:hover {
+      background-color: #c9302c;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    .empty-orders {
+      text-align: center;
+      padding: 40px;
+      font-size: 18px;
+      color: #999;
+    }
+  </style>
+</head>
 <body>
 
 <header class="header">
     <div class="container">
         <div class="header__inner">
-            <div><a class="header__logo" asp-action="Index">KeyDivide</a></div>
+            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
+
             <nav class="nav">
                 <ul>
                     <li class="_link"><a class="nav__link" href="#keyboards">Клавиатуры</a></li>
                     <li class="_link"><a class="nav__link" href="#services">Услуги</a></li>
                     <li class="_link"><a class="nav__link" href="#aboutus">О нас</a></li>
-                    <li class="_link">
-                        <a class="nav__link" href="#">Соцсети</a>
+                    <li class="_link"><a class="nav__link" href="#">Соцсети</a>
                         <ul class="url">
                             <li class="two_link" style="margin-top: 10px;"><a class="url__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
                             <li class="two_link"><a class="url__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
+                            <li class="two_link"><a class="url__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
                         </ul>
-                    </li>
-                </ul>
+                    </li>					
+                </ul>   
             </nav>
         </div>
-        <div>
-            <a class="ikon" asp-action="Avtor" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-            <a class="ikon" asp-action="Avtor"><img src="assets/images/корзина.png" width="26" height="26"></a>
-        </div>
+       
+		<div>
+			<a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
+			<a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
+		</div>
     </div>
 </header>
-     
-<div><form asp-action="login" asp-controller="home" class="box">
-    <div class="user_card">
-        <div class="user_info">
-            <img src="assets/images/sw_pink.png" alt="" width="80" height="80" style="border-radius: 50%; margin-left: 20px;">
-            <div class="data">
-                <h1>@ViewBag.UserName</h1>
-                <p>@ViewBag.UserTeleh</p>
-            </div>
-        </div>
-        <div class="orders_info">
-            <p class="my_orders">Мои заказы</p>
-            <p class="personal_data">Личные данные</p>
-            <p class="logout">Выйти</p>
-        </div>
+
+<div class="box">
+  <div class="user_card">
+    <div class="user_info">
+      <img src="assets/images/sw_pink.png" alt="Аватар" width="80" height="80" style="border-radius: 50%" />
+      <div class="data">
+        <h1 id="username"></h1>
+        <p id="userphone"></p>
+        <p id="useremail"></p>
+        <p id="useraddress"></p>
+      </div>
     </div>
-    <h2 style="text-align:center; margin: 25px auto;"> Мои заказы </h2>
-    <table style="width: 1100px;">
-        <tr>
-            <th colspan="2">Наименование товара</th>
-            <th>Количество </th>
-            <th>Дата заказа </th>
-            <th>Срок заказа </th> 
-            <th> </th>
-        </tr>
-        @foreach (var item in ViewBag.UserOrders)
-        {
-            <tr>
-                <td><img src="assets/images/sw_pink.png" style="height:100px"></td>
-                <td>@item.Product.NameProduct</td>
-                <td>@item.Quantity</td>
-                <td>@item.Date</td>
-                <td>@item.Srok</td>
-                <td>
-                    <form asp-controller="Home" asp-action="DeleteOrder" method="post">
-                        <input type="hidden" name="orderId" value="@item.OrderId" />
-                        <button onclick="showDeleteConfirmation()">Удалить</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </table>
-
-    @foreach (var item in ViewBag.UserOrders)
-    <div class="past-products">
-        <div class="prod">
-            <img src="assets/images/sw_pink.png" style="height:100px">
-            <p style="margin-left: 16px;">@item.Product.NameProduct</p>
-        </div>
-        <p>Кол-во: @item.Quantity</p>
-        <p>Цена: -</p>
-        <div class="name-prod">
-            <p>Оформлен: @item.Date</p>
-            <p>Закрыт: @item.Srok</p>
-        </div>
+    <div class="orders_info">
+      <p><button id="logoutBtn" class="logout">Выйти</button></p>
     </div>
-</form></div>
+  </div>
 
-
+  <h2 style="text-align:center;">Мои заказы</h2>
+  <div id="ordersSection">
+    <div class="empty-orders">У вас пока нет заказов.</div>
+  </div>
+</div>
 
 <div class="footer">
     <div class="footbox">
@@ -119,6 +159,7 @@
                     <h1 class="coltitle">Соцсети</h1>
                     <a href="https://discord.gg/PKZ8ejUB8Z" target="_blank"><p class="coltext">Discord</p></a>
                     <a href="https://vk.com/cacao_keyboards" target="_blank"><p class="coltext">Вконтакте</p></a>
+                    <a href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank"><p class="coltext">YouTube</p></a>  
                 </div>
                 <div class="col4">
                     <h1 class="coltitle">Инфо</h1>
@@ -139,30 +180,74 @@
     </div>
 </div>
 
-
 <script>
-    function showDeleteConfirmation(orderId) {
-        if (confirm("Вы уверены, что хотите удалить этот заказ?")) {
 
-            deleteOrder(orderId);
-        }
+
+  window.onload = function () {
+    const isAuth = localStorage.getItem('isAuthenticated');
+    const usernameKey = localStorage.getItem('username');
+
+    if (isAuth !== 'true' || !usernameKey) {
+      alert('Пожалуйста, войдите в аккаунт.');
+      window.location.href = 'Авторизация.html';
+      return;
     }
 
+    const user = JSON.parse(localStorage.getItem(`user_${usernameKey}`));
 
-    function deleteOrder(orderId) {
+    if (!user) {
+      alert('Данные пользователя не найдены.');
+      return;
+    }
 
-    var form = document.createElement("form");
-    form.setAttribute("method", "post");
-    form.setAttribute("action", "@Url.Action()");
-    var input = document.createElement("input");
-    input.setAttribute("type", "hidden");
-    input.setAttribute("name", "orderId");
-    input.setAttribute("value", orderId);
-    form.appendChild(input)
-    document.body.appendChild(form);
-    form.submit();
-}
+    document.getElementById('username').textContent = user.username || usernameKey;
+    document.getElementById('userphone').textContent = `Телефон: ${user.phone || '-'}`;
+    document.getElementById('useremail').textContent = `Email: ${user.email || '-'}`;
+    document.getElementById('useraddress').textContent = `Адрес: ${user.address || '-'}`;
 
+    const orders = JSON.parse(localStorage.getItem(`orders_${usernameKey}`)) || [];
+    const ordersSection = document.getElementById('ordersSection');
+
+    if (orders.length === 0) {
+      ordersSection.innerHTML = `<div class="empty-orders">У вас пока нет заказов.</div>`;
+      return;
+    }
+
+    let tableHTML = `<table>
+      <tr>
+        <th>Товар</th>
+        <th>Переключатель</th>
+        <th>Количество</th>
+        <th>Сумма</th>
+      </tr>`;
+
+    orders.forEach(order => {
+      const total = (order.price || 0) * (order.quantity || 1);
+      tableHTML += `
+        <tr>
+          <td>${order.productName || 'Товар'}</td>
+          <td>${order.switchName || '-'}</td>
+          <td>${order.quantity || 1}</td>
+          <td>${total.toLocaleString('ru-RU')} ₽</td>
+        </tr>
+      `;
+    });
+
+    tableHTML += '</table>';
+    ordersSection.innerHTML = tableHTML;
+  };
+
+  document.getElementById('logoutBtn').onclick = function () {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('username');
+    alert('Вы вышли из аккаунта.');
+    window.location.href = 'Главная.html';
+  };
+
+
+
+  
 </script>
+
 </body>
 </html>
