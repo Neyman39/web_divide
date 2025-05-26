@@ -18,14 +18,14 @@ h1, h3, h4, h5, h6 {
 }
 
 /* Landscape phones and smaller */
-@media (max-width: 480px) {
+@media (max-width: 767px) {
 
     /*Intro*/
     .intro {
         background-color: #E7E7E7;
         width: 100%;
         margin: 0 auto;
-        height: 2000px; 
+        height: auto; 
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -37,7 +37,7 @@ h1, h3, h4, h5, h6 {
         flex-direction: column;
         align-items: center;
         margin: 0 auto;
-        margin-bottom: 50px;
+        margin-bottom: 100px;
     }
 
     .baza {
@@ -62,8 +62,8 @@ h1, h3, h4, h5, h6 {
 
     .prod_info {
         margin-top: 20px;
-        margin-left: 10px;
-        width: 100%;
+        margin-left: 2%;
+        width: 98%;
         height: auto;
         text-decoration: none;
         display: flex;
@@ -276,10 +276,10 @@ h1, h3, h4, h5, h6 {
     .bombom2 {
         margin-left: 30px;
         margin-bottom: 20px;
-        width: 500px;
+        width: 90%;
     }
     .bombom2 h3 {
-        width: 500px;
+        width: 90%;
         padding-top: 30px;
         padding-bottom: 20px;
     }

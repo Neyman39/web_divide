@@ -172,9 +172,9 @@
   }
   
   .filter {
-    width: 800px;
+    width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
   }
   
@@ -193,6 +193,7 @@
   
   .in_card1 {
     width: 100%;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -36,11 +36,24 @@ a {
     color: white;
 }
 
-.colinfo {
+/* .colinfo {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 860px;
+} */
+
+.colinfo {
+    display: flex;
+    margin-right: 50px;
+    width: 800px;
+    flex-direction: row;
+    justify-content: space-between; /* Выравнивание элементов по началу строки */
+}
+
+.colinfo > * {
+    min-width: 130px; /* Минимальная ширина перед переносом */
+    max-width: 300px; /* Максимальная ширина элемента */
 }
 
 .coltext {
@@ -66,13 +79,6 @@ a {
 }
 .col1 p {
     padding: 14px 0;
-}
-
-.col5 p {
-    font-size: 16px;
-    padding: 14px 0;
-    width: 300px;
-    line-height: 24px;
 }
 
 .by {

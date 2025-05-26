@@ -1,13 +1,3 @@
-*,
-*:before,
-*:after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    list-style: none;
-    text-decoration: none;
-}
-
 body {
     background-color: #f9f9f9;
 }
@@ -17,7 +7,6 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 57px;
     width: 100%;
     height: 80vh;
     background: url("../images/for-basket.png") center

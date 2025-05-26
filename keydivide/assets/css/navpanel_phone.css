@@ -1,4 +1,5 @@
 body {
+    margin: 0;
     font-family: "Rubik", sans-serif;
     -webkit-text-size-adjust: 100%; /* Предотвращает авто-масштабирование текста на iOS */
 }
@@ -16,135 +17,121 @@ body {
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
-
-/* Container */
-.container {
-    width: 400px;
-    min-height: 200px; /* Используем min-height вместо фиксированной высоты */
-    display: flex;
-    flex-direction: column; /* Колоночная layout для мобильных */
-}
-
-/* Header */
-.header {
-    width: 400px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    background-color: #D1A49E;
-    padding: 15px 0; /* Добавляем отступы вместо фиксированной высоты */
-}
-
-.header__inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 15px; /* Добавляем боковые отступы */
-}
-
-.header__logo {
-    font-size: 24px; /* Уменьшаем размер шрифта для мобильных */
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 15px; /* Заменяем margin-right на margin-bottom */
-    text-decoration: none;
-    text-align: center;
-}
-
-/* Навигация */
-.nav {
-    width: 100%; /* Занимает всю доступную ширину */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.nav__link {
-    display: block;
-    padding: 12px 0; /* Увеличиваем тап-зоны для мобильных */
-    width: 100%;
-    text-align: center;
-    color: #fff;
-    font-size: 18px; /* Уменьшаем размер шрифта */
-    transition: transform 0.2s;
-}
-
-.nav__link:hover,
-.nav__link:focus {
-    transform: scale(1.05);
-}
-
-/* Выпадающее меню */
-.url {
-    position: static; /* Изменяем позиционирование для мобильных */
-    width: 100%;
-    background-color: rgba(209, 164, 158, 0.9);
-    display: none;
-    border-radius: 0;
-    margin-top: 5px;
-}
-
-._link:hover > .url,
-._link:focus-within > .url {
-    display: block;
-}
-
-.url__link {
-    display: block;
-    padding: 10px 15px;
-    color: #fff;
-    font-size: 16px;
-    text-align: center;
-}
-
-/* Адаптация для разных размеров экранов */
-@media (min-width: 481px) {
+@media (max-width: 767px) {
+    /* Header */
     .header {
-        height: auto;
-        padding: 20px 0;
+        display: none;
+        height: 58px;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: -1000000000000000000000000000;
+        background-color: #D1A49E;
+        align-items: baseline;
     }
-    
-    .header__inner {
-        flex-direction: row;
-        justify-content: space-between;
-        max-width: 1200px;
+
+    .header_phone {
+        display: block;
+        height: 58px;
+        width: 100%;
+        position: fixed;
+        z-index: 1000;
+        background-color: #D1A49E;
+        align-items: baseline;
+    }
+
+    /*Container*/
+    .container {
+        width: 100%;
+        height: 58px;
         margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
-    
-    .header__logo {
-        margin-bottom: 0;
-        margin-right: 30px;
-        font-size: 30px;
-    }
-    
-    .nav {
+
+    .header__inner {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
         flex-direction: row;
-        width: auto;
+        align-items: center;
     }
-    
+
+    .header__logo {
+        font-size: 26px;
+        font-weight: 650;
+        color: #fff;
+        margin-right: 0;
+        text-decoration: none;
+    }
+
+    /* Навигация */
+    .nav {
+        margin-top: 5px;
+        font-size: 21px;
+        font-weight: 410;
+    }
+
     .nav__link {
-        margin: 0 15px;
-        width: auto;
-        padding: 0;
+        display: flex;
+        vertical-align: bottom;
+        margin: 19px 18px;
+
+        color: #fff;
+        text-decoration: none;
+
+        transition: 0.2s;
     }
-    
+
+    .nav__link:hover {
+        transform: scale(1.05);
+    }
+
+    .url__link {
+        padding: 7px 0;
+        display: block;
+        margin: 0 15px;
+        position: relative;
+
+        color: #fff;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 400;
+        transition: 0s;
+    }
+    .url__link:hover {
+        transform: scale(1.05);
+    }
+
     .url {
         position: absolute;
-        top: 100%;
+        top: 47px;
         left: 0;
-        width: 200px;
+        width: 150px;
+        background-color: #D1A49E;
+        display: none;
         border-radius: 10px;
-    }
-}
+    }   
 
-/* Особые стили для очень маленьких экранов */
-@media (max-width: 360px) {
-    .header__logo {
-        font-size: 20px;
+    .two_link {
+        width: 100%;
     }
-    
-    .nav__link {
-        font-size: 16px;
+
+    ._link:hover > .url{
+        display: initial;
+    }
+
+    ._link {
+        position: relative;
+        float: left;
+    }
+
+    .ikon {
+      display: inline-block;
+      margin: 0 7px;
+      position: relative;
     }
 }
