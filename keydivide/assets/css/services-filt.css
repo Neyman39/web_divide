@@ -89,7 +89,7 @@
   @media (max-width: 767px) {
     .product-container3 {
       margin-top: 78px;
-      width: 767px;
+      width: 90%;
       height: 1110px;
       display: flex;
       flex-direction: column;

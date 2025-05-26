@@ -5,7 +5,7 @@ a {
 }
 
 /* Landscape phones and smaller */
-@media (max-width: 480px) {
+@media (max-width: 767px) {
     .footer {
         margin: 0;
         width: 100%;
