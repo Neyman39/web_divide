@@ -157,7 +157,8 @@ option{
 
 #klaviatura {
   margin-top: 60px;
-  width: 1340px;
+  max-width: 1340px;
+  min-width: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -178,9 +179,6 @@ option{
 }
 
 .product-container {
-  margin-top: 78px;
-  width: 1340px;
-  height: 840px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -222,6 +220,30 @@ option{
 .filter-dropdown {
   display: none;
   position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 10;
+  min-width: 200px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.filter-dropdown.active {
+  display: block;
+}
+
+.filter-option {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.filter-option:hover {
+  background-color: #e2e2e2;
+}
+
+
+/* .filter-dropdown {
+  display: none;
+  position: absolute;
   background-color: #f9f9f9;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
@@ -234,7 +256,7 @@ option{
 
 .filter-dropdown .filter-option:hover {
   background-color: #aaaaaa;
-}
+} */
 
 .row {
   height: 450px;
@@ -254,6 +276,7 @@ option{
 }
 
 .in_card1 {
+  margin-top: 60px;
   width: 400px;
   height: 315px;
   display: flex;

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Профиль | KeyDivide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/css/navpanel.css" />
+  <link rel="stylesheet" href="assets/css/footer.css" />
+  <link rel="stylesheet" href="assets/css/login.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    .user_card {
+      background-color: #f5f5f5;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user_info {
+      display: flex;
+      align-items: center;
+    }
+
+    .data {
+      margin-left: 20px;
+    }
+
+    .data h1 {
+      font-size: 24px;
+      margin: 0;
+       color: black;
+    }
+
+    .data p {
+      margin: 4px 0;
+      color: #666;
+    }
+
+    .orders_info p {
+      margin: 8px 0;
+    }
+
+    .logout {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .logout:hover {
+      background-color: #c9302c;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    .empty-orders {
+      text-align: center;
+      padding: 40px;
+      font-size: 18px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="container">
+        <div class="header__inner">
+            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
+
+            <nav class="nav">
+                <ul>
+                    <li class="_link"><a class="nav__link" href="Главная.html#keyboards">Клавиатуры</a></li>
+                    <li class="_link"><a class="nav__link" href="Главная.html#services">Услуги</a></li>
+                    <li class="_link"><a class="nav__link" href="Главная.html#aboutus">О нас</a></li>
+                    <li class="_link"><a class="nav__link" href="#">Соцсети</a>
+                        <ul class="url">
+                            <li class="two_link" style="margin-top: 10px;"><a class="url__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
+                            <li class="two_link"><a class="url__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
+                            <li class="two_link"><a class="url__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
+                        </ul>
+                    </li>					
+                </ul>   
+            </nav>
+        </div>
+       
+		<div>
+			<a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
+			<a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
+		</div>
+    </div>
+</header>
+
+<div class="box">
+  <div class="user_card">
+    <div class="user_info">
+      <img src="assets/images/sw_pink.png" alt="Аватар" width="80" height="80" style="border-radius: 50%" />
+      <div class="data">
+        <h1 id="username"></h1>
+        <p id="userphone"></p>
+        <p id="useremail"></p>
+        <p id="useraddress"></p>
+      </div>
+    </div>
+    <div class="orders_info">
+      <p><button id="logoutBtn" class="logout">Выйти</button></p>
+    </div>
+  </div>
+
+  <h2 style="text-align:center; margin-bottom: 5px;">Мои заказы</h2>
+  <div id="ordersSection">
+    <div class="empty-orders">У вас пока нет заказов.</div>
+  </div>
+</div>
+
+<div class="footer">
+    <div class="footbox">
+        <div class="line"></div>
+        <div class="colums">
+            <div class="col1">
+                <h1>KeyDivide</h1>
+                <p>made by people for people</p>
+            </div>
+            <div class="colinfo">
+                <div class="col2">
+                    <h1 class="coltitle">Магазин</h1>
+                    <p class="coltext"><a href="#keyboards">Клавиатуры</a></p>
+                    <p class="coltext"><a href="#services">Услуги</a></p>
+                </div>
+                <div class="col3">
+                    <h1 class="coltitle">Соцсети</h1>
+                    <a href="https://discord.gg/PKZ8ejUB8Z" target="_blank"><p class="coltext">Discord</p></a>
+                    <a href="https://vk.com/cacao_keyboards" target="_blank"><p class="coltext">Вконтакте</p></a>
+                    <a href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank"><p class="coltext">YouTube</p></a>  
+                </div>
+                <div class="col4">
+                    <h1 class="coltitle">Инфо</h1>
+                    <p class="coltext"><a href="#aboutus">О нас</a></p>
+                </div>
+                <div class="col5">
+                    <h1 class="coltitle">Контакты</h1>
+                    <p>По поводу интересующих вопросов или предложениях пишите нам в Discord или of_cacaoboards@mail.ru</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="by">
+        <div class="byby">
+            <p>©CacaoBoards All Rights Reserved</p>
+            <p>Designed with ❤️ by neyman</p>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+  window.onload = async function () {
+    
+    const response = await fetch('http://localhost:5000/check-auth', {
+        headers: {
+          'Authorization': localStorage.getItem('authToken') || ''
+        }
+    });
+
+    //const usernameKey = localStorage.getItem('username');
+
+    if (!response.ok) {
+      alert('Пожалуйста, войдите в аккаунт.');
+      window.location.href = 'Авторизация.html';
+      return;
+    }
+
+    //const user = JSON.parse(localStorage.getItem(`user_${usernameKey}`));
+    const { user } = await response.json();
+
+    if (!user) {
+      alert('Данные пользователя не найдены.');
+      return;
+    }
+
+    document.getElementById('username').textContent = user.name || usernameKey;
+    document.getElementById('userphone').textContent = `Телефон: ${user.phone || '-'}`;
+    document.getElementById('useremail').textContent = `Email: ${user.email || '-'}`;
+    document.getElementById('useraddress').textContent = `Адрес: ${user.address || '-'}`;
+
+    const orders = JSON.parse(localStorage.getItem(`orders_${user.name}`)) || [];
+    const ordersSection = document.getElementById('ordersSection');
+
+    if (orders.length === 0) {
+      ordersSection.innerHTML = `<div class="empty-orders">У вас пока нет заказов.</div>`;
+      return;
+    }
+
+    let tableHTML = `<table>
+      <tr>
+        <th>Товар</th>
+        <th>Переключатель</th>
+        <th>Количество</th>
+        <th>Сумма</th>
+      </tr>`;
+
+    orders.forEach(order => {
+      const total = (order.price || 0) * (order.quantity || 1);
+      tableHTML += `
+        <tr>
+          <td>${order.productName || 'Товар'}</td>
+          <td>${order.switchName || '-'}</td>
+          <td>${order.quantity || 1}</td>
+          <td>${total.toLocaleString('ru-RU')} ₽</td>
+        </tr>
+      `;
+    });
+
+    tableHTML += '</table>';
+    ordersSection.innerHTML = tableHTML;
+  };
+
+  // Функция выхода из системы
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+  function logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    alert('Вы вышли из аккаунта.');
+    window.location.href = 'Главная.html';
+  }
+  
+</script>
+
+</body>
+</html>

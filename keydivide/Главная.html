@@ -39,12 +39,12 @@
                 </ul>   
             </nav>
         </div>
-        <!-- Блок для приветствия -->
-<div id="authStatus" style="text-align: right; margin: 10px; font-weight: bold;"></div>
-		<div>
-			<a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-			<a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
-		</div>
+        <!-- Блок для приветствия -->   
+		    <div style="flex-direction: row; display: flex; align-items: center;">
+          <div id="authStatus"></div>
+		    	<a class="ikon" id="account" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
+		    	<a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
+		    </div>
     </div>
 </header>
 
@@ -114,7 +114,10 @@
             <div style="width: 180px;"></div>
             <div id="SM2"><h3> Услуги </h3></div>
             <div class="filter-container3">
-                <button class="filter-btn3" onclick="toggleFilterDropdowne()"> <span class="filter-text3">Рекомендуемые</span><img src="assets/images/n-стрелка.png" alt="" width="12" height="12"></button>
+                <button class="filter-btn3" onclick="toggleFilterDropdowne()"> 
+                  <span class="filter-text3">Рекомендуемые</span>
+                  <img src="assets/images/n-стрелка.png" alt="" width="12" height="12">
+                </button>
                 <div class="filter-dropdown3">
                     <div class="filter-option3" onclick="applyFilterD('allo')">Рекомендуемые</div>
                     <div class="filter-option3" onclick="applyFilterD('asce')">По возрастанию цены</div>
@@ -504,104 +507,90 @@
     </div>
 </div>
 
+<script src="check_authorization.js"></script>
+
   
 
 <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+      await checkAuthAndDisplayUser();
+    });
+   
+    let currentFilter = 'all'; // по умолчанию
 
-  // Проверка авторизации
-  window.onload = function() {
-    const isAuth = localStorage.getItem('isAuthenticated');
-    const username = localStorage.getItem('username');
+// Функция открытия/закрытия выпадающего списка
+function toggleFilterDropdown() {
+  document.querySelector('.filter-dropdown').classList.toggle('active');
+}
 
-    const authDiv = document.getElementById('authStatus');
+// Функция применения фильтра
+function applyFilter(filter) {
+  currentFilter = filter;
 
-    if (isAuth === 'true' && username) {
-      authDiv.innerHTML = `Добро пожаловать, ${username}! <a href="#" id="logoutLink" style="color: red;">Выйти</a>`;
-      
-      document.getElementById('logoutLink').onclick = function() {
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('username');
-        location.reload();
-      };
-    } 
-  }
+  // Обновляем текст кнопки
+  const filterTextMap = {
+    'all': 'Рекомендуемые',
+    'asc': 'По возрастанию цены',
+    'desc': 'По убыванию цены'
+  };
 
-  
-    // Массив с товарами
-const products = [
-  { id: 1, name: 'CacaoSplit Ortomini52', price: 8.940, img: 'assets/images/ortomini_main.jpg', link: "k_card_orto.html" },
-  { id: 2, name: 'CacaoSplit Founder64', price: 10.140, img: 'assets/images/founder_main.jpg', link: "k_card_founder.html" },
-  { id: 3, name: 'CacaoSplit Ortomini Black', price: 9.890, img: 'assets/images/ortoblack_main.png', link: "k_card_orto_rev2.html" },
-  { id: 4, name: 'HHKB Professional 2', price: 27.590, img: 'assets/images/pink-switch.png' },
-  { id: 5, name: 'CacaoSplit', price: 1.590, img: 'assets/images/pink-switch.png' },
-  { id: 6, name: 'CacaoSplit', price: 1.590, img: 'assets/images/pink-switch.png' }
-];
+  document.querySelector('.filter-text').textContent = filterTextMap[filter] || 'Фильтр';
 
-// Функция для отображения товаров в карточках
-function displayProducts(filteredProducts) {
+  // Закрываем выпадающий список
+  document.querySelector('.filter-dropdown').classList.remove('active');
+
+  // Перезагружаем товары с новым фильтром
+  displayProducts();
+}
+
+// Функция для отображения товаров из БД
+async function displayProducts() {
   const productContainer = document.querySelector('.product-container');
   productContainer.innerHTML = '';
 
-  filteredProducts.forEach(product => {
-
-    const in_card1 = document.createElement('div');
-    in_card1.classList.add('in_card1');
-
-    const aLink = document.createElement('a');
-    aLink.href = product.link;
-    aLink.classList.add('in_card1');
-
-    const productImg = document.createElement('img');
-    productImg.src = product.img;
-    aLink.appendChild(productImg);
+  try {
+    // Запрашиваем данные с сервера
+    const response = await fetch('http://localhost:5000/api/products');
+    if (!response.ok) throw new Error('Ошибка загрузки товаров');
     
-    const productName = document.createElement('h4');
-    productName.textContent = product.name;
-    aLink.appendChild(productName);
+    let products = await response.json();
 
-    const productPrice = document.createElement('h5');
-    productPrice.textContent = `${product.price.toFixed(3)} ₽`;
-    aLink.appendChild(productPrice);
+    // Применяем фильтр
+    if (currentFilter === 'asc') {
+      products.sort((a, b) => a.price - b.price); // по возрастанию
+    } else if (currentFilter === 'desc') {
+      products.sort((a, b) => b.price - a.price); // по убыванию
+    }
+    // 'all' — без сортировки, просто как есть
 
-    in_card1.appendChild(aLink)
-    productContainer.appendChild(in_card1);
-    
+    // Отрисовка товаров
+    products.forEach(product => {
+      const in_card1 = document.createElement('a');
+      in_card1.classList.add('in_card1');
+      in_card1.href = product.link || '#';
 
-  });
-}
+      const productImg = document.createElement('img');
+      productImg.src = product.img || 'assets/images/default.jpg';
+      productImg.alt = product.name;
+      in_card1.appendChild(productImg);
 
-// Функция для сортировки и фильтрации товаров
-function applyFilter(filterType) {
-  let filteredProducts;
-  const filterBtn = document.querySelector('.filter-btn .filter-text');
+      const productName = document.createElement('h4');
+      productName.textContent = product.name;
+      in_card1.appendChild(productName);
 
-  switch (filterType) {
-    case 'asc':
-      filteredProducts = [...products].sort((a, b) => a.price - b.price);
-      filterBtn.textContent = 'По возрастанию цены';
-      break;
-    case 'desc':
-      filteredProducts = [...products].sort((a, b) => b.price - a.price);
-      filterBtn.textContent = 'По убыванию цены';
-      break;
-    case 'recommended':
-    default:
-      filteredProducts = [...products];
-      filterBtn.textContent = 'Рекомендуемые';
+      const productPrice = document.createElement('h5');
+      productPrice.textContent = `${product.price} ₽`;
+      in_card1.appendChild(productPrice);
+
+      productContainer.appendChild(in_card1);
+    });
+  } catch (error) {
+    console.error('Ошибка:', error);
+    productContainer.innerHTML = '<p>Не удалось загрузить товары. Попробуйте позже.</p>';
   }
-
-  displayProducts(filteredProducts);
-  toggleFilterDropdown();
 }
 
-// Функция для переключения выпадающего списка фильтрации
-function toggleFilterDropdown() {
-  const filterDropdown = document.querySelector('.filter-dropdown');
-  filterDropdown.style.display = filterDropdown.style.display === 'none' ? 'block' : 'none';
-}
-
-// Инициальное отображение всех товаров
-applyFilter('all');
+document.addEventListener('DOMContentLoaded', displayProducts);
 </script>
 <script src="services-fil.js"></script>
 

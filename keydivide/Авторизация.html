@@ -22,7 +22,7 @@
     </form>   
 </div>
 
-<script>
+<!-- <script>
   // Переключение видимости пароля
   function togglePassword() {
     const passInput = document.getElementById('password');
@@ -42,7 +42,7 @@
     phone: "+7 999 123-45-67",
     email: "ivan@example.com",
     login: "admin",
-    password: "1234",
+    password: "12345",
     address: "г. Москва, ул. Примерная, д. 1"
   };
 
@@ -65,6 +65,43 @@
       errorMessage.textContent = 'Неверный логин или пароль';
     }
   });
+</script> -->
+
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const login = document.getElementById('login').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const errorMessage = document.getElementById('errorMessage');
+  
+  try {
+    const response = await fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        login,
+        password
+      }),
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      // Авторизация успешна
+      localStorage.setItem('authToken', login); // Используем login как простой токен
+      localStorage.setItem('userData', JSON.stringify(data.user));
+      window.location.href = 'Главная.html';
+    } else {
+      errorMessage.textContent = data.error || 'Ошибка авторизации';
+    }
+  } catch (error) {
+    console.error('Ошибка:', error);
+    errorMessage.textContent = 'Ошибка соединения с сервером';
+  }
+});
 </script>
 
 </body>

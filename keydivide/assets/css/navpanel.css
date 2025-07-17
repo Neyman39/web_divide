@@ -79,6 +79,14 @@ h1, h3, h4, h5, h6 {
     transition: 0.2s;
 }
 
+#authStatus {
+    text-align: right; 
+    margin-right: 10px; 
+    font-size: 19px;
+    font-weight: 390;
+    color: #fff;
+}
+
 .nav__link:hover {
     transform: scale(1.05);
 }

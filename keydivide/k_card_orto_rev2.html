@@ -38,12 +38,12 @@
                 </ul>   
             </nav>
         </div>
-         <!-- Блок для приветствия -->
-<div id="authStatus" style="text-align: right; margin: 10px; font-weight: bold;"></div>
-		<div>
-			<a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-			<a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
-		</div>
+        <!-- Блок для приветствия -->
+        <div style="flex-direction: row; display: flex; align-items: center;">
+            <div id="authStatus"></div>
+            <a class="ikon" id="account" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
+            <a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
+        </div>
     </div>
 </header>
 
@@ -175,7 +175,7 @@
             </div>
             <div class="box-price"><p class="price" id="price">9890 ₽</p></div>
             <div class="butt">
-               <div id="addToCartBtn" class="button" >
+               <div id="addToCartBtn" class="button" style="cursor:pointer;">
                   <p>В корзину</p>
                   <img src="assets/images/корзина.png" alt="" width="26" height="24"> 
                </div>
@@ -308,70 +308,72 @@
     </div>
 </div>
 <script src="script.js"></script>
+<script src="check_authorization.js"></script>
 
 
 <script>
-     // Проверка авторизации
-  window.onload = function() {
-    const isAuth = localStorage.getItem('isAuthenticated');
-    const username = localStorage.getItem('username');
+    // Проверка авторизации при загрузке страницы
+    document.addEventListener('DOMContentLoaded', async () => {
+      await checkAuthAndDisplayUser();
+      setupCartButton();
+    });
 
-    const authDiv = document.getElementById('authStatus');
-
-    if (isAuth === 'true' && username) {
-      authDiv.innerHTML = `Добро пожаловать, ${username}! <a href="#" id="logoutLink" style="color: red;">Выйти</a>`;
-      
-      document.getElementById('logoutLink').onclick = function() {
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('username');
-        location.reload();
-      };
-    } 
-  }
-
-
-  
-  document.getElementById('addToCartBtn').addEventListener('click', () => {
-    const isAuth = localStorage.getItem('isAuthenticated');
-    const username = localStorage.getItem('username');
-
-    if (isAuth !== 'true' || !username) {
-      alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
-      window.location.href = 'Авторизация.html'; // редирект на вход
-      return;
+    // Настройка кнопки добавления в корзину
+    function setupCartButton() {
+        document.getElementById('addToCartBtn')?.addEventListener('click', async () => {
+            try {
+                // Проверяем авторизацию
+                const response = await fetch('http://localhost:5000/check-auth', {
+                    headers: {
+                        'Authorization': localStorage.getItem('authToken') || ''
+                    }
+                });
+            
+                if (!response.ok) {
+                    alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
+                    window.location.href = 'Авторизация.html';
+                    return;
+                }
+            
+                const { user } = await response.json();
+                
+                // Получаем текущую цену товара (может понадобиться чуть более сложная логика)
+                const priceText = document.getElementById('price').textContent; // например, "8940 ₽"
+                const price = parseFloat(priceText.replace(/[^\d.-]/g, '')); // извлекаем число
+                
+                // Название товара
+                const productName = document.getElementById('typing-demo').textContent;
+                
+                // Название или описание выбранного товара, если есть
+                const productDescription = "Маленькая клавиатура даже без ряда цифр, с ортолинейным строением..."; // или динамически
+            
+                // Ключ корзины для этого пользователя
+                const cartKey = `cart_${user.name}`;
+                let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+            
+                // Можно хранить один товар или делать уникальный ключ для комбинации товара + цена — тут пример по имени
+                const existingItem = cart.find(item => item.productName === productName);
+            
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } 
+                else {
+                    cart.push({
+                        productName: productName,
+                        description: productDescription,
+                        price: price,
+                        quantity: 1
+                    });
+                }
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+                alert('Товар добавлен в корзину!');
+            } 
+            catch (error) {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при добавлении в корзину');
+            }
+        });
     }
-
-    // Получаем текущую цену товара (может понадобиться чуть более сложная логика)
-    const priceText = document.getElementById('price').textContent; // например, "8940 ₽"
-    const price = parseFloat(priceText.replace(/[^\d.-]/g, '')); // извлекаем число
-
-    // Название товара 
-    const productName = "CacaoSplit Ortomini Black"; 
-
-    // Название или описание выбранного товара, если есть
-    const productDescription = " "; // или динамически
-
-    // Ключ корзины для этого пользователя
-    const cartKey = `cart_${username}`;
-    let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
-
-    // Можно хранить один товар или делать уникальный ключ для комбинации товара + цена — тут пример по имени
-    const existingItem = cart.find(item => item.productName === productName);
-
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cart.push({
-        productName: productName,
-        description: productDescription,
-        price: price,
-        quantity: 1
-      });
-    }
-
-    localStorage.setItem(cartKey, JSON.stringify(cart));
-    alert('Товар добавлен в корзину!');
-  });
 </script>
 
 
