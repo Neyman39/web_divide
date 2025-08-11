@@ -71,13 +71,14 @@
     </div>
 </header>
 
-<div class="box" id="cartContainer">
-  <!-- Здесь будут отображаться товары либо сообщение об отсутствии -->
+<div class="box" style="display: flex; align-items: center; flex-direction: column;">
+  <div id="cartContainer">
+    <!-- Здесь будут отображаться товары либо сообщение об отсутствии -->
+  </div>
+  <div style="margin-top: 20px; text-align: center;">
+    <button id="orderBtn" class="button" style="padding: 10px 20px; font-size: 16px;">Заказать</button>
+  </div>
 </div>
-<div style="margin-top: 20px; text-align: center;">
-  <button id="orderBtn" class="button" style="padding: 10px 20px; font-size: 16px;">Заказать</button>
-</div>
-
 
 
 
@@ -189,6 +190,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     html += `</ul>`;
     html += `<p style="font-weight:bold; margin-top:10px;">Общая сумма: ${totalPrice.toLocaleString('ru-RU')} ₽</p>`;
+
+    // html += `<div style="margin-top: 20px; text-align: center;">
+    //   <button id="orderBtn" class="button" style="padding: 10px 20px; font-size: 16px;">Заказать</button>
+    // </div>`;
 
     cartContainer.innerHTML = html;
     

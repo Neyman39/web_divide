@@ -33,7 +33,7 @@ h1, h3, h4, h5, h6 {
     width: 100%;
     position: fixed;
     z-index: 1000;
-    background-color: #D1A49E;
+    background-color: #818181; /*  D1A49E #D9D9D9*/
     align-items: baseline;
 }
 
@@ -62,6 +62,22 @@ h1, h3, h4, h5, h6 {
 }
 
 /* Навигация */
+
+.prod_count{
+    display: flex;
+    width: 18px; /* Задайте желаемую ширину */
+    height: 18px; /* Задайте желаемую высоту */
+    background-color: rgb(224, 68, 68); /* Задайте желаемый цвет */
+    border-radius: 50%; /* Превращает квадрат в круг */
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    font-size: 12px;
+}
+
 .nav {
     margin-top: 5px;
     font-size: 21px;

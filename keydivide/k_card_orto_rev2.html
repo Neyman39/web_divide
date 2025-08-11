@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/css/k_card_style.css">
+    <link rel="stylesheet" href="assets/css/k_card_style copy.css">
     <link rel="stylesheet" href="assets/css/k_card_phone.css">
     <link rel="stylesheet" href="assets/css/navpanel.css">
     <link rel="stylesheet" href="assets/css/navpanel_phone.css">
@@ -13,6 +13,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Press+Start+2P&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KeyDivide</title>
 </head>
@@ -98,7 +104,7 @@
             <div class="wrapper">
                 <h1 class="typing-demo" id="typing-demo" style="width: 26ch;">CacaoSplit Ortomini Black </h1>
             </div>
-            <div class="box-prod"><p class="prod" href="#">Маленькая клавиатура даже без ряда цифр, с ортолинейным строением на основе двух контроллеров <em>arduino pro micro</em></p></div>
+            <div class="box-prod"><p class="prod" href="#">Маленькая клавиатура без ряда цифр, с ортолинейным строением и поддержкой via на основе двух контроллеров arduino pro micro</p></div>
             <div class="form">
                 <h2>Переключатели</h2>
                 <div class="switches">
@@ -194,6 +200,45 @@
                 <img src="assets/images/orto_black/orto_b6.jpg" alt="Image 6" class="thumbnail" >
             </div>
         </div>
+        <div class="terminal">
+            <div class="header_code">
+              <span class="icon red"></span>
+              <span class="icon yellow"></span>
+              <span class="icon green"></span>
+              <h2>Ortomini Black Info.json</h2>
+            </div>
+            <div class="json_style">
+                <div class="numbers">1 2 3 4 5 6 7 8 9 10 11 12</div>
+                <pre class="code">
+"specifications": {
+    <span class="key1">"Материал клавиш"</span>: <span class="value1">"PBT"</span>,
+    <span class="key1">"Профиль кейкапов"</span>: <span class="value1">"Cherry"</span>,
+    <span class="key1">"Конструкция"</span>: <span class="value1">"Треймаунт"</span>,
+    <span class="key1">"Переключатели"</span>: <span class="value1">"Akko V3 Cream Yellow (линейные 50г.)"</span>,
+    <span class="key1">"Кол-во переключателей"</span>: <span class="value1">"52 шт."</span>,
+    <span class="key1">"Поддержка hot-swap"</span>: <span class="value1">"Есть"</span>,
+    <span class="key1">"Светодиоды"</span>: <span class="value1">"нет"</span>,
+    <span class="key1">"Типы разъемов"</span>: <span class="value1">"usb type-c / trrs"</span>,
+    <span class="key1">"Гарантия"</span>: <span class="value1">"1 год"</span>
+}
+                </pre>
+                <div class="numbers">1 2 3 4 5 6 7 8</div>
+                <pre class="code">
+"equipment": [
+    <span class="key1">"Клавиатура"</span>,
+    <span class="key1">"Коробка"</span>,
+    <span class="key1">"Кабель usb type-c"</span>,
+    <span class="key1">"Кабель trrs"</span>,
+    <span class="key1">"Кейкап-пуллер"</span>
+]
+                </pre>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <p>Этот текст находится на панели с эффектом мутного стекла</p>
+        </div>
+
         <div class="specs">
             <div class="bombom">
                 <h3 class="spectitle">Характеристики</h3>
@@ -264,10 +309,9 @@
                 </div>
             </div>
         </div>
-    </div> 
-    <iframe width="70%" height="50%" src="https://www.youtube.com/embed/_RS06SZoUDM?si=otiXJAgLO96BYoYi" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-        
-    </iframe> 
+    </div>
+</div>  
+    
 </div>
 <div class="footer">
     <div class="footbox">
@@ -307,6 +351,102 @@
         </div>
     </div>
 </div>
+<script>
+    // Строки, которые будут "печататься" в терминале
+    const lines = [
+    "> INITIALIZING KEYDIVIDE v2.1...",
+    "  [OK] Memory check",
+    "  [OK] Keyboard driver loaded",
+    "  [INFO] Hot-swap module: active",
+    "  [INFO] RGB lighting: disabled",
+    "> Scanning firmware...",
+    "  [OK] All devices ready",
+    " ",
+    "　　　　　／フ---/フ",
+    "　　　　　| 　_　 _|",
+    "　 　　　／`ミ _x 彡",
+    "　　 　 /　　　 　 |",
+    "　　　 /　 ヽ　　 ﾉ",
+    "　／￣|　　 |　|　|",
+    "　| (￣ヽ＿_ヽ_)_)",
+    "　＼二つ",
+    "> SYSTEM READY. WELCOME, USER."
+    ];
+
+    // const lines = [
+    // "> INITIALIZING KEYDIVIDE v2.1...",
+    // "  [OK] Memory check",
+    // "  [OK] Keyboard driver loaded",
+    // "  [INFO] Hot-swap module: active",
+    // "  [INFO] RGB lighting: disabled",
+    // "> Scanning firmware...",
+    // "  [OK] All devices ready",
+    // " ",
+    // "　　　　　／＞　 フ",
+    // "　　　　　| 　_　 _|",
+    // "　 　　　／`ミ _x 彡",
+    // "　　 　 /　　　 　 |",
+    // "　　　 /　 ヽ　　 ﾉ",
+    // "　／￣|　　 |　|　|",
+    // "　| (￣ヽ＿_ヽ_)_)",
+    // "　＼二つ",
+    // "> SYSTEM READY. WELCOME, USER."
+    // ];
+  
+    const terminal1 = document.getElementById('terminal1');
+    const cursor = document.querySelector('.cursor');
+  
+    let lineIndex = 0;
+    let charIndex = 0;
+    let currentLine = '';
+  
+    // Функция, имитирующая печать текста
+    function typeLine() {
+        if (lineIndex >= lines.length) {
+          // Завершаем анимацию
+          setTimeout(() => {
+            document.getElementById('terminal-screen').style.display = 'none'; // none
+            const main = document.getElementById('main-content');
+            main.style.display = 'block'; // block
+            setTimeout(() => {
+                main.style.opacity = '1'; // 1
+            }, 100);
+          }, 500);
+          return;
+        }
+
+  const currentLine = lines[lineIndex];
+
+  // Формируем текущий текст: уже напечатанное + новый символ
+  const printed = currentLine.substring(0, charIndex + 1);
+
+  // Очищаем терминал и вставляем всё с новым курсором
+  terminal.innerHTML = lines
+    .slice(0, lineIndex) // Все предыдущие строки
+    .map(line => line + '<br>')
+    .join('') +
+    printed + // Текущая строка — до текущего символа
+    '<span class="cursor">█</span>'; // Курсор в конце
+
+  charIndex++;
+
+  if (charIndex === currentLine.length) {
+    charIndex = 0;
+    lineIndex++;
+    if (lineIndex == 6) {
+        setTimeout(typeLine, 1000);
+    }
+    else setTimeout(typeLine, Math.random() * 200 + 50); // Задержка между строками
+  } 
+  else setTimeout(typeLine, 15 + Math.random() * 15); // Быстрая печать
+}
+  
+    // Запуск анимации при загрузке
+    document.addEventListener('DOMContentLoaded', async () => {
+      await typeLine();
+    });
+</script>
+
 <script src="script.js"></script>
 <script src="check_authorization.js"></script>
 
