@@ -3,8 +3,34 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
 const cors = require('cors');
+const openapiSpec = require('./apidoc.json');
 
 const app = express();
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+// const options = {
+//   definition: {
+//     openapi: '3.0.0',
+//     info: {
+//       title: 'Мой API',
+//       version: '1.0.0',
+//       description: 'Документация к API интернет-магазина',
+//     },
+//     servers: [
+//       {
+//         url: 'http://localhost:5000',
+//       },
+//     ],
+//   },
+//   apis: ['./server.js'], // путь к вашему файлу с маршрутами (если файл называется server.js)
+// };
+
+// const specs = swaggerJsdoc(options);
+
+// Документация
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
 app.use(cors());
 
 // Настройки подключения к PostgreSQL
@@ -24,6 +50,11 @@ app.get('/', (req, res) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.get('/openapi.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(specs);
+});
 
 // Роут для получения всех товаров
 app.get('/api/products', async (req, res) => {
@@ -113,8 +144,7 @@ app.get('/check-auth', async (req, res) => {
     const token = req.headers.authorization;
     if (!token) return res.status(401).json({ isAuthenticated: false });
 
-    // Здесь должна быть проверка JWT токена (если используете)
-    // Для простоты будем проверять наличие пользователя в БД
+    // Здесь должна быть проверка JWT токена
     const user = await pool.query(
       'SELECT id, login, name, surname, email FROM users WHERE login = $1',
       [token]
@@ -135,4 +165,7 @@ app.get('/check-auth', async (req, res) => {
 });
 
 const PORT = 5000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:5000`));
+app.listen(PORT, () => {
+  console.log('Server running on http://localhost:5000');
+  console.log('Документация: http://localhost:5000/api-docs');
+});

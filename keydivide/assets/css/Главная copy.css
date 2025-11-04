@@ -43,7 +43,7 @@ select {
   border: none;
   background-color:rgba(255,255,255,0);
   color:#FFFFFF;
-  font-size:17px;
+  font-size: 17px;
 }
 
 option{
@@ -62,18 +62,17 @@ option{
   background-size: cover; /* размер одного повторяющегося изображения */
 }
 
-#panelWhite {
+.welcome-banner {
   width: 900px;
   height: 350px;
-  left: 500px;
   border-radius: 10px;
-  padding:20px;
+  padding: 20px;
   background: #F7F8FACC;
   display: inline-block;
   margin: 0 auto; 
 }
 
-#H2 {
+.welcome-banner__title {
   font-size: 40px;
   font-weight: 700;
   line-height: 58px;
@@ -82,49 +81,43 @@ option{
   margin-top: 15px;
 }
 
-.butt p a {
-  width: 226px;
-  height: 46px;
-}
-
-#H21 {
-  height: 1000px;
-  margin: 10px auto;
+.welcome-banner__description {
   font-size: 22px;
   font-weight: 400;
   line-height: 31px;
   text-align: center;
-  width: 735px;
-  height: 92px;
-  top: 429px;
-  left: 624px;
-  margin-top: 25px;
+  padding: 25px 30px;
 }
 
-.button {
+
+.main-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
   width: 226px;
   height: 46px;
-  top: 569px;
-  left: 634px;
   border-radius: 4px;
-  border: 0px;
-  gap: 10px;
   background: #FF7A69;
   font-family: Rubik;
   font-size: 22px;
   color:#FFFFFF;
-  margin-top: 25px;
+  
+  transition: 0.2s;
+}
+.main-button:hover {
+  transform: scale(1.05);
 }
 
-.butt {
+.welcome-banner__buttons {
   width: 100%;
   max-width: 650px;
-  margin: 0 auto;
+  margin: 15px auto;
   display: flex;
   justify-content: space-between;
 }
 
-.anim {
+/* .anim {
   width: 226px;
   height: 46px;
   top: 569px;
@@ -141,7 +134,7 @@ option{
 }
 .anim:hover {
   transform: scale(1.05);
-}
+} */
 
 
 /*Каталог*/
@@ -153,8 +146,8 @@ option{
   justify-content: space-between;
   flex-direction: column;
   align-items: center; 
-  /* background-color: #f9f9f9; */
-  background: url("../images/бумажный_фон.png") center;
+  background-color: #f9f9f9;
+  /* background: url("../images/бумажный_фон.png") center; */
   background-size: cover;
 }
 
@@ -333,79 +326,80 @@ option{
 }*/
 
 /*О нас*/
-#contr {
-  width: 100%;
-  height: 500px;
-  display: flex;
-  align-items: center;
+.aboutus {
   background-color: #efebeb; 
-    
+  /* background: url("../images/бумажный_фон.png") center;   */
 }
-.pysto {
-  width: 1200px;  
+
+.aboutus__inner {  
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin: 0 auto; 
+
+  width: 100%;
+  max-width: 1216px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-#SM5 {
+.aboutus__title {
   width: 100%;
   text-align: left;
-}
-#SM5 h3 {
   font-family: 'IBM Plex Sans';
   font-size: 24px;
 }
 
 .about {
   margin-top: 15px;
-  width: 1140px;
+  width: 100%;
+  max-width: 1140px;
   display: flex;
   align-items:flex-start;
   justify-content: space-between;
 }
 
 .text_about {
-  width: 750px;
-  height: 300px;
+  width: min(100%, 750px);
   display: flex;
   align-items:flex-start;
   flex-direction: column;
   justify-content: space-between;
+  flex: 1;
+  align-self: stretch;
 }
   
 .SM4 {
-  height: 200px;
   display: flex;
   float: left; 
   flex-direction: column;
   justify-content: space-between;
+  padding-right: 16px;
 }
 .SM4 p {
   font-family: 'Source Code Pro';
   display: flex;
   padding: 6px 0;
-  width: 750px;
   font-size: 19px;
   text-align: justify;
+  text-wrap: wrap;
+}
+
+.butt1 {
+  display: flex;
+  gap: 60px;
 }
 
 .SM6 {
   width: auto;
-  text-align: center;
-  display: inline;
-  overflow: hidden;
-  
-  border-radius: 10% ;
-  float: right;
-}
-
-.butt1 {
-  width: 650px;
-  margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  overflow: hidden;
+  margin: 0 auto;
+  
+  border-radius: 5% ;
 }
 
 .photo {
@@ -418,574 +412,4 @@ option{
 
 .redact {
   border-radius: 20px;
-}
-
-
-
-
-
-
-/*карта */
-/* Основные стили карты эргономики */
-.ergonomics-section {
-  padding: 40px 0;
-  background-color: #f9f9f9;
-  margin-top: 50px;
-}
-
-.ergo-title {
-  text-align: center;
-  font-size: 28px;
-  color: #333;
-  margin-bottom: 30px;
-}
-
-.ergo-map-container {
-  display: flex;
-  max-width: 1200px;
-  margin: 0 auto;
-  gap: 40px;
-  align-items: center;
-}
-
-.hand-diagram {
-  position: relative;
-  width: 50%;
-  flex-shrink: 0;
-}
-
-.hand-image {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* Стили активных зон */
-.hotspot {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background-color: rgba(255, 87, 34, 0.3);
-  border-radius: 50%;
-  border: 2px solid #ff5722;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
-}
-
-.hotspot:hover {
-  background-color: rgba(255, 87, 34, 0.6);
-  transform: scale(1.2);
-}
-
-.hotspot-tooltip {
-  position: absolute;
-  top: -35px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-.hotspot:hover .hotspot-tooltip {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Позиционирование зон */
-.wrist-hotspot {
-  top: 45%;
-  left: 35%;
-}
-
-.fingers-hotspot {
-  top: 85%;
-  left: 60%;
-}
-
-.palm-hotspot {
-  top: 65%;
-  left: 60%;
-}
-
-.forearm-hotspot {
-  top: 10%;
-  left: 35%;
-}
-
-/* Стили информационной панели */
-.ergo-info-panel {
-  width: 50%;
-}
-
-.info-card {
-  background-color: white;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  display: none;
-}
-
-.info-card.active {
-  display: block;
-  animation: fadeIn 0.5s ease;
-}
-
-.info-card h4 {
-  color: #ff5722;
-  font-size: 22px;
-  margin-bottom: 15px;
-}
-
-.info-card p {
-  line-height: 1.6;
-  color: #555;
-  margin-bottom: 15px;
-}
-
-.solution {
-  background-color: #f5f5f5;
-  padding: 12px;
-  border-left: 4px solid #ff5722;
-  font-style: italic;
-}
-
-.solution span {
-  font-weight: bold;
-  color: #333;
-}
-
-/* Анимации */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .ergo-map-container {
-    flex-direction: column;
-  }
-  
-  .hand-diagram,
-  .ergo-info-panel {
-    width: 100%;
-  }
-  
-  .hotspot {
-    width: 25px;
-    height: 25px;
-  }
-}
-
-
-
-
-
-
-
-/* Основные стили конструктора */
-#keyboard-configurator {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-#keyboard-configurator.active {
-  display: flex;
-  opacity: 1;
-}
-
-.configurator-modal {
-  background-color: white;
-  width: 90%;
-  max-width: 900px;
-  max-height: 90vh;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-}
-
-.configurator-header {
-  padding: 20px;
-  background-color: #2c3e50;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.configurator-header h2 {
-  margin: 0;
-  font-size: 24px;
-}
-
-.close-configurator {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 28px;
-  cursor: pointer;
-  padding: 0 10px;
-}
-
-.configurator-steps {
-  display: flex;
-  border-bottom: 1px solid #eee;
-  padding: 0 20px;
-}
-
-.step {
-  flex: 1;
-  text-align: center;
-  padding: 15px 0;
-  position: relative;
-  cursor: pointer;
-}
-
-.step span {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  border-radius: 50%;
-  background-color: #ecf0f1;
-  color: #7f8c8d;
-  margin-bottom: 5px;
-  transition: all 0.3s ease;
-}
-
-.step p {
-  margin: 0;
-  color: #7f8c8d;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.step.active span {
-  background-color: #3498db;
-  color: white;
-}
-
-.step.active p {
-  color: #2c3e50;
-  font-weight: bold;
-}
-
-.step.completed span {
-  background-color: #2ecc71;
-  color: white;
-}
-
-.configurator-content {
-  padding: 20px;
-  overflow-y: auto;
-  flex-grow: 1;
-}
-
-.step-content {
-  display: none;
-}
-
-.step-content.active {
-  display: block;
-  animation: fadeIn 0.5s ease;
-}
-
-.options-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.option-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.option-card:hover {
-  border-color: #3498db;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.option-card.selected {
-  border-color: #3498db;
-  background-color: #f0f8ff;
-}
-
-.option-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: contain;
-  margin-bottom: 10px;
-}
-
-.option-card h4 {
-  margin: 0 0 5px 0;
-  color: #2c3e50;
-}
-
-.option-card p {
-  margin: 0;
-  color: #7f8c8d;
-  font-size: 14px;
-}
-
-.additional-options {
-  margin-top: 20px;
-}
-
-.option-row {
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.option-row label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.option-row input {
-  margin-right: 10px;
-}
-
-.preview-section {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-}
-
-.keyboard-preview {
-  display: flex;
-  gap: 30px;
-  margin-top: 15px;
-  align-items: center;
-}
-
-.keyboard-preview img {
-  width: 200px;
-  height: auto;
-}
-
-.keyboard-specs {
-  flex-grow: 1;
-}
-
-.keyboard-specs p {
-  margin: 10px 0;
-}
-
-.total-price {
-  font-size: 18px;
-  margin-top: 20px !important;
-  color: #2c3e50;
-}
-
-.configurator-nav {
-  padding: 15px 20px;
-  border-top: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-}
-
-.nav-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #3498db;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.nav-btn:hover {
-  background-color: #2980b9;
-}
-
-.nav-btn:disabled {
-  background-color: #bdc3c7;
-  cursor: not-allowed;
-}
-
-.finish-btn {
-  background-color: #2ecc71;
-}
-
-.finish-btn:hover {
-  background-color: #27ae60;
-}
-
-/* Анимации */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .configurator-modal {
-    width: 95%;
-    height: 95vh;
-  }
-  
-  .options-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .keyboard-preview {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .step p {
-    display: none;
-  }
-}
-
-
-/* Стили для секции конструктора */
-.ergonomics{
-  text-align: center;
-  padding: 40px 20px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
-  border-radius: 12px;
-  margin: 40px auto;
-  max-width: 800px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-}
-
-.ergooo-title {
-  font-size: 2.2rem;
-  color: #2c3e50;
-  margin-bottom: 15px;
-  font-weight: 700;
-  background: linear-gradient(90deg, #3498db, #9b59b6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.configurator-desc {
-  font-size: 1.1rem;
-  color: #5a6a7e;
-  line-height: 1.6;
-  margin-bottom: 30px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.configurator-cta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
-/* Стили для кнопки */
-.open-configurator {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px 32px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
-  background: linear-gradient(90deg, #3498db, #9b59b6);
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.open-configurator:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
-}
-
-.open-configurator:active {
-  transform: translateY(1px);
-}
-
-.open-configurator .btn-icon {
-  font-size: 1.3rem;
-  transition: transform 0.3s ease;
-}
-
-.open-configurator .btn-arrow {
-  opacity: 0;
-  transform: translateX(-10px);
-  transition: all 0.3s ease;
-}
-
-.open-configurator:hover .btn-arrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.open-configurator:hover .btn-icon {
-  transform: rotate(15deg);
-}
-
-/* Подсказка под кнопкой */
-.configurator-hint {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.9rem;
-  color: #7f8c8d;
-  animation: pulse 2s infinite;
-}
-
-.configurator-hint svg {
-  width: 16px;
-  height: 16px;
-}
-
-@keyframes pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; }
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .ergooo-title {
-    font-size: 1.8rem;
-  }
-  
-  .configurator-desc {
-    font-size: 1rem;
-  }
-  
-  .open-configurator {
-    padding: 14px 28px;
-    font-size: 1rem;
-  }
 }

@@ -62,7 +62,7 @@
     background-size: cover; /* размер одного повторяющегося изображения */
   }
   
-  #panelWhite {
+  .welcome-banner {
     width: 86%;
     height: auto;
     border-radius: 10px;
@@ -74,7 +74,7 @@
     margin: 0 auto; 
   }
   
-  #H2 {
+  .welcome-banner__title {
     font-size: 40px;
     font-weight: 700;
     line-height: 58px;
@@ -83,13 +83,7 @@
     margin-top: 15px;
   }
   
-  .butt p a {
-    width: 160px;
-    height: 35px;
-    padding: 5px;
-  }
-  
-  #H21 {
+  .welcome-banner__description {
     width: 95%;
     margin: 0;
     font-size: 18px;
@@ -113,7 +107,7 @@
     margin-top: 25px;
   } */
 
-  .butt {
+  .welcome-banner__buttons {
     width: 90%;
     max-width: 460px;
     margin: 0;
@@ -121,23 +115,21 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between; /* Изменено с space-between на center */
-    /* gap: 10px; */ /* Добавлено для равномерных отступов */
+    justify-content: space-between;
+    gap: 10px;
   }
 
   @media (max-width: 487px) {
-  .butt {
-    justify-content: center; /* Изменено с space-between на center */
-    /* gap: 10px; */ /* Добавлено для равномерных отступов */
-  }
+    .welcome-banner__buttons {
+      justify-content: center;
+    }
   }
   
-  .anim {
+  .main-button {
     width: 160px;
     height: 35px;
     border-radius: 4px;
     border: 0px;
-    gap: 10px;
     background: #FF7A69;
     font-family: Rubik;
     font-size: 16px;
@@ -145,7 +137,7 @@
     margin-top: 25px;
     transition: 0.2s;
   }
-  .anim:hover {
+  .main-button:hover {
     transform: scale(1.05);
   }
   

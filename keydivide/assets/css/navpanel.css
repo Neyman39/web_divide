@@ -1,19 +1,5 @@
-body{
+body {
     font-family: "Rubik", sans-serif;
-}
-
-*,
-*:before,
-*:after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    list-style: none;
-    text-decoration: none;
-}
-
-h1, h3, h4, h5, h6 {
-    margin: 0;
 }
 
 /*Container*/
@@ -128,7 +114,7 @@ h1, h3, h4, h5, h6 {
     top: 47px;
     left: 0;
     width: 150px;
-    background-color: #D1A49E;
+    background-color: #818181;
     display: none;
     border-radius: 10px;
 }   
