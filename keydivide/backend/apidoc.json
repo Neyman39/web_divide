@@ -1,0 +1,1461 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "API Интернет-магазина эргономичных клавиатур",
+      "description": "REST API для управления каталогом клавиатур, свитчами, заказами и пользователями",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:5000",
+        "description": "Сервер разработки"
+      }
+    ],
+    "paths": {
+        "/api/products": {
+            "get": {
+              "summary": "Получить список всех товаров",
+              "responses": {
+                "200": {
+                  "description": "Список товаров",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "price": {
+                              "type": "number"
+                            },
+                            "image": {
+                              "type": "string"
+                            },
+                            "link": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "500": {
+                  "description": "Ошибка сервера"
+                }
+              }
+            }
+        },
+        "/register": {
+            "post": {
+              "summary": "Регистрация нового пользователя",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "login": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "surname": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string",
+                          "format": "password"
+                        }
+                      },
+                      "required": [
+                        "login",
+                        "email",
+                        "password"
+                      ]
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Пользователь успешно создан"
+                },
+                "400": {
+                  "description": "Пользователь с таким логином или email уже существует"
+                },
+                "500": {
+                  "description": "Ошибка сервера"
+                }
+              }
+            }
+        },
+        "/login": {
+            "post": {
+              "summary": "Аутентификация пользователя",
+              "description": "Проверка учетных данных пользователя и создание сессии",
+              "tags": ["Users"],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "required": ["login", "password"],
+                      "properties": {
+                        "login": {
+                          "type": "string",
+                          "description": "Логин пользователя"
+                        },
+                        "password": {
+                          "type": "string",
+                          "format": "password",
+                          "description": "Пароль пользователя"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Успешная аутентификация",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "example": "Авторизация успешна"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "description": "ID пользователя"
+                              },
+                              "login": {
+                                "type": "string",
+                                "description": "Логин пользователя"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "Имя пользователя"
+                              },
+                              "surname": {
+                                "type": "string",
+                                "description": "Фамилия пользователя"
+                              },
+                              "email": {
+                                "type": "string",
+                                "description": "Email пользователя"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Неверный логин или пароль",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "500": {
+                  "description": "Ошибка сервера",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "/check-auth": {
+            "get": {
+              "summary": "Проверка статуса аутентификации",
+              "description": "Проверка валидности токена авторизации и восстановление сессии пользователя",
+              "tags": ["Users"],
+              "parameters": [
+                {
+                  "name": "Authorization",
+                  "in": "header",
+                  "required": true,
+                  "schema": {
+                    "type": "string",
+                    "description": "Токен авторизации (логин пользователя)"
+                  },
+                  "description": "Токен в формате: логин пользователя"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Статус аутентификации",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "isAuthenticated": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "description": "ID пользователя"
+                              },
+                              "login": {
+                                "type": "string",
+                                "description": "Логин пользователя"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "Имя пользователя"
+                              },
+                              "surname": {
+                                "type": "string",
+                                "description": "Фамилия пользователя"
+                              },
+                              "email": {
+                                "type": "string",
+                                "description": "Email пользователя"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Токен не предоставлен или невалиден",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "isAuthenticated": {
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "500": {
+                  "description": "Ошибка сервера",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "/api/products/{id}": {
+            "get": {
+              "summary": "Получение детальной информации о клавиатуре",
+              "description": "Возвращает полную информацию о конкретной клавиатуре по её идентификатору",
+              "tags": ["Products"],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  },
+                  "description": "ID клавиатуры"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Успешное получение данных о клавиатуре",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ProductDetail"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Клавиатура не найдена",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "/api/products/{id}/switches": {
+            "get": {
+              "summary": "Получение совместимых свитчей для клавиатуры",
+              "description": "Возвращает список свитчей, совместимых с конкретной моделью клавиатуры",
+              "tags": ["Products", "Switches"],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  },
+                  "description": "ID клавиатуры"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Успешное получение списка свитчей",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Switch"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "/api/switches": {
+            "get": {
+              "summary": "Получение каталога свитчей",
+              "description": "Возвращает полный список всех доступных свитчей с возможностью фильтрации",
+              "tags": ["Switches"],
+              "parameters": [
+                {
+                  "name": "type",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "string"
+                  },
+                  "description": "Фильтр по типу свитчей"
+                },
+                {
+                  "name": "in_stock",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "boolean"
+                  },
+                  "description": "Фильтр по наличию на складе"
+                },
+                {
+                  "name": "page",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "description": "Номер страницы для пагинации"
+                },
+                {
+                  "name": "limit",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                  },
+                  "description": "Количество элементов на странице"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Успешное получение каталога свитчей",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Switch"
+                            }
+                          },
+                          "pagination": {
+                            "$ref": "#/components/schemas/Pagination"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        },
+        "/api/orders": {
+            "post": {
+              "summary": "Создание нового заказа",
+              "description": "Создание заказа с выбранными товарами и свитчами",
+              "tags": ["Orders"],
+              "security": [
+                {
+                  "bearerAuth": []
+                }
+              ],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/CreateOrderRequest"
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Заказ успешно создан",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Order"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Невалидные данные заказа",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Требуется аутентификация"
+                }
+              }
+            }
+        },
+        "/api/user/orders": {
+            "get": {
+              "summary": "Получение истории заказов пользователя",
+              "description": "Возвращает список всех заказов текущего авторизованного пользователя",
+              "tags": ["Orders", "Users"],
+              "security": [
+                {
+                  "bearerAuth": []
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "page",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                {
+                  "name": "limit",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 50
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Успешное получение истории заказов",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Order"
+                            }
+                          },
+                          "pagination": {
+                            "$ref": "#/components/schemas/Pagination"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Требуется аутентификация"
+                }
+              }
+            }
+        },
+        "/admin/products": {
+            "post": {
+              "summary": "Добавление новой клавиатуры",
+              "description": "Создание новой клавиатуры в каталоге магазина",
+              "tags": ["Admin"],
+              "security": [
+                {
+                  "bearerAuth": []
+                }
+              ],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "required": ["name", "description", "price", "category"],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Название клавиатуры",
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Описание клавиатуры"
+                        },
+                        "price": {
+                          "type": "number",
+                          "minimum": 0,
+                          "description": "Цена клавиатуры"
+                        },
+                        "image_url": {
+                          "type": "string",
+                          "description": "URL изображения клавиатуры"
+                        },
+                        "category": {
+                          "type": "string",
+                          "description": "Категория клавиатуры"
+                        },
+                        "in_stock": {
+                          "type": "boolean",
+                          "description": "Наличие на складе",
+                          "default": true
+                        },
+                        "specifications": {
+                          "type": "object",
+                          "properties": {
+                            "layout": {
+                              "type": "string",
+                              "description": "Раскладка клавиатуры"
+                            },
+                            "connection_type": {
+                              "type": "string",
+                              "description": "Тип подключения"
+                            },
+                            "battery_life": {
+                              "type": "string",
+                              "description": "Время работы от батареи"
+                            },
+                            "weight": {
+                              "type": "string",
+                              "description": "Вес клавиатуры"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Клавиатура успешно создана",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ProductDetail"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Невалидные данные клавиатуры",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Требуется аутентификация администратора"
+                },
+                "403": {
+                  "description": "Недостаточно прав для выполнения операции"
+                }
+              }
+            }
+        },
+        "/admin/products/{id}": {
+            "put": {
+              "summary": "Обновление информации о клавиатуре",
+              "description": "Изменение данных существующей клавиатуры в каталоге",
+              "tags": ["Admin"],
+              "security": [
+                {
+                  "bearerAuth": []
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  },
+                  "description": "ID клавиатуры"
+                }
+              ],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Название клавиатуры"
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Описание клавиатуры"
+                        },
+                        "price": {
+                          "type": "number",
+                          "minimum": 0,
+                          "description": "Цена клавиатуры"
+                        },
+                        "image_url": {
+                          "type": "string",
+                          "description": "URL изображения клавиатуры"
+                        },
+                        "category": {
+                          "type": "string",
+                          "description": "Категория клавиатуры"
+                        },
+                        "in_stock": {
+                          "type": "boolean",
+                          "description": "Наличие на складе"
+                        },
+                        "specifications": {
+                          "type": "object",
+                          "properties": {
+                            "layout": {
+                              "type": "string",
+                              "description": "Раскладка клавиатуры"
+                            },
+                            "connection_type": {
+                              "type": "string",
+                              "description": "Тип подключения"
+                            },
+                            "battery_life": {
+                              "type": "string",
+                              "description": "Время работы от батареи"
+                            },
+                            "weight": {
+                              "type": "string",
+                              "description": "Вес клавиатуры"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Клавиатура успешно обновлена",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ProductDetail"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Клавиатура не найдена",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Требуется аутентификация администратора"
+                }
+              }
+            },
+            "delete": {
+              "summary": "Удаление клавиатуры",
+              "description": "Удаление клавиатуры из каталога магазина",
+              "tags": ["Admin", "Products"],
+              "security": [
+                {
+                  "bearerAuth": []
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  },
+                  "description": "ID клавиатуры"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Клавиатура успешно удалена",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "example": "Клавиатура успешно удалена"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Клавиатура не найдена",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "409": {
+                  "description": "Невозможно удалить клавиатуру, так как она есть в активных заказах",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Требуется аутентификация администратора"
+                }
+              }
+            }
+        },
+        "/admin/switches": {
+            "post": {
+              "summary": "Добавление нового свитча",
+              "description": "Создание нового типа свитча для кастомизации клавиатур",
+              "tags": ["Admin"],
+              "security": [
+                {
+                  "bearerAuth": []
+                }
+              ],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "required": ["name", "type", "price"],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Название свитча",
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Тип свитча (линейные, тактильные, кликающие)"
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Описание свитча"
+                        },
+                        "actuation_force": {
+                          "type": "string",
+                          "description": "Сила срабатывания (в граммах)"
+                        },
+                        "travel_distance": {
+                          "type": "string",
+                          "description": "Дистанция хода (в мм)"
+                        },
+                        "price": {
+                          "type": "number",
+                          "minimum": 0,
+                          "description": "Цена свитча"
+                        },
+                        "image_url": {
+                          "type": "string",
+                          "description": "URL изображения свитча"
+                        },
+                        "in_stock": {
+                          "type": "boolean",
+                          "description": "Наличие на складе",
+                          "default": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Свитч успешно создан",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Switch"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Невалидные данные свитча",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Требуется аутентификация администратора"
+                }
+              }
+            }
+        },
+        "/admin/products/{id}/switches": {
+            "post": {
+              "summary": "Добавление свитча к клавиатуре",
+              "description": "Привязка свитча к конкретной модели клавиатуры для кастомизации",
+              "tags": ["Admin"],
+              "security": [
+                {
+                  "bearerAuth": []
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  },
+                  "description": "ID клавиатуры"
+                }
+              ],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "required": ["switch_id"],
+                      "properties": {
+                        "switch_id": {
+                          "type": "integer",
+                          "description": "ID свитча для привязки"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Свитч успешно привязан к клавиатуре",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "example": "Свитч успешно добавлен к клавиатуре"
+                          },
+                          "product_id": {
+                            "type": "integer"
+                          },
+                          "switch_id": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Невалидные данные или свитч уже привязан",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Клавиатура или свитч не найдены",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Требуется аутентификация администратора"
+                }
+              }
+            }
+        },
+        "/admin/orders": {
+            "get": {
+              "summary": "Получение всех заказов",
+              "description": "Возвращает список всех заказов для администрирования",
+              "tags": ["Admin"],
+              "security": [
+                {
+                  "bearerAuth": []
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "status",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "string",
+                    "enum": ["pending", "processing", "shipped", "delivered", "cancelled"]
+                  },
+                  "description": "Фильтр по статусу заказа"
+                },
+                {
+                  "name": "page",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "description": "Номер страницы для пагинации"
+                },
+                {
+                  "name": "limit",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                  },
+                  "description": "Количество элементов на странице"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Успешное получение списка заказов",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Order"
+                            }
+                          },
+                          "pagination": {
+                            "$ref": "#/components/schemas/Pagination"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Требуется аутентификация администратора"
+                }
+              }
+            }
+        },
+        "/admin/orders/{id}/status": {
+            "put": {
+              "summary": "Изменение статуса заказа",
+              "description": "Обновление статуса заказа для отслеживания процесса выполнения",
+              "tags": ["Admin"],
+              "security": [
+                {
+                  "bearerAuth": []
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  },
+                  "description": "ID заказа"
+                }
+              ],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "required": ["status"],
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "enum": ["pending", "processing", "shipped", "delivered", "cancelled"],
+                          "description": "Новый статус заказа"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Статус заказа успешно обновлен",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Order"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Невалидный статус заказа",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Заказ не найден",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Требуется аутентификация администратора"
+                }
+              }
+            }
+        },
+        "/admin/users": {
+            "get": {
+              "summary": "Получение списка пользователей",
+              "description": "Возвращает список всех зарегистрированных пользователей",
+              "tags": ["Admin"],
+              "security": [
+                {
+                  "bearerAuth": []
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "page",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "description": "Номер страницы для пагинации"
+                },
+                {
+                  "name": "limit",
+                  "in": "query",
+                  "required": false,
+                  "schema": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 50
+                  },
+                  "description": "Количество элементов на странице"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Успешное получение списка пользователей",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "data": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "login": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "surname": {
+                                  "type": "string"
+                                },
+                                "created_at": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                }
+                              }
+                            }
+                          },
+                          "pagination": {
+                            "$ref": "#/components/schemas/Pagination"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Требуется аутентификация администратора"
+                }
+              }
+            }
+        }
+    },
+    "components": {
+      "schemas": { 
+        "ProductDetail": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number",
+              "format": "float"
+            },
+            "image_url": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "in_stock": {
+              "type": "boolean"
+            },
+            "specifications": {
+              "type": "object",
+              "properties": {
+                "layout": {
+                  "type": "string"
+                },
+                "connection_type": {
+                  "type": "string"
+                },
+                "battery_life": {
+                  "type": "string"
+                },
+                "weight": {
+                  "type": "string"
+                }
+              }
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "Switch": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "actuation_force": {
+              "type": "string"
+            },
+            "travel_distance": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number",
+              "format": "float"
+            },
+            "image_url": {
+              "type": "string"
+            },
+            "in_stock": {
+              "type": "boolean"
+            }
+          }
+        },
+        "CreateOrderRequest": {
+          "type": "object",
+          "required": ["items", "shipping_address"],
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["product_id", "quantity"],
+                "properties": {
+                  "product_id": {
+                    "type": "integer"
+                  },
+                  "switch_id": {
+                    "type": "integer"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            },
+            "shipping_address": {
+              "type": "object",
+              "required": ["address", "city", "postal_code", "country"],
+              "properties": {
+                "address": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "postal_code": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "Order": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "user_id": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["pending", "processing", "shipped", "delivered", "cancelled"]
+            },
+            "total_amount": {
+              "type": "number",
+              "format": "float"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "product_name": {
+                    "type": "string"
+                  },
+                  "switch_name": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "shipping_address": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "postal_code": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "Pagination": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "integer"
+            },
+            "limit": {
+              "type": "integer"
+            },
+            "total": {
+              "type": "integer"
+            },
+            "pages": {
+              "type": "integer"
+            }
+          }
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    },
+    "tags": [
+      {
+        "name": "Admin",
+        "description": "Админские запросы"
+      },
+      {
+        "name": "Products",
+        "description": "Операции с клавиатурами"
+      },
+      {
+        "name": "Switches",
+        "description": "Операции со свитчами"
+      },
+      {
+        "name": "Orders",
+        "description": "Операции с заказами"
+      },
+      {
+        "name": "Users",
+        "description": "Операции с пользователями"
+      }
+    ]
+  }

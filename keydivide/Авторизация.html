@@ -1,26 +1,88 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Авторизация</title>
-<link rel="stylesheet" type="text/css" href="assets/css/stylesRegistr.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  <title>Авторизация</title>
+  <link rel="stylesheet" type="text/css" href="assets/css/stylesRegistr.css">
 </head>
+
 <body>
-<div class="login-container">
-    <h2>Авторизация</h2>
-    <form class="form-box" id="loginForm"> 
-        <input type="text" id="login" name="login" placeholder="Введите логин" required>
-        <div class="password_container">
-            <input type="password" id="password" name="password" placeholder="Введите пароль" required>
-            <span class="password-toggle" onclick="togglePassword()">&#128065;</span>
+
+<div id="terminal-screen" class="terminal-screen">
+    <div class="terminal-container">
+        <div class="prompt_tab">
+            <p class="prompt">KeyDivide Prompt REV[01]</p>
         </div>
-        <div id="errorMessage" style="color:red; margin-top:10px;"></div>
-        <div class="butt"><button type="submit"> Войти </button></div>
-        <div style="margin-top: 16px;">Впервые у нас? <a href="Регистрация.html">Загеристируйтесь!</a></div>
-        <a href="Главная.html"><div class="forbutt" style="margin-top: 10px;"> Назад </div></a>            
-    </form>   
+        <div id="terminal" class="terminal1"></div>
+    </div>
 </div>
+  <div class="authorization">
+    <div class="terminal">
+      <div class="header_code">
+        <a href="Главная.html"><span class="icon red"></span></a>
+        <span class="icon yellow"></span>
+        <span class="icon green"></span>
+        <h2>Авторизация.json</h2>
+      </div>
+      <div class="json_style">
+        <!-- <div class="numbers">1 2 3 4 5 6 7 8 9 10 11 12</div> -->
+        <form class="terminal_log" id="loginForm">
+          <pre class="code">
+"authorization": {
+<span class="key1">"Логин"</span>: <input type="text" id="login" name="login" placeholder="Введите логин" required>
+<span class="key1">"Пароль"</span>: <div class="password_container"><input type="password" id="password" name="password" placeholder="Введите пароль" required><span class="password-toggle" onclick="togglePassword()">&#128065;</span></div>}
+       
+          </pre>
+          <div id="errorMessage" style="color:red; margin-top:10px;"></div>
+          <div class="butt"><button type="submit"> Войти </button></div> 
+          <div style="margin-top: 10px; color: black; font-size: 16px;">Впервые у нас?</div>
+          <a href="Регистрация.html"><div class="forbutt" style="margin-top: 10px;"> Загеристируйтесь! </div></a> 
+        </form>
+      </div>
+    </div>
+  </div>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const login = document.getElementById('login').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const errorMessage = document.getElementById('errorMessage');
+  
+  try {
+    const response = await fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        login,
+        password
+      }),
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      // Авторизация успешна
+      localStorage.setItem('authToken', login); // Используем login как простой токен
+      localStorage.setItem('userData', JSON.stringify(data.user));
+      typeLine();
+      //window.location.href = 'Главная.html';
+    } else {
+      errorMessage.textContent = data.error || 'Ошибка авторизации';
+    }
+  } catch (error) {
+    console.error('Ошибка:', error);
+    errorMessage.textContent = 'Ошибка соединения с сервером';
+  }
+});
+</script>
+
 
 <script>
   // Переключение видимости пароля
@@ -36,35 +98,88 @@
     }
   }
 
-  // Фикс: сохраняем пользователя только при успешном входе
-  const validUser = {
-    username: "Иван Иванов",
-    phone: "+7 999 123-45-67",
-    email: "ivan@example.com",
-    login: "admin",
-    password: "1234",
-    address: "г. Москва, ул. Примерная, д. 1"
-  };
+// Функция, имитирующая печать текста
 
-  document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
 
-    const login = document.getElementById('login').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const errorMessage = document.getElementById('errorMessage');
+  // Строки, которые будут "печататься" в терминале
+  
+  const terminal1 = document.getElementById('terminal1');
+  const cursor = document.querySelector('.cursor');
 
-    errorMessage.textContent = '';
+  let lineIndex = 0;
+  let charIndex = 0;
+  let currentLine = '';
 
-    if (login === validUser.login && password === validUser.password) {
-      // Сохраняем данные пользователя по логину
-      localStorage.setItem(`user_${login}`, JSON.stringify(validUser));
-      localStorage.setItem("username", login);
-      localStorage.setItem("isAuthenticated", "true");
-      window.location.href = 'login copy.html';
-    } else {
-      errorMessage.textContent = 'Неверный логин или пароль';
+  function typeLine(user) {
+    const userata = JSON.parse(localStorage.getItem('userData'));
+    const lines = [
+  "> INITIALIZING KEYDIVIDE v2.1...",
+  "  [OK] Memory check",
+  "  [OK] Keyboard driver loaded",
+  "  [INFO] Hot-swap module: active",
+  "  [INFO] RGB lighting: disabled",
+  "> Scanning firmware...",
+  " ",
+  "　　　　　／フ---/フ",
+  "　　　　　| 　_　 _|",
+  "　 　　　／`ミ _x 彡",
+  "　　 　 /　　　 　 |",
+  "　　　 /　 ヽ　　 ﾉ",
+  "　／￣|　　 |　|　|",
+  "　| (￣ヽ＿_ヽ_)_)",
+  "　＼二つ",
+  "> SYSTEM READY. WELCOME, " + userata.name.toUpperCase() + " " + userata.surname.toUpperCase() + "."
+  ];
+
+    document.getElementById('terminal-screen').style.display = 'flex';
+      if (lineIndex >= lines.length) {
+        // Завершаем анимацию
+        setTimeout(() => {
+          document.getElementById('terminal-screen').style.display = 'none'; // none
+          const main = document.getElementById('main-content');
+          main.style.display = 'block'; // block
+          setTimeout(() => {
+              main.style.opacity = '1'; // 1
+          }, 100);
+        }, 500);
+        window.location.href = 'Главная.html';
+        return;
+      }
+
+const currentLine = lines[lineIndex];
+
+// Формируем текущий текст: уже напечатанное + новый символ
+const printed = currentLine.substring(0, charIndex + 1);
+
+// Очищаем терминал и вставляем всё с новым курсором
+terminal.innerHTML = lines
+  .slice(0, lineIndex) // Все предыдущие строки
+  .map(line => line + '<br>')
+  .join('') +
+  printed + // Текущая строка — до текущего символа
+  '<span class="cursor">█</span>'; // Курсор в конце
+
+charIndex++;
+
+  if (charIndex === currentLine.length) {
+    charIndex = 0;
+    lineIndex++;
+    if (lineIndex == 6 || lineIndex == 16) {
+        setTimeout(typeLine, 1000);
     }
-  });
+    else setTimeout(typeLine, Math.random() * 200 + 50); // Задержка между строками
+  } 
+  else if (lineIndex < 7 || lineIndex == 15) {
+    setTimeout(typeLine, 10 + Math.random() * 10); // Быстрая печать
+  }
+  else setTimeout(typeLine, 5 + Math.random() * 5); // Быстрая печать
+}
+
+
+  // Запуск анимации при загрузке
+  // document.addEventListener('DOMContentLoaded', async () => {
+  //   await typeLine();
+  // });
 </script>
 
 </body>

@@ -36,10 +36,12 @@
                 </ul>   
             </nav>
         </div>
-		<div>
-			<a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-			<a class="ikon" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
-		</div>
+        <!-- Блок для приветствия -->
+        <div style="flex-direction: row; display: flex; align-items: center;">
+          <div id="authStatus"></div>
+          <a class="ikon" id="account" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
+          <a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
+      </div>
     </div>
 </header>
 
@@ -69,11 +71,13 @@
     </div>
 </header>
 
-<div class="box" id="cartContainer">
-  <!-- Здесь будут отображаться товары либо сообщение об отсутствии -->
-</div>
-<div style="margin-top: 20px; text-align: center;">
-  <button id="orderBtn" class="button" style="padding: 10px 20px; font-size: 16px;">Заказать</button>
+<div class="box" style="display: flex; align-items: center; flex-direction: column;">
+  <div id="cartContainer">
+    <!-- Здесь будут отображаться товары либо сообщение об отсутствии -->
+  </div>
+  <div style="margin-top: 20px; text-align: center;">
+    <button id="orderBtn" class="button" style="padding: 10px 20px; font-size: 16px;">Заказать</button>
+  </div>
 </div>
 
 
@@ -118,79 +122,32 @@
     </div>
 </div>
 <script src="modalw.js"></script>
+<script src="check_authorization.js"></script>
 
 <script>
-
-
-
-  window.onload = function() {
-    const isAuth = localStorage.getItem('isAuthenticated');
-    const username = localStorage.getItem('username');
-    const cartContainer = document.getElementById('cartContainer');
-
-    if (isAuth !== 'true' || !username) {
-      cartContainer.innerHTML = `
-        <p>Пожалуйста, <a href="Авторизация.html">войдите</a>, чтобы просмотреть корзину.</p>
-      `;
-      return;
-    }
-
-    const cartKey = `cart_${username}`;
-    const cart = JSON.parse(localStorage.getItem(cartKey));
-
-    if (!cart || cart.length === 0) {
-      // Корзина пустая — показываем сообщение вашего блока .nonein
-      cartContainer.innerHTML = `
-        <div class="nonein">
-          <p>В корзине пока пусто, но в каталоге есть интересные клавиатуры</p>
-          <a href="Главная.html#keyboards" class="button">Перейти к выбору</a>
-        </div>
-      `;
-      return;
-    }
-
-    // Есть товары — строим список
-    let html = '<h2>Ваша корзина:</h2><ul class="cart-list" style="list-style:none; padding:0;">';
-
-    let totalPrice = 0;
-
-    cart.forEach(item => {
-      const itemTotal = (item.price || 0) * (item.quantity || 1);
-      totalPrice += itemTotal;
-
-      html += `
-        <li style="border-bottom:1px solid #ccc; padding:10px 0;">
-          <strong>${item.productName || 'Товар'}</strong><br/>
-          ${item.switchName ? `<em>Переключатель: ${item.switchName}</em><br/>` : ''}
-          Кол-во: ${item.quantity || 1}<br/>
-          Цена за шт: ${item.price ? item.price.toLocaleString('ru-RU') + ' ₽' : '–'}<br/>
-          Итог: ${itemTotal.toLocaleString('ru-RU')} ₽
-        </li>
-      `;
+document.addEventListener('DOMContentLoaded', async () => {
+      await checkAuthAndDisplayUser();
+      setupCartButton();
     });
-
-    html += `</ul>`;
-    html += `<p style="font-weight:bold; margin-top:10px;">Общая сумма: ${totalPrice.toLocaleString('ru-RU')} ₽</p>`;
-
-    cartContainer.innerHTML = html;
-  };
-</script>
-
-<script>
   // Функция отрисовки корзины
-  function renderCart() {
-    const isAuth = localStorage.getItem('isAuthenticated');
-    const username = localStorage.getItem('username');
+  async function renderCart() {
     const cartContainer = document.getElementById('cartContainer');
 
-    if (isAuth !== 'true' || !username) {
+    const response = await fetch('http://localhost:5000/check-auth', {
+            headers: {
+              'Authorization': localStorage.getItem('authToken') || ''
+            }
+          });
+
+    if (!response.ok) {
       cartContainer.innerHTML = `
-        <p>Пожалуйста, <a href="Авторизация.html">войдите</a>, чтобы просмотреть корзину.</p>
-      `;
+        <p>Пожалуйста, <a href="Авторизация.html">войдите</a>, чтобы просмотреть корзину.</p>`;
       return;
     }
 
-    const cartKey = `cart_${username}`;
+    const { user } = await response.json();
+
+    const cartKey = `cart_${user.name}`;
     let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
 
     if (cart.length === 0) {
@@ -200,6 +157,7 @@
           <a href="Главная.html#keyboards" class="button">Перейти к выбору</a>
         </div>
       `;
+      if (orderBtn) orderBtn.style.display = 'none'; // Скрыть кнопку
       return;
     }
 
@@ -233,8 +191,13 @@
     html += `</ul>`;
     html += `<p style="font-weight:bold; margin-top:10px;">Общая сумма: ${totalPrice.toLocaleString('ru-RU')} ₽</p>`;
 
-    cartContainer.innerHTML = html;
+    // html += `<div style="margin-top: 20px; text-align: center;">
+    //   <button id="orderBtn" class="button" style="padding: 10px 20px; font-size: 16px;">Заказать</button>
+    // </div>`;
 
+    cartContainer.innerHTML = html;
+    
+    if (orderBtn) orderBtn.style.display = 'block'; // Показать кнопку
     // Навешиваем обработчики на кнопки
     cartContainer.querySelectorAll('.btn-increase').forEach(button => {
       button.onclick = () => {
@@ -279,17 +242,23 @@
 
 
   // Обработчик для кнопки "Заказать"
-  document.getElementById('orderBtn').onclick = () => {
-  const isAuth = localStorage.getItem('isAuthenticated');
-  const username = localStorage.getItem('username');
+  document.getElementById('orderBtn').onclick = async () => {
 
-  if (isAuth !== 'true' || !username) {
-    alert('Пожалуйста, войдите или зарегистрируйтесь для оформления заказа.');
-    window.location.href = 'Авторизация.html';
-    return;
-  }
+    const response = await fetch('http://localhost:5000/check-auth', {
+        headers: {
+          'Authorization': localStorage.getItem('authToken') || ''
+        }
+    });
 
-  const cartKey = `cart_${username}`;
+    if (!response.ok) {
+      alert('Пожалуйста, войдите или зарегистрируйтесь для оформления заказа.');
+      window.location.href = 'Авторизация.html';
+      return;
+    }
+
+    const { user } = await response.json();
+
+  const cartKey = `cart_${user.name}`;
   const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
 
   if (cart.length === 0) {
@@ -298,7 +267,7 @@
   }
 
   // Добавляем товары в заказы
-  const orderKey = `orders_${username}`;
+  const orderKey = `orders_${user.name}`;
   const existingOrders = JSON.parse(localStorage.getItem(orderKey)) || [];
 
   const updatedOrders = [...existingOrders, ...cart];
@@ -310,10 +279,10 @@
   alert(`Спасибо за заказ! Вы заказали ${cart.length} товаров на сумму ${cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0).toLocaleString('ru-RU')} ₽`);
 
   // Перенаправляем в профиль
-  window.location.href = 'login copy.html';
+  window.location.href = 'User_Account.html';
 };
-
   
 </script>
+
 </body>
 </html>
