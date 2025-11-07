@@ -10,77 +10,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    .user_card {
-      background-color: #f5f5f5;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .user_info {
-      display: flex;
-      align-items: center;
-    }
-
-    .data {
-      margin-left: 20px;
-    }
-
-    .data h1 {
-      font-size: 24px;
-      margin: 0;
-       color: black;
-    }
-
-    .data p {
-      margin: 4px 0;
-      color: #666;
-    }
-
-    .orders_info p {
-      margin: 8px 0;
-    }
-
-    .logout {
-      background-color: #d9534f;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .logout:hover {
-      background-color: #c9302c;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #f0f0f0;
-    }
-
-    .empty-orders {
-      text-align: center;
-      padding: 40px;
-      font-size: 18px;
-      color: #999;
-    }
-  </style>
 </head>
 <body>
 
@@ -128,10 +57,13 @@
     </div>
   </div>
 
-  <h2 style="text-align:center; margin-bottom: 5px;">Мои заказы</h2>
-  <div id="ordersSection">
-    <div class="empty-orders">У вас пока нет заказов.</div>
+  <div class="myorders">
+    <h2 style="text-align:center; margin-bottom: 5px;">Мои заказы</h2>
+    <div id="ordersSection">
+      <div class="empty-orders">У вас пока нет заказов.</div>
+    </div>
   </div>
+  
 </div>
 
 <div class="footer">

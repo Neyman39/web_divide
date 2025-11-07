@@ -9,23 +9,6 @@ const app = express();
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
-// const options = {
-//   definition: {
-//     openapi: '3.0.0',
-//     info: {
-//       title: 'Мой API',
-//       version: '1.0.0',
-//       description: 'Документация к API интернет-магазина',
-//     },
-//     servers: [
-//       {
-//         url: 'http://localhost:5000',
-//       },
-//     ],
-//   },
-//   apis: ['./server.js'], // путь к вашему файлу с маршрутами (если файл называется server.js)
-// };
-
 // const specs = swaggerJsdoc(options);
 
 // Документация
@@ -169,3 +152,21 @@ app.listen(PORT, () => {
   console.log('Server running on http://localhost:5000');
   console.log('Документация: http://localhost:5000/api-docs');
 });
+
+
+// const options = {
+//   definition: {
+//     openapi: '3.0.0',
+//     info: {
+//       title: 'Мой API',
+//       version: '1.0.0',
+//       description: 'Документация к API интернет-магазина',
+//     },
+//     servers: [
+//       {
+//         url: 'http://localhost:5000',
+//       },
+//     ],
+//   },
+//   apis: ['./server.js'], // путь к вашему файлу с маршрутами (если файл называется server.js)
+// };
