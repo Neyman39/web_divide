@@ -5,7 +5,7 @@
         <title>KeyDivide Сайт по продаже клавиатур</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="assets/css/stylesRegistr.css">
-    <title>Авторизация</title>
+    <title>Регистрация</title>
 </head>
 <body>
     <!-- <div class="login-container">
@@ -25,7 +25,14 @@
             <a href="Авторизация.html"><div class="forbutt"> Назад </div></a>        
         </form>
     </div> -->
-
+    <div id="terminal-screen" class="terminal-screen">
+      <div class="terminal-container">
+          <div class="prompt_tab">
+              <p class="prompt">KeyDivide Prompt REV[01]</p>
+          </div>
+          <div id="terminal" class="terminal1"></div>
+      </div>
+    </div>
     <div class="authorization">
     <div class="terminal">
       <div class="header_code">
@@ -84,8 +91,8 @@
     </script> -->
     
     <script>
-        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
+      document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
   
   const login = document.getElementById('login').value.trim();
   const email = document.getElementById('email').value.trim();
@@ -119,8 +126,10 @@
 
         if (response.ok) {
           // Регистрация успешна
-          localStorage.setItem('username', login);
-          window.location.href = 'Главная.html';
+          localStorage.setItem('authToken', data.login);
+          localStorage.setItem('userData', JSON.stringify(data));
+          typeLine();
+          // window.location.href = 'Главная.html';
         } 
         
         else {
@@ -129,11 +138,14 @@
         }
     } 
     catch (error) {
-        console.error('Ошибка:', error);
-        document.getElementById('message').textContent = 'Ошибка соединения с сервером';
-        document.getElementById('message').style.color = 'red';
+      console.error('Ошибка:', error);
+      console.error('Тип ошибки:', error.name);
+      console.error('Сообщение:', error.message);
+      document.getElementById('message').textContent = 'Ошибка соединения с сервером: ' + error.message;
+      document.getElementById('message').style.color = 'red';
     }
     });
-    </script>
+</script>
+<script src="./assets/scripts/welcome_terminal.js"></script>
 </body>
 </html>

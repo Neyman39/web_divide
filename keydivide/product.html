@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/css/k_card_style copy.css">
+    <link rel="stylesheet" href="assets/css/k_card_phone.css">
+    <link rel="stylesheet" href="assets/css/navpanel.css">
+    <link rel="stylesheet" href="assets/css/navpanel_phone.css">
+    <link rel="stylesheet" href="assets/css/footer.css">
+    <link rel="stylesheet" href="assets/css/footer_phone.css">
+    <link rel="stylesheet" href="assets/css/slider.css">
+    <link rel="stylesheet" href="assets/css/slider_phone.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Press+Start+2P&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeyDivide - Product</title>
+</head>
+<body>
+    
+<!-- Header (оставляем как было) -->
+<header class="header">
+    <div class="container">
+        <div class="header__inner">
+            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
+            <nav class="nav">
+                <ul>
+                    <li class="_link"><a class="nav__link" href="Главная.html#keyboards">Клавиатуры</a></li>
+                    <li class="_link"><a class="nav__link" href="Главная.html#services">Услуги</a></li>
+                    <li class="_link"><a class="nav__link" href="Главная.html#aboutus">О нас</a></li>
+                    <li class="_link"><a class="nav__link" href="#">Соцсети</a>
+                        <ul class="url">
+                            <li class="two_link" style="margin-top: 10px;"><a class="url__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
+                            <li class="two_link"><a class="url__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
+                            <li class="two_link"><a class="url__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
+                        </ul>
+                    </li>					
+                </ul>   
+            </nav>
+        </div>
+        <div style="flex-direction: row; display: flex; align-items: center;">
+            <div id="authStatus"></div>
+            <a class="ikon" id="account" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
+            <a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
+        </div>
+    </div>
+</header>
+
+<!-- Mobile Header (оставляем как было) -->
+<header class="header_phone">
+    <div class="container">
+        <div class="header__inner">
+            <nav class="nav">
+                <ul>
+                    <li class="_link"><a class="nav__link" href="#" style="font-size: 30px;">=</a>
+                        <ul class="url">
+                            <li class="two_link"><a class="nav__link" href="Главная.html#keyboards">Клавиатуры</a></li>
+                            <li class="two_link"><a class="nav__link" href="Главная.html#services">Услуги</a></li>
+                            <li class="two_link"><a class="nav__link" href="Главная.html#aboutus">О нас</a></li>
+                            <li class="two_link" style="margin-top: 10px;"><a class="nav__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
+                            <li class="two_link"><a class="nav__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
+                            <li class="two_link"><a class="nav__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
+                        </ul>
+                    </li>					
+                </ul>   
+            </nav>
+            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
+            <div>
+                <a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
+                <a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Основной контент -->
+<div class="intro">
+    <div class="baza">
+        <div class="think_about_title">
+            <div class="slider-container">
+                <button class="prev-btn" aria-label="Посмотреть предыдущий слайд">
+                    <img src="assets/images/стрелка.png" alt="Предыдущее" width="20" height="20" style="rotate: 180deg;">
+                </button>
+                <div class="slider">
+                    <!-- Динамически заполнятся через JS -->
+                    <img src="" alt="Loading..." class="main-image" width="810" height="440" id="mainImage">
+                </div>
+                <button class="next-btn" aria-label="Посмотреть следующий слайд">
+                    <img src="assets/images/стрелка.png" alt="Следующее" width="20" height="20">
+                </button>
+            </div> 
+            <div class="thumbnail-container-phone">
+                <div class="thumbnail-list" id="phoneThumbnails">
+                    <!-- Миниатюры для телефона -->
+                </div>
+            </div> 
+        </div>
+        <div class="prod_info">
+            <div class="wrapper">
+                <h1 class="typing-demo" id="productName">Загрузка...</h1>
+            </div>
+            <div class="box-prod">
+                <p class="prod" id="productDescription">Загрузка описания...</p>
+            </div>
+            <div class="form">
+                <h2>Переключатели</h2>
+                <div class="switches" id="switchesContainer">
+                    <!-- Динамически заполнятся через JS -->
+                </div>
+            </div>
+            <div class="box-price">
+                <p class="price" id="productPrice">0 ₽</p>
+            </div>
+            <div class="butt">
+               <div id="addToCartBtn" class="button" style="cursor:pointer;">
+                  <p>В корзину</p>
+                  <img src="assets/images/корзина.png" alt="Корзина" width="26" height="24"> 
+               </div>
+               <div class="deliver"><p>Бесплатная доставка от 4 дней 🚚</p></div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="thumbnail-container">
+            <div class="thumbnail-list" id="desktopThumbnails">
+                <!-- Миниатюры для десктопа -->
+            </div>
+        </div>
+        <div class="terminal">
+            <div class="header_code">
+              <span class="icon red"></span>
+              <span class="icon yellow"></span>
+              <span class="icon green"></span>
+              <h2 id="terminalTitle">Product Info.json</h2>
+            </div>
+            <div class="json_style">
+                <div class="numbers">1 2 3 4 5 6 7 8 9 10 11 12</div>
+                <pre class="code" id="specificationsCode">
+<!-- Спецификации будут здесь -->
+                </pre>
+                <div class="numbers">1 2 3 4 5 6 7 8</div>
+                <pre class="code" id="equipmentCode">
+<!-- Комплектация будет здесь -->
+                </pre>
+            </div>
+        </div>
+
+        <!-- <div class="specs">
+            <div class="bombom">
+                <h3 class="spectitle">Характеристики</h3>
+                <div id="specificationsList">
+                    Характеристики будут здесь
+                </div>
+            </div>
+            <div class="bombom2">
+                <h3>Комплектация</h3>
+                <div id="equipmentList">
+                    Комплектация будет здесь
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>  
+
+<!-- Footer (оставляем как было) -->
+<div class="footer">
+    <div class="footbox">
+        <div class="line"></div>
+        <div class="colums">
+            <div class="col1">
+                <h1>KeyDivide</h1>
+                <p>made by people for people</p>
+            </div>
+            <div class="colinfo">
+                <div class="col2">
+                    <h1 class="coltitle">Магазин</h1>
+                    <p class="coltext"><a href="Главная.html#keyboards">Клавиатуры</a></p>
+                    <p class="coltext"><a href="Главная.html#services">Услуги</a></p>
+                </div>
+                <div class="col3">
+                    <h1 class="coltitle">Соцсети</h1>
+                    <a href="https://discord.gg/PKZ8ejUB8Z" target="_blank"><p class="coltext">Discord</p></a>
+                    <a href="https://vk.com/cacao_keyboards" target="_blank"><p class="coltext">Вконтакте</p></a>
+                    <a href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank"><p class="coltext">YouTube</p></a>  
+                </div>
+                <div class="col4">
+                    <h1 class="coltitle">Инфо</h1>
+                    <p class="coltext"><a href="Главная.html#aboutus">О нас</a></p>
+                </div>
+                <div class="col5">
+                    <h1 class="coltitle">Контакты</h1>
+                    <p class="coltext">of_keydivide@mail.ru</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="by">
+        <div class="byby">
+            <p>©CacaoBoards All Rights Reserved</p>
+            <p>Designed with ❤️ by neyman</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Получаем ID продукта из URL
+function getProductIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id') || 2; // По умолчанию ID 1, если не указан
+}
+
+// Основная функция загрузки данных продукта
+async function loadProductData() {
+    const productId = getProductIdFromUrl();
+    
+    try {
+        const response = await fetch(`/api/products/${productId}`);
+        if (!response.ok) {
+            throw new Error('Product not found');
+        }
+        
+        const productData = await response.json();
+        renderProductPage(productData);
+        setupEventListeners(productData);
+        
+    } catch (error) {
+        console.error('Error loading product:', error);
+        document.getElementById('productName').textContent = 'Товар не найден';
+    }
+}
+
+// Рендеринг данных на странице
+function renderProductPage(data) {
+    // Основная информация
+    document.getElementById('productName').textContent = data.name;
+    document.getElementById('productDescription').textContent = data.description;
+    document.getElementById('productPrice').textContent = `${Math.round(data.current_price)} ₽`;
+    document.getElementById('terminalTitle').textContent = `${data.name} Info.json`;
+
+    // Изображения
+    renderImages(data.images);
+    
+    // Переключатели
+    renderSwitches(data.available_switches);
+    
+    // Спецификации в терминале
+    renderSpecificationsCode(data.specifications);
+    
+    // Комплектация в терминале
+    renderEquipmentCode(data.equipment);
+    
+    // // Характеристики в списке
+    // renderSpecificationsList(data.specifications);
+    
+    // // Комплектация в списке
+    // renderEquipmentList(data.equipment);
+}
+
+// Рендер изображений
+function renderImages(images) {
+    if (images.length === 0) return;
+    
+    const mainImage = document.getElementById('mainImage');
+    mainImage.src = images[0].url;
+    mainImage.alt = images[0].alt;
+    
+    // Миниатюры для десктопа
+    const desktopThumbnails = document.getElementById('desktopThumbnails');
+    const phoneThumbnails = document.getElementById('phoneThumbnails');
+    
+    desktopThumbnails.innerHTML = '';
+    phoneThumbnails.innerHTML = '';
+    
+    images.forEach((image, index) => {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = image.url;
+        thumbnail.alt = image.alt;
+        thumbnail.className = 'thumbnail' + (index === 0 ? ' active' : '');
+        thumbnail.onclick = () => changeMainImage(image.url, image.alt, index);
+        
+        desktopThumbnails.appendChild(thumbnail.cloneNode(true));
+        phoneThumbnails.appendChild(thumbnail);
+    });
+}
+
+// Рендер переключателей
+function renderSwitches(switches) {
+    const container = document.getElementById('switchesContainer');
+    container.innerHTML = '';
+    
+    switches.forEach(sw => {
+        const button = document.createElement('button');
+        button.className = 'config-button';
+        button.setAttribute('data-config', sw.id);
+        button.setAttribute('data-price', sw.total_price);
+        
+        button.innerHTML = `
+            <div class="swbox">${sw.name}
+                <div class="switch__overlay">
+                    <div class="switch__inner">
+                        <div class="switch__info">
+                            <div class="switch__image">
+                                <img src="assets/images/${getSwitchImage(sw.name)}.png" alt="${sw.name}" width="80" height="80">
+                            </div>
+                            <div class="switch__title">
+                                <p class="switch__name">${sw.name}</p>
+                                <div class="switch__type">${sw.type}</div>
+                            </div>
+                        </div>
+                        <div class="swith__specs">
+                            <div class="spec__line"><p>Сила срабатывания</p><p>${sw.actuation_force}g</p></div>
+                            <div class="li_line"></div>
+                            <div class="spec__line"><p>Сила до упора</p><p>${sw.bottom_force}g</p></div>
+                            <div class="li_line"></div>
+                            <div class="spec__line"><p>Сила тактильности</p><p>${sw.tactile_force || 'none'}</p></div>
+                            <div class="li_line"></div>
+                            <div class="spec__line"><p>Длина пути</p><p>${sw.travel_length}</p></div>
+                            <div class="li_line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        if (sw.is_default) {
+            button.style.border = '1.5px solid rgb(255, 122, 105)';
+        }
+        
+        container.appendChild(button);
+    });
+}
+
+// Вспомогательная функция для получения изображения свитча
+function getSwitchImage(switchName) {
+    const images = {
+        'Akko V3 Cream Yellow': 'akko-yellow',
+        'Akko V3 Cream Blue': 'akko-blue',
+        'Outemu Silent Peach': 'outemu-peach'
+    };
+    return images[switchName] || 'default-switch';
+}
+
+// Рендер спецификаций в терминале
+function renderSpecificationsCode(specs) {
+    const codeElement = document.getElementById('specificationsCode');
+    let code = '"specifications": {\n';
+    
+    specs.forEach(spec => {
+        code += `    <span class="key1">"${spec.key}"</span>: <span class="value1">"${spec.value}"</span>,\n`;
+    });
+    
+    code = code.slice(0, -2) + '\n}'; // Убираем последнюю запятую
+    codeElement.innerHTML = code;
+}
+
+// Рендер комплектации в терминале
+function renderEquipmentCode(equipment) {
+    const codeElement = document.getElementById('equipmentCode');
+    let code = '"equipment": [\n';
+    
+    equipment.forEach(item => {
+        code += `    <span class="key1">"${item}"</span>,\n`;
+    });
+    
+    code = code.slice(0, -2) + '\n]'; // Убираем последнюю запятую
+    codeElement.innerHTML = code;
+}
+
+// Рендер характеристик в списке
+// function renderSpecificationsList(specs) {
+//     const container = document.getElementById('specificationsList');
+//     container.innerHTML = '';
+    
+//     specs.forEach(spec => {
+//         const specHTML = `
+//             <div class="haracter">
+//                 <p class="spectext">${spec.key}</p>
+//                 <p class="spectext2">${spec.value}</p>
+//             </div>
+//             <div class="li_line"></div>
+//         `;
+//         container.innerHTML += specHTML;
+//     });
+// }
+
+// Рендер комплектации в списке
+// function renderEquipmentList(equipment) {
+//     const container = document.getElementById('equipmentList');
+//     container.innerHTML = '';
+    
+//     equipment.forEach(item => {
+//         const itemHTML = `
+//             <div class="complect">
+//                 <div class="dot"></div>
+//                 <p>${item}</p>
+//             </div>
+//         `;
+//         container.innerHTML += itemHTML;
+//     });
+// }
+
+// Смена основного изображения
+function changeMainImage(src, alt, index) {
+    const mainImage = document.getElementById('mainImage');
+    mainImage.src = src;
+    mainImage.alt = alt;
+    
+    // Обновляем активные миниатюры
+    document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+    });
+}
+
+// Настройка обработчиков событий
+function setupEventListeners(data) {
+    // Обработчики для кнопок переключателей
+    document.querySelectorAll('.config-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const switchId = this.getAttribute('data-config');
+            const newPrice = this.getAttribute('data-price');
+            
+            // Обновляем цену
+            document.getElementById('productPrice').textContent = `${Math.round(newPrice)} ₽`;
+            
+            // Обновляем рамки кнопок
+            document.querySelectorAll('.config-button').forEach(btn => {
+                btn.style.border = '1.5px solid rgb(96, 96, 96)';
+            });
+            this.style.border = '1.5px solid rgb(255, 122, 105)';
+            
+            // Обновляем спецификацию "Переключатели"
+            updateSwitchSpecification(switchId, data.available_switches);
+        });
+    });
+    
+    // Обработчики для слайдера
+    setupSliderControls();
+}
+
+// Обновление спецификации переключателей
+function updateSwitchSpecification(switchId, switches) {
+    const selectedSwitch = switches.find(sw => sw.id == switchId);
+    if (!selectedSwitch) return;
+    
+    const switchSpec = `Переключатели`;
+    const switchValue = `${selectedSwitch.name} (${selectedSwitch.type} ${selectedSwitch.actuation_force}г.)`;
+    
+    // Обновляем в терминале
+    const specs = document.querySelectorAll('#specificationsCode .key1');
+    specs.forEach(spec => {
+        if (spec.textContent.includes('Переключатели')) {
+            const valueElement = spec.nextElementSibling.nextElementSibling;
+            valueElement.textContent = `"${switchValue}"`;
+        }
+    });
+    
+    // Обновляем в списке характеристик
+    const specItems = document.querySelectorAll('#specificationsList .haracter');
+    specItems.forEach(item => {
+        const keyElement = item.querySelector('.spectext');
+        if (keyElement.textContent === 'Переключатели') {
+            const valueElement = item.querySelector('.spectext2');
+            valueElement.textContent = switchValue.toLowerCase();
+        }
+    });
+}
+
+// Настройка управления слайдером
+function setupSliderControls() {
+    let currentImageIndex = 0;
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    
+    document.querySelector('.next-btn').addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex + 1) % thumbnails.length;
+        thumbnails[currentImageIndex].click();
+    });
+    
+    document.querySelector('.prev-btn').addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex - 1 + thumbnails.length) % thumbnails.length;
+        thumbnails[currentImageIndex].click();
+    });
+}
+
+// Загрузка при старте
+document.addEventListener('DOMContentLoaded', () => {
+    loadProductData();
+    // Ваши существующие скрипты авторизации и корзины
+    checkAuthAndDisplayUser();
+    setupCartButton();
+});
+
+// Функция для кнопки корзины (адаптированная под новые данные)
+function setupCartButton() {
+    document.getElementById('addToCartBtn')?.addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://localhost:5000/check-auth', {
+                headers: {
+                    'Authorization': localStorage.getItem('authToken') || ''
+                }
+            });
+        
+            if (!response.ok) {
+                alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
+                window.location.href = 'Авторизация.html';
+                return;
+            }
+        
+            const { user } = await response.json();
+            const productName = document.getElementById('productName').textContent;
+            const priceText = document.getElementById('productPrice').textContent;
+            const price = parseFloat(priceText.replace(/[^\d.-]/g, ''));
+            
+            // Получаем выбранный свитч
+            const selectedSwitchButton = document.querySelector('.config-button[style*="rgb(255, 122, 105)"]');
+            const selectedSwitch = selectedSwitchButton ? selectedSwitchButton.querySelector('.swbox').textContent.trim() : '';
+            
+            const cartKey = `cart_${user.name}`;
+            let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+            
+            const existingItem = cart.find(item => 
+                item.productName === productName && item.selectedSwitch === selectedSwitch
+            );
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    productName: productName,
+                    selectedSwitch: selectedSwitch,
+                    price: price,
+                    quantity: 1,
+                    productId: getProductIdFromUrl()
+                });
+            }
+            
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+            alert('Товар добавлен в корзину!');
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка при добавлении в корзину');
+        }
+    });
+}
+</script>
+
+<!-- Подключаем ваши существующие скрипты -->
+<script src="script.js"></script>
+<script src="check_authorization.js"></script>
+
+</body>
+</html>

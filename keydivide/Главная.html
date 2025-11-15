@@ -5,11 +5,12 @@
 	<title>KeyDivide</title>
 	<link rel="stylesheet" href="assets/css/navpanel.css">
   	<link rel="stylesheet" href="assets/css/navpanel_phone.css">
-	<link rel="stylesheet" href="assets/css/Главная copy.css">
-  	<link rel="stylesheet" href="assets/css/Главная-phone.css">
+	<link rel="stylesheet" href="assets/css/Главная страница/Главная copy.css">
+  	<link rel="stylesheet" href="assets/css/Главная страница/Главная-phone.css">
 	<link rel="stylesheet" href="assets/css/footer.css">
   	<link rel="stylesheet" href="assets/css/footer_phone.css">
   	<link rel="stylesheet" href="assets/css/services-filt.css">
+    <link rel="stylesheet" href="assets/css/Главная страница/product-card.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
@@ -90,7 +91,7 @@
 
 <div class="container_usl">
     <a name="keyboards"></a>
-    <div id="klaviatura">
+    <div class="klaviatura">
         <div class="filter">
             <div style="width: 180px;"></div>
             <div id="SM2"><h3> Клавиатуры </h3></div>
@@ -110,7 +111,7 @@
     </div>
     <a name="services"></a>
 
-    <div id="klaviatura">
+    <div class="klaviatura">
         <div class="filter">
             <div style="width: 180px;"></div>
             <div id="SM2"><h3> Услуги </h3></div>
@@ -241,40 +242,40 @@ async function displayProducts() {
   productContainer.innerHTML = '';
 
   try {
-    // Запрашиваем данные с сервера
     const response = await fetch('http://localhost:5000/api/products');
     if (!response.ok) throw new Error('Ошибка загрузки товаров');
     
     let products = await response.json();
 
-    // Применяем фильтр
     if (currentFilter === 'asc') {
-      products.sort((a, b) => a.price - b.price); // по возрастанию
+      products.sort((a, b) => a.price - b.price);
     } else if (currentFilter === 'desc') {
-      products.sort((a, b) => b.price - a.price); // по убыванию
+      products.sort((a, b) => b.price - a.price);
     }
     // 'all' — без сортировки, просто как есть
 
-    // Отрисовка товаров
     products.forEach(product => {
-      const in_card1 = document.createElement('a');
-      in_card1.classList.add('in_card1');
-      in_card1.href = product.link || '#';
+      const prod_card = document.createElement('a');
+      prod_card.classList.add('product-card');
+      prod_card.href = product.link || `product.html?id=${product.id}`;
 
       const productImg = document.createElement('img');
       productImg.src = product.img || 'assets/images/default.jpg';
       productImg.alt = product.name;
-      in_card1.appendChild(productImg);
+      productImg.classList.add('product-card__img');
+      prod_card.appendChild(productImg);
 
-      const productName = document.createElement('h4');
+      const productName = document.createElement('h3');
       productName.textContent = product.name;
-      in_card1.appendChild(productName);
+      productName.classList.add('product-card__name');
+      prod_card.appendChild(productName);
 
-      const productPrice = document.createElement('h5');
-      productPrice.textContent = `${product.price} ₽`;
-      in_card1.appendChild(productPrice);
+      const productPrice = document.createElement('h4');
+      productPrice.textContent = `${Math.round(product.price)} ₽`;
+      productPrice.classList.add('product-card__price');
+      prod_card.appendChild(productPrice);
 
-      productContainer.appendChild(in_card1);
+      productContainer.appendChild(prod_card);
     });
   } catch (error) {
     console.error('Ошибка:', error);
@@ -283,87 +284,57 @@ async function displayProducts() {
 }
 
 document.addEventListener('DOMContentLoaded', displayProducts);
+
+// // Функция для отображения товаров из БД
+// async function displayProducts() {
+//   const productContainer = document.querySelector('.product-container');
+//   productContainer.innerHTML = '';
+
+//   try {
+//     // Запрашиваем данные с сервера
+//     const response = await fetch('http://localhost:5000/api/products');
+//     if (!response.ok) throw new Error('Ошибка загрузки товаров');
+    
+//     let products = await response.json();
+
+//     // Применяем фильтр
+//     if (currentFilter === 'asc') {
+//       products.sort((a, b) => a.price - b.price); // по возрастанию
+//     } else if (currentFilter === 'desc') {
+//       products.sort((a, b) => b.price - a.price); // по убыванию
+//     }
+//     // 'all' — без сортировки, просто как есть
+
+//     // Отрисовка товаров
+//     products.forEach(product => {
+//       const in_card1 = document.createElement('a');
+//       in_card1.classList.add('in_card1');
+//       in_card1.href = product.link || '#';
+
+//       const productImg = document.createElement('img');
+//       productImg.src = product.img || 'assets/images/default.jpg';
+//       productImg.alt = product.name;
+//       in_card1.appendChild(productImg);
+
+//       const productName = document.createElement('h4');
+//       productName.textContent = product.name;
+//       in_card1.appendChild(productName);
+
+//       const productPrice = document.createElement('h5');
+//       productPrice.textContent = `${product.price} ₽`;
+//       in_card1.appendChild(productPrice);
+
+//       productContainer.appendChild(in_card1);
+//     });
+//   } catch (error) {
+//     console.error('Ошибка:', error);
+//     productContainer.innerHTML = '<p>Не удалось загрузить товары. Попробуйте позже.</p>';
+//   }
+// }
+
+// document.addEventListener('DOMContentLoaded', displayProducts);
 </script>
 <script src="services-fil.js"></script>
-
-<script src="scriptTest.js"></script>
-
-
-<script>
-  // Строки, которые будут "печататься" в терминале
-  const lines = [
-  "> INITIALIZING KEYDIVIDE v2.1...",
-  "  [OK] Memory check",
-  "  [OK] Keyboard driver loaded",
-  "  [INFO] Hot-swap module: active",
-  "  [INFO] RGB lighting: disabled",
-  "> Scanning firmware...",
-  "  [OK] All devices ready",
-  " ",
-  "　　　　　／フ---/フ",
-  "　　　　　| 　_　 _|",
-  "　 　　　／`ミ _x 彡",
-  "　　 　 /　　　 　 |",
-  "　　　 /　 ヽ　　 ﾉ",
-  "　／￣|　　 |　|　|",
-  "　| (￣ヽ＿_ヽ_)_)",
-  "　＼二つ",
-  "> SYSTEM READY. WELCOME, USER."
-  ];
-
-  const terminal1 = document.getElementById('terminal1');
-  const cursor = document.querySelector('.cursor');
-
-  let lineIndex = 0;
-  let charIndex = 0;
-  let currentLine = '';
-
-  // Функция, имитирующая печать текста
-  function typeLine() {
-      if (lineIndex >= lines.length) {
-        // Завершаем анимацию
-        setTimeout(() => {
-          document.getElementById('terminal-screen').style.display = 'none'; // none
-          const main = document.getElementById('main-content');
-          main.style.display = 'block'; // block
-          setTimeout(() => {
-              main.style.opacity = '1'; // 1
-          }, 100);
-        }, 500);
-        return;
-      }
-
-const currentLine = lines[lineIndex];
-
-// Формируем текущий текст: уже напечатанное + новый символ
-const printed = currentLine.substring(0, charIndex + 1);
-
-// Очищаем терминал и вставляем всё с новым курсором
-terminal.innerHTML = lines
-  .slice(0, lineIndex) // Все предыдущие строки
-  .map(line => line + '<br>')
-  .join('') +
-  printed + // Текущая строка — до текущего символа
-  '<span class="cursor">█</span>'; // Курсор в конце
-
-charIndex++;
-
-if (charIndex === currentLine.length) {
-  charIndex = 0;
-  lineIndex++;
-  if (lineIndex == 6) {
-      setTimeout(typeLine, 1000);
-  }
-  else setTimeout(typeLine, Math.random() * 200 + 50); // Задержка между строками
-} 
-else setTimeout(typeLine, 15 + Math.random() * 15); // Быстрая печать
-}
-
-  // Запуск анимации при загрузке
-  document.addEventListener('DOMContentLoaded', async () => {
-    await typeLine();
-  });
-</script>
 
 </body>
 </html>

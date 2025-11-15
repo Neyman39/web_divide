@@ -240,8 +240,12 @@ h1, h3, h4, h5, h6 {
     width: 890px;
 }
 
+.wrapper {
+  width: fit-content;
+}
+
 .typing-demo {
-    width: 22ch;
+    width: 100%;
     animation: typing 2.5s steps(22), blink .5s step-end infinite alternate;
     white-space: nowrap;
     overflow: hidden;
@@ -251,7 +255,8 @@ h1, h3, h4, h5, h6 {
     font-size: 32px;
 }
   @keyframes typing {
-    from {width: 0;}}
+    from {width: 0;}
+  }
   @keyframes blink {
     50% {border-color: transparent;}
 }
@@ -306,7 +311,9 @@ CacaoSplit Ortomini Black
     display: inline-block;
     position: relative;
 }
-.overlay {
+
+/* Всплывающее окно с характеристиками свитча */
+.swoverlay {
     margin-top: -300px;
     left: -50px;
     display: none;
@@ -319,9 +326,13 @@ CacaoSplit Ortomini Black
     border-radius: 5px;
     background-color: #383434;
 }
-.config-button:hover .overlay {
+.config-button:hover .swoverlay {
     display: block;
     z-index: 9999;
+}
+
+.swoverlay__inner {
+  padding: 15px;
 }
 
 .about_sw {
@@ -506,4 +517,76 @@ CacaoSplit Ortomini Black
     height: 6px;
     border-radius: 50%;
     background-color: #656565;
+}
+
+
+
+
+/* Всплывающее окно с характеристиками свитча */
+.switch__overlay {
+  top: -270px;
+  left: -50px;
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  width: 390px;
+  color: #eeeeee;
+
+  border-radius: 5px;
+  background-color: #383434;
+}
+.config-button:hover .switch__overlay {
+  display: block;
+  z-index: 9999;
+}
+
+.switch__inner {
+padding: 15px;
+}
+
+.switch__info {
+  font-family: 'Ubuntu Sans Mono';
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+.switch__image {
+  border-radius: 3px;
+  width: 80px;
+  height: 80px;
+  background-color: #eeeeee;
+  overflow: hidden;
+}
+
+.switch__title {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.switch__name {
+  font-size: 19px;
+}
+
+.switch__type {
+  width: fit-content;
+  text-align: center;
+  padding: 4px 12px;
+  font-size: 15px;
+  border: 1px solid #eeeeee;
+  border-radius: 5px;
+}
+
+.swith__specs {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.spec__line {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 4px;
 }
