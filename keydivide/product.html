@@ -23,36 +23,10 @@
 </head>
 <body>
     
-<!-- Header (оставляем как было) -->
-<header class="header">
-    <div class="container">
-        <div class="header__inner">
-            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
-            <nav class="nav">
-                <ul>
-                    <li class="_link"><a class="nav__link" href="Главная.html#keyboards">Клавиатуры</a></li>
-                    <li class="_link"><a class="nav__link" href="Главная.html#services">Услуги</a></li>
-                    <li class="_link"><a class="nav__link" href="Главная.html#aboutus">О нас</a></li>
-                    <li class="_link"><a class="nav__link" href="#">Соцсети</a>
-                        <ul class="url">
-                            <li class="two_link" style="margin-top: 10px;"><a class="url__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
-                            <li class="two_link"><a class="url__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
-                            <li class="two_link"><a class="url__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
-                        </ul>
-                    </li>					
-                </ul>   
-            </nav>
-        </div>
-        <div style="flex-direction: row; display: flex; align-items: center;">
-            <div id="authStatus"></div>
-            <a class="ikon" id="account" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-            <a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
-        </div>
-    </div>
-</header>
+<header id="nav_header"></header>
+<header id="header-phone"></header>
 
-<!-- Mobile Header (оставляем как было) -->
-<header class="header_phone">
+<!-- <header class="header_phone">
     <div class="container">
         <div class="header__inner">
             <nav class="nav">
@@ -76,9 +50,8 @@
             </div>
         </div>
     </div>
-</header>
+</header> -->
 
-<!-- Основной контент -->
 <div class="intro">
     <div class="baza">
         <div class="think_about_title">
@@ -149,63 +122,23 @@
                 </pre>
             </div>
         </div>
-
-        <!-- <div class="specs">
-            <div class="bombom">
-                <h3 class="spectitle">Характеристики</h3>
-                <div id="specificationsList">
-                    Характеристики будут здесь
-                </div>
-            </div>
-            <div class="bombom2">
-                <h3>Комплектация</h3>
-                <div id="equipmentList">
-                    Комплектация будет здесь
-                </div>
-            </div>
-        </div> -->
     </div>
 </div>  
 
-<!-- Footer (оставляем как было) -->
-<div class="footer">
-    <div class="footbox">
-        <div class="line"></div>
-        <div class="colums">
-            <div class="col1">
-                <h1>KeyDivide</h1>
-                <p>made by people for people</p>
-            </div>
-            <div class="colinfo">
-                <div class="col2">
-                    <h1 class="coltitle">Магазин</h1>
-                    <p class="coltext"><a href="Главная.html#keyboards">Клавиатуры</a></p>
-                    <p class="coltext"><a href="Главная.html#services">Услуги</a></p>
-                </div>
-                <div class="col3">
-                    <h1 class="coltitle">Соцсети</h1>
-                    <a href="https://discord.gg/PKZ8ejUB8Z" target="_blank"><p class="coltext">Discord</p></a>
-                    <a href="https://vk.com/cacao_keyboards" target="_blank"><p class="coltext">Вконтакте</p></a>
-                    <a href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank"><p class="coltext">YouTube</p></a>  
-                </div>
-                <div class="col4">
-                    <h1 class="coltitle">Инфо</h1>
-                    <p class="coltext"><a href="Главная.html#aboutus">О нас</a></p>
-                </div>
-                <div class="col5">
-                    <h1 class="coltitle">Контакты</h1>
-                    <p class="coltext">of_keydivide@mail.ru</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="by">
-        <div class="byby">
-            <p>©CacaoBoards All Rights Reserved</p>
-            <p>Designed with ❤️ by neyman</p>
-        </div>
-    </div>
-</div>
+<footer id="footer"></footer>
+
+<script src="assets/scripts/initMobileNavigation.js"></script>
+<script src="assets/scripts/check_authorization.js"></script>
+<script src="assets/scripts/components.js"></script>
+<script>
+    // Загружаем компоненты при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        loadComponent('nav_header', 'nav_header');
+        loadComponent('footer', 'footer');
+        loadComponent('header-phone', 'header-phone');
+        initMobileNavigation();
+    });
+</script>
 
 <script>
 // Получаем ID продукта из URL
@@ -253,12 +186,6 @@ function renderProductPage(data) {
     
     // Комплектация в терминале
     renderEquipmentCode(data.equipment);
-    
-    // // Характеристики в списке
-    // renderSpecificationsList(data.specifications);
-    
-    // // Комплектация в списке
-    // renderEquipmentList(data.equipment);
 }
 
 // Рендер изображений

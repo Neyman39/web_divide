@@ -19,6 +19,7 @@
 .product-card__name {
     font-size: clamp(16px, 2vw, 20px);
     font-weight: 700;
+    text-align: center;
     color: #000000;
 }
 

@@ -173,20 +173,6 @@ body {
   border-left: 1px solid #9b9b9b;
 } */
 
-*,
-*:before,
-*:after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    list-style: none;
-    text-decoration: none;
-}
-
-h1, h3, h4, h5, h6 {
-    margin: 0;
-}
-
 /*Intro*/
 .intro {
     background: url("../images/бумажный_фон.png") center;

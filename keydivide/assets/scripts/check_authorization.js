@@ -1,10 +1,11 @@
 // check_authorization - функция проверки авторизации и отображения пользователя
 async function checkAuthAndDisplayUser() {
       
-    const authStatusDiv = document.getElementById('authStatus');
-  
+  const authStatusDiv = document.getElementById('authStatus');
+  const authStatusDiv_phone = document.getElementById('authStatus-phone');
+
   try {
-    const response = await fetch('http://localhost:5000/check-auth', {
+    const response = await fetch('/check-auth', {
       headers: {
         'Authorization': localStorage.getItem('authToken') || ''
       }
@@ -15,8 +16,10 @@ async function checkAuthAndDisplayUser() {
       
       // Отображаем информацию о пользователе
       authStatusDiv.innerHTML = `${user.name} ${user.surname}`;
+      authStatusDiv_phone.innerHTML = `${user.name} ${user.surname}`;
 
         document.getElementById('account').href = 'User_Account.html';
+        document.getElementById('account-phone').href = 'User_Account.html';
     } else {
       // Пользователь не авторизован
       showAuthLinks();
