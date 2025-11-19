@@ -72,7 +72,6 @@
       localStorage.setItem('authToken', login); // Используем login как простой токен
       localStorage.setItem('userData', JSON.stringify(data.user));
       typeLine();
-      //window.location.href = 'Главная.html';
     } else {
       errorMessage.textContent = data.error || 'Ошибка авторизации';
     }

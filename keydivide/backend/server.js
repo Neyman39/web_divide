@@ -194,12 +194,13 @@ app.get('/check-auth', async (req, res) => {
   }
 });
 
-// API Endpoint для получения данных продукта
+
+// Основная информация о продукте (без свитчей)
 app.get('/api/products/:id', async (req, res) => {
   let client;
   try {
       const productId = parseInt(req.params.id);
-      console.log('Fetching product with ID:', productId);
+      console.log('Fetching basic product info for ID:', productId);
 
       client = await pool.connect();
 
@@ -214,11 +215,6 @@ app.get('/api/products/:id', async (req, res) => {
               p.base_switch_id,
               s.name as base_switch_name,
               s.type as base_switch_type,
-              s.actuation_force as base_actuation_force,
-              s.bottom_force as base_bottom_force,
-              s.tactile_force as base_tactile_force,
-              s.travel_length as base_travel_length,
-              s.price_per_switch as base_price_per_switch,
               (p.base_price + (s.price_per_switch * p.switch_count)) as current_price
           FROM products_demo p
           LEFT JOIN switches s ON p.base_switch_id = s.id
@@ -234,33 +230,7 @@ app.get('/api/products/:id', async (req, res) => {
       const product = productResult.rows[0];
       console.log('Found product:', product.name);
 
-      // 2. Получаем доступные свитчи для этого продукта с явным приведением типов
-      const switchesQuery = `
-          SELECT 
-              s.id,
-              s.name,
-              s.type,
-              s.actuation_force,
-              s.bottom_force,
-              s.tactile_force,
-              s.travel_length,
-              s.price_per_switch,
-              p.switch_count,
-              (s.price_per_switch * p.switch_count) as additional_price,
-              (p.base_price + (s.price_per_switch * p.switch_count)) as total_price,
-              pas.display_order,
-              (s.id = p.base_switch_id) as is_default
-          FROM product_available_switches pas
-          JOIN switches s ON pas.switch_id = s.id
-          JOIN products_demo p ON pas.product_id = p.id
-          WHERE pas.product_id = $1
-          ORDER BY pas.display_order
-      `;
-
-      const switchesResult = await client.query(switchesQuery, [productId]);
-      console.log('Found switches:', switchesResult.rows.length);
-
-      // 3. Получаем изображения
+      // 2. Получаем изображения
       const imagesQuery = `
           SELECT i.image_url, i.alt_text
           FROM product_images pi
@@ -272,7 +242,7 @@ app.get('/api/products/:id', async (req, res) => {
       const imagesResult = await client.query(imagesQuery, [productId]);
       console.log('Found images:', imagesResult.rows.length);
 
-      // 4. Получаем характеристики
+      // 3. Получаем характеристики
       const specsQuery = `
           SELECT spec_key, spec_value, depends_on_switch, display_order
           FROM product_specifications
@@ -283,7 +253,7 @@ app.get('/api/products/:id', async (req, res) => {
       const specsResult = await client.query(specsQuery, [productId]);
       console.log('Found specifications:', specsResult.rows.length);
 
-      // 5. Получаем комплектацию
+      // 4. Получаем комплектацию
       const equipmentQuery = `
           SELECT item_name
           FROM product_equipment
@@ -294,7 +264,7 @@ app.get('/api/products/:id', async (req, res) => {
       const equipmentResult = await client.query(equipmentQuery, [productId]);
       console.log('Found equipment:', equipmentResult.rows.length);
 
-      // 6. Формируем финальный ответ
+      // 5. Формируем финальный ответ (без свитчей)
       const response = {
           id: product.id,
           name: product.name,
@@ -302,10 +272,93 @@ app.get('/api/products/:id', async (req, res) => {
           base_price: parseFloat(product.base_price),
           current_price: parseFloat(product.current_price),
           switch_count: product.switch_count,
+          base_switch_id: product.base_switch_id,
+          base_switch_name: product.base_switch_name,
+          base_switch_type: product.base_switch_type,
           images: imagesResult.rows.map(img => ({
               url: img.image_url,
               alt: img.alt_text
           })),
+          specifications: specsResult.rows.map(spec => ({
+              key: spec.spec_key,
+              value: spec.spec_value,
+              depends_on_switch: spec.depends_on_switch
+          })),
+          equipment: equipmentResult.rows.map(eq => eq.item_name)
+      };
+
+      console.log('Sending basic product info for:', product.name);
+      res.json(response);
+
+  } catch (error) {
+      console.error('Error fetching product:', error);
+      res.status(500).json({ error: 'Internal server error: ' + error.message });
+  } finally {
+      if (client) {
+          client.release();
+      }
+  }
+});
+
+// Получение доступных свитчей для продукта
+app.get('/api/products/:id/switches', async (req, res) => {
+  let client;
+  try {
+      const productId = parseInt(req.params.id);
+      console.log('Fetching switches for product ID:', productId);
+
+      client = await pool.connect();
+
+      // Получаем базовую информацию о продукте для расчетов
+      const productQuery = `
+          SELECT base_price, switch_count, base_switch_id 
+          FROM products_demo 
+          WHERE id = $1
+      `;
+      
+      const productResult = await client.query(productQuery, [productId]);
+      
+      if (productResult.rows.length === 0) {
+          return res.status(404).json({ error: 'Product not found' });
+      }
+
+      const product = productResult.rows[0];
+
+      // Получаем доступные свитчи с расчетами цен
+      const switchesQuery = `
+          SELECT 
+              s.id,
+              s.name,
+              s.type,
+              s.actuation_force,
+              s.bottom_force,
+              s.tactile_force,
+              s.travel_length,
+              s.price_per_switch,
+              $1::decimal as switch_count,
+              (s.price_per_switch * ($1::decimal)) as additional_price,
+              ($2 + (s.price_per_switch * ($1::decimal))) as total_price,
+              pas.display_order,
+              (s.id = $3) as is_default
+          FROM product_available_switches pas
+          JOIN switches s ON pas.switch_id = s.id
+          WHERE pas.product_id = $4
+          ORDER BY pas.display_order
+      `;
+
+      const switchesResult = await client.query(switchesQuery, [
+          product.switch_count,
+          product.base_price,
+          product.base_switch_id,
+          productId
+      ]);
+
+      console.log('Found switches:', switchesResult.rows.length);
+
+      const response = {
+          product_id: productId,
+          base_price: parseFloat(product.base_price),
+          switch_count: product.switch_count,
           available_switches: switchesResult.rows.map(sw => ({
               id: sw.id,
               name: sw.name,
@@ -319,63 +372,18 @@ app.get('/api/products/:id', async (req, res) => {
               additional_price: parseFloat(sw.additional_price),
               total_price: parseFloat(sw.total_price),
               is_default: sw.is_default
-          })),
-          specifications: specsResult.rows.map(spec => ({
-              key: spec.spec_key,
-              value: spec.spec_value,
-              depends_on_switch: spec.depends_on_switch
-          })),
-          equipment: equipmentResult.rows.map(eq => eq.item_name)
+          }))
       };
 
-      console.log('Sending response for product:', product.name);
       res.json(response);
 
   } catch (error) {
-      console.error('Error fetching product:', error);
+      console.error('Error fetching switches:', error);
       res.status(500).json({ error: 'Internal server error: ' + error.message });
   } finally {
       if (client) {
           client.release();
       }
-  }
-});
-
-// Endpoint для расчёта цены при смене свитча
-app.get('/api/products/:id/price', async (req, res) => {
-  try {
-      const productId = parseInt(req.params.id);
-      const switchId = parseInt(req.query.switch_id);
-
-      const priceQuery = `
-          SELECT 
-              p.base_price,
-              p.switch_count,
-              s.price_per_switch,
-              (p.base_price + (s.price_per_switch * p.switch_count)) as total_price,
-              (s.price_per_switch * p.switch_count) as additional_price
-          FROM products_demo p
-          JOIN switches s ON s.id = $1
-          WHERE p.id = $2
-      `;
-
-      const priceResult = await pool.query(priceQuery, [switchId, productId]);
-      
-      if (priceResult.rows.length === 0) {
-          return res.status(404).json({ error: 'Product or switch not found' });
-      }
-
-      const priceData = priceResult.rows[0];
-      res.json({
-          base_price: parseFloat(priceData.base_price),
-          total_price: parseFloat(priceData.total_price),
-          additional_price: parseFloat(priceData.additional_price),
-          switch_count: priceData.switch_count
-      });
-
-  } catch (error) {
-      console.error('Error calculating price:', error);
-      res.status(500).json({ error: 'Internal server error' });
   }
 });
 

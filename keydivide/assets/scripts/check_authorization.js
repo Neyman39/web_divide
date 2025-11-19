@@ -1,9 +1,5 @@
-// check_authorization - функция проверки авторизации и отображения пользователя
+// функция проверки авторизации и отображения пользователя
 async function checkAuthAndDisplayUser() {
-      
-  const authStatusDiv = document.getElementById('authStatus');
-  const authStatusDiv_phone = document.getElementById('authStatus-phone');
-
   try {
     const response = await fetch('/check-auth', {
       headers: {
@@ -13,13 +9,19 @@ async function checkAuthAndDisplayUser() {
 
     if (response.ok) {
       const { user } = await response.json();
+      const isMobile = window.innerWidth <= 768;
       
       // Отображаем информацию о пользователе
-      authStatusDiv.innerHTML = `${user.name} ${user.surname}`;
-      authStatusDiv_phone.innerHTML = `${user.name} ${user.surname}`;
-
-        document.getElementById('account').href = 'User_Account.html';
+      if (isMobile) {
+        const authStatusDiv_phone = document.getElementById('authStatus-phone');
+        authStatusDiv_phone.innerHTML = `${user.name} ${user.surname}`;
         document.getElementById('account-phone').href = 'User_Account.html';
+      }
+      else {
+        const authStatusDiv = document.getElementById('authStatus');
+        authStatusDiv.innerHTML = `${user.name} ${user.surname}`;
+        document.getElementById('account').href = 'User_Account.html';
+      }
     } else {
       // Пользователь не авторизован
       showAuthLinks();

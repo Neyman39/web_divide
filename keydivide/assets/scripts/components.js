@@ -11,6 +11,7 @@ async function loadComponent(componentName, targetElementId) {
         // Инициализация компонента после загрузки
         if (componentName === 'nav_header') {
             await checkAuthAndDisplayUser();
+            window.addEventListener('resize', checkAuthAndDisplayUser);
         }
         if (componentName === 'header-phone') {
             initMobileNavigation();

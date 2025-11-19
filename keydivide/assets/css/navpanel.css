@@ -127,7 +127,7 @@ body {
 }
 
 .ikon {
-  display: inline-block;
+  display: flex;
+  align-items: center;
   margin: 0 7px;
-  position: relative;
 }

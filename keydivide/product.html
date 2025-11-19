@@ -26,32 +26,6 @@
 <header id="nav_header"></header>
 <header id="header-phone"></header>
 
-<!-- <header class="header_phone">
-    <div class="container">
-        <div class="header__inner">
-            <nav class="nav">
-                <ul>
-                    <li class="_link"><a class="nav__link" href="#" style="font-size: 30px;">=</a>
-                        <ul class="url">
-                            <li class="two_link"><a class="nav__link" href="Главная.html#keyboards">Клавиатуры</a></li>
-                            <li class="two_link"><a class="nav__link" href="Главная.html#services">Услуги</a></li>
-                            <li class="two_link"><a class="nav__link" href="Главная.html#aboutus">О нас</a></li>
-                            <li class="two_link" style="margin-top: 10px;"><a class="nav__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
-                            <li class="two_link"><a class="nav__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
-                            <li class="two_link"><a class="nav__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
-                        </ul>
-                    </li>					
-                </ul>   
-            </nav>
-            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
-            <div>
-                <a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-                <a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
-            </div>
-        </div>
-    </div>
-</header> -->
-
 <div class="intro">
     <div class="baza">
         <div class="think_about_title">
@@ -112,14 +86,18 @@
               <h2 id="terminalTitle">Product Info.json</h2>
             </div>
             <div class="json_style">
-                <div class="numbers">1 2 3 4 5 6 7 8 9 10 11 12</div>
-                <pre class="code" id="specificationsCode">
-<!-- Спецификации будут здесь -->
-                </pre>
-                <div class="numbers">1 2 3 4 5 6 7 8</div>
-                <pre class="code" id="equipmentCode">
-<!-- Комплектация будет здесь -->
-                </pre>
+                <div class="json__block">
+                    <div class="numbers">1 2 3 4 5 6 7 8 9 10 11 12</div>
+                    <pre class="code" id="specificationsCode">
+                        <!-- Спецификации будут здесь -->
+                    </pre>
+                </div>
+                <div class="json__block">
+                    <div class="numbers">1 2 3 4 5 6 7 8</div>
+                    <pre class="code" id="equipmentCode">
+                        <!-- Комплектация будет здесь -->
+                    </pre>
+                </div>
             </div>
         </div>
     </div>
@@ -144,7 +122,7 @@
 // Получаем ID продукта из URL
 function getProductIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id') || 2; // По умолчанию ID 1, если не указан
+    return urlParams.get('id') || 1; // По умолчанию ID 1, если не указан
 }
 
 // Основная функция загрузки данных продукта
@@ -159,11 +137,38 @@ async function loadProductData() {
         
         const productData = await response.json();
         renderProductPage(productData);
-        setupEventListeners(productData);
+
+         // Затем загружаем свитчи отдельно
+        await loadSwitchesData(productId);
         
     } catch (error) {
         console.error('Error loading product:', error);
         document.getElementById('productName').textContent = 'Товар не найден';
+    }
+}
+
+// Загрузка данных о свитчах
+async function loadSwitchesData(productId) {
+    try {
+        const switchesResponse = await fetch(`/api/products/${productId}/switches`);
+        if (!switchesResponse.ok) {
+            throw new Error('Switches not found');
+        }
+        
+        currentSwitchesData = await switchesResponse.json();
+        renderSwitches(currentSwitchesData.available_switches);
+        setupEventListeners(currentSwitchesData);
+        
+        // // Устанавливаем свитч по умолчанию
+        // const defaultSwitch = currentSwitchesData.available_switches.find(sw => sw.is_default);
+        // if (defaultSwitch) {
+        //     selectedSwitchId = defaultSwitch.id;
+        //     updatePriceDisplay(defaultSwitch.total_price);
+        // }
+        
+    } catch (error) {
+        console.error('Error loading switches:', error);
+        document.getElementById('switchesContainer').innerHTML = '<p>Ошибка загрузки переключателей</p>';
     }
 }
 
@@ -179,13 +184,16 @@ function renderProductPage(data) {
     renderImages(data.images);
     
     // Переключатели
-    renderSwitches(data.available_switches);
+    // renderSwitches(data.available_switches);
     
     // Спецификации в терминале
     renderSpecificationsCode(data.specifications);
     
     // Комплектация в терминале
     renderEquipmentCode(data.equipment);
+
+    // document.getElementById('basePriceInfo').textContent = 
+    //     `Базовая цена: ${Math.round(data.base_price)} ₽ + переключатели`;
 }
 
 // Рендер изображений
@@ -219,6 +227,11 @@ function renderImages(images) {
 function renderSwitches(switches) {
     const container = document.getElementById('switchesContainer');
     container.innerHTML = '';
+
+    if (switches.length === 0) {
+        container.innerHTML = '<p>Нет доступных переключателей</p>';
+        return;
+    }
     
     switches.forEach(sw => {
         const button = document.createElement('button');
@@ -298,39 +311,6 @@ function renderEquipmentCode(equipment) {
     codeElement.innerHTML = code;
 }
 
-// Рендер характеристик в списке
-// function renderSpecificationsList(specs) {
-//     const container = document.getElementById('specificationsList');
-//     container.innerHTML = '';
-    
-//     specs.forEach(spec => {
-//         const specHTML = `
-//             <div class="haracter">
-//                 <p class="spectext">${spec.key}</p>
-//                 <p class="spectext2">${spec.value}</p>
-//             </div>
-//             <div class="li_line"></div>
-//         `;
-//         container.innerHTML += specHTML;
-//     });
-// }
-
-// Рендер комплектации в списке
-// function renderEquipmentList(equipment) {
-//     const container = document.getElementById('equipmentList');
-//     container.innerHTML = '';
-    
-//     equipment.forEach(item => {
-//         const itemHTML = `
-//             <div class="complect">
-//                 <div class="dot"></div>
-//                 <p>${item}</p>
-//             </div>
-//         `;
-//         container.innerHTML += itemHTML;
-//     });
-// }
-
 // Смена основного изображения
 function changeMainImage(src, alt, index) {
     const mainImage = document.getElementById('mainImage');
@@ -370,31 +350,49 @@ function setupEventListeners(data) {
 }
 
 // Обновление спецификации переключателей
+// function updateSwitchSpecification(switchId, switches) {
+//     const selectedSwitch = switches.find(sw => sw.id == switchId);
+//     if (!selectedSwitch) return;
+    
+//     const switchSpec = `Переключатели`;
+//     const switchValue = `${selectedSwitch.name} (${selectedSwitch.type} ${selectedSwitch.actuation_force}г.)`;
+    
+//     // Обновляем в терминале
+//     const specs = document.querySelectorAll('#specificationsCode .key1');
+//     specs.forEach(spec => {
+//         if (spec.textContent === '"Переключатели"') {
+//             const valueElement = spec.nextElementSibling.nextElementSibling;
+//             valueElement.textContent = `"${switchValue}"`;
+//         }
+//     });
+
 function updateSwitchSpecification(switchId, switches) {
     const selectedSwitch = switches.find(sw => sw.id == switchId);
     if (!selectedSwitch) return;
     
-    const switchSpec = `Переключатели`;
     const switchValue = `${selectedSwitch.name} (${selectedSwitch.type} ${selectedSwitch.actuation_force}г.)`;
     
-    // Обновляем в терминале
-    const specs = document.querySelectorAll('#specificationsCode .key1');
-    specs.forEach(spec => {
-        if (spec.textContent.includes('Переключатели')) {
-            const valueElement = spec.nextElementSibling.nextElementSibling;
+    // Получаем все строки спецификаций
+    const specs = document.querySelectorAll('#specificationsCode .value1');
+    
+    // Предположим, что "Переключатели" всегда на 3-й позиции (индекс 2)
+    if (specs.length > 3) {
+        const switchSpec = specs[2];
+        const valueElement = switchSpec.nextElementSibling.nextElementSibling;
+        if (valueElement) {
             valueElement.textContent = `"${switchValue}"`;
         }
-    });
+    }
     
-    // Обновляем в списке характеристик
-    const specItems = document.querySelectorAll('#specificationsList .haracter');
-    specItems.forEach(item => {
-        const keyElement = item.querySelector('.spectext');
-        if (keyElement.textContent === 'Переключатели') {
-            const valueElement = item.querySelector('.spectext2');
-            valueElement.textContent = switchValue.toLowerCase();
-        }
-    });
+    // // Обновляем в списке характеристик
+    // const specItems = document.querySelectorAll('#specificationsList .haracter');
+    // specItems.forEach(item => {
+    //     const keyElement = item.querySelector('.spectext');
+    //     if (keyElement.textContent === 'Переключатели') {
+    //         const valueElement = item.querySelector('.spectext2');
+    //         valueElement.textContent = switchValue.toLowerCase();
+    //     }
+    // });
 }
 
 // Настройка управления слайдером
@@ -417,7 +415,7 @@ function setupSliderControls() {
 document.addEventListener('DOMContentLoaded', () => {
     loadProductData();
     // Ваши существующие скрипты авторизации и корзины
-    checkAuthAndDisplayUser();
+    // checkAuthAndDisplayUser();
     setupCartButton();
 });
 

@@ -38,7 +38,8 @@ body {
 /* Стили терминала */
 .terminal {
   font-family: monospace;
-  width: 1340px;
+  width: 100%;
+  max-width: 1340px;
   background-color: #eeeeee;
   color: #fff;
   border-radius: 8px;
@@ -48,11 +49,10 @@ body {
 }
 
 .header_code {
-  font-family: monospace;
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background-color: #D9D9D9;/*  сервый #D9D9D9 серо-розовый#f0d7d7 */
+  background-color: #D9D9D9;/*  серый #D9D9D9 серо-розовый#f0d7d7 */
   color: #111111;
   border-bottom: 1px solid #969696;
 }
@@ -68,13 +68,18 @@ body {
   font-size: 18px;
   line-height: 1.6;
   white-space: pre-wrap;
-  word-break: break-all;
   color: #111111;
 }
+
 .json_style {
+  display: flex;
+  flex-flow: row wrap;
+}
+.json__block {
   display: flex;
   flex-direction: row;
 }
+
 .key1 {
   color: #cf3838;
 }
