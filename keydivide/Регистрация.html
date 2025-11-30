@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <title>KeyDivide Сайт по продаже клавиатур</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <title>KeyDivide Регистрация</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="assets/css/stylesRegistr.css">
-    <title>Регистрация</title>
 </head>
 <body>
     <div id="terminal-screen" class="terminal-screen">
@@ -36,59 +38,43 @@
             </div>
             <input type="password" id="password2" name="password2" placeholder="Повторите пароль" required>
             <div id="message"></div>
-            <div class="butt"><button TYPE="submit"> Зарегистироваться </button></div> 
+            <div class="butt"><button type="submit"> Зарегистироваться </button></div> 
             <a href="Авторизация.html"><div class="forbutt"> Назад </div></a>        
         </form>
       </div>
     </div>
   </div>
-
-    <!-- <script>
-        const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('password2');
-        const messageDiv = document.getElementById('message');
-
-        function 
-        togglePassword() {
-            const passImput = document.getElementById('password');
-            const passTogg = document.querySelector('.password-toggle');
-            if (passImput.type == 'password'){
-                passImput.type = 'text';
-                passTogg.innerHTML ='&#128066';
-            }else{
-                passImput.type = 'password'
-                passTogg.innerHTML ='&#128065';
-            }
-        }
-
-        confirmPasswordInput.addEventListener('input', function() {
-          if (passwordInput.value === confirmPasswordInput.value) {
-            messageDiv.textContent = 'Пароли совпадают';
-            messageDiv.style.color = 'green';
-          } else {
-            messageDiv.textContent = 'Пароли не совпадают';
-            messageDiv.style.color = 'red';
-          }
-        });
-
-    </script> -->
     
-    <script>
-      document.getElementById('registrationForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-  
-  const login = document.getElementById('login').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const surname = document.getElementById('surname').value.trim();
-  const name = document.getElementById('name').value.trim();
-  const password = document.getElementById('password').value.trim();
-  const password2 = document.getElementById('password2').value.trim();
-  
-  if (password !== password2) {
-    document.getElementById('message').textContent = 'Пароли не совпадают';
-    document.getElementById('message').style.color = 'red';
-    return;
+<script>
+  function isValidEmail(email) {
+    // Простое, но достаточно надёжное регулярное выражение для email
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
   }
+      
+  document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+  
+    const login = document.getElementById('login').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const surname = document.getElementById('surname').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const password2 = document.getElementById('password2').value.trim();
+
+    const messageEl = document.getElementById('message');
+
+    if (!isValidEmail(email)) {
+      messageEl.textContent = 'Некорректный формат email';
+      messageEl.style.color = 'red';
+      return;
+    }
+  
+    if (password !== password2) {
+      messageEl.textContent = 'Пароли не совпадают';
+      messageEl.style.color = 'red';
+      return;
+    }
   
     try {
         const response = await fetch('http://localhost:5000/register', {

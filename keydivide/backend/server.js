@@ -102,6 +102,15 @@ app.post('/register', async (req, res) => {
   try {
     const { login, email, surname, name, password } = req.body;
     
+    if (!login || !email || !surname || !name || !password) {
+      return res.status(400).json({ error: 'Все поля обязательны для заполнения' });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Некорректный формат email' });
+    }
+
     // Проверка на существующего пользователя
     const userExists = await pool.query(
       'SELECT * FROM users WHERE login = $1 OR email = $2',
@@ -109,7 +118,14 @@ app.post('/register', async (req, res) => {
     );
     
     if (userExists.rows.length > 0) {
-      return res.status(400).json({ error: 'Пользователь с таким логином или email уже существует' });
+      // Уточним, что именно занято — email или логин
+      const existing = userExists.rows[0];
+      if (existing.email === email) {
+        return res.status(400).json({ error: 'Пользователь с таким email уже зарегистрирован' });
+      }
+      if (existing.login === login) {
+        return res.status(400).json({ error: 'Пользователь с таким логином уже существует' });
+      }
     }
     
     // Хеширование пароля
