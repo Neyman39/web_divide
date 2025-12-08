@@ -97,8 +97,41 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
+// Удаление пользователя по email
+app.delete('/users/email/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    
+    if (!email) {
+      return res.status(400).json({ error: 'Email обязателен' });
+    }
+
+    const result = await pool.query(
+      'DELETE FROM users WHERE email = $1 RETURNING id, login, email',
+      [email]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Пользователь с таким email не найден' });
+    }
+    
+    // Сбросить последовательность
+    await pool.query(
+      'SELECT setval(pg_get_serial_sequence(\'users\', \'id\'), COALESCE(MAX(id), 0) + 1, false) FROM users'
+    );
+    
+    res.json({ 
+      message: 'Пользователь успешно удален',
+      deletedUser: result.rows[0]
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
 // Регистрация пользователя
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
   try {
     const { login, email, surname, name, password } = req.body;
     
@@ -188,7 +221,10 @@ app.post('/login', async (req, res) => {
 app.get('/check-auth', async (req, res) => {
   try {
     const token = req.headers.authorization;
-    if (!token) return res.status(401).json({ isAuthenticated: false });
+    if (!token) return res.json({ 
+        isAuthenticated: false,
+        user: null
+      });
 
     // Здесь должна быть проверка JWT токена
     const user = await pool.query(
@@ -197,7 +233,10 @@ app.get('/check-auth', async (req, res) => {
     );
 
     if (user.rows.length === 0) {
-      return res.status(401).json({ isAuthenticated: false });
+      return res.json({ 
+        isAuthenticated: false,
+        user: null
+      });
     }
 
     res.json({ 
@@ -408,6 +447,7 @@ app.listen(PORT,() => {
   console.log('Server running on http://localhost:5000');
   console.log('Документация: http://localhost:5000/api-docs');
 });
+
 
 
 // const options = {

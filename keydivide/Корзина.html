@@ -121,33 +121,38 @@
         </div>
     </div>
 </div>
-<script src="modalw.js"></script>
-<script src="check_authorization.js"></script>
+<!-- возможно это скрипт нужен для оформления заказа -->
+<!-- <script src="modalw.js"></script> -->
+<script src="assets/scripts/check_authorization.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
       await checkAuthAndDisplayUser();
-      setupCartButton();
+      // setupCartButton(); видимо спустя много переделок эта функция потерялась
     });
   // Функция отрисовки корзины
   async function renderCart() {
     const cartContainer = document.getElementById('cartContainer');
 
     const response = await fetch('http://localhost:5000/check-auth', {
-            headers: {
-              'Authorization': localStorage.getItem('authToken') || ''
-            }
-          });
+      headers: {
+        'Authorization': localStorage.getItem('authToken') || ''
+      }
+    });
 
-    if (!response.ok) {
+    const data = await response.json();
+
+    if (!response.ok || !data.isAuthenticated) {
       cartContainer.innerHTML = `
-        <p>Пожалуйста, <a href="Авторизация.html">войдите</a>, чтобы просмотреть корзину.</p>`;
+        <p>Пожалуйста, 
+          <a href="Авторизация.html" style="color: black; text-decoration: none; font-weight: bold;">войдите</a>, 
+          чтобы просмотреть корзину.
+        </p>`;
+        if (orderBtn) orderBtn.style.display = 'none';
       return;
     }
 
-    const { user } = await response.json();
-
-    const cartKey = `cart_${user.name}`;
+    const cartKey = `cart_${data.user.name}`;
     let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
 
     if (cart.length === 0) {

@@ -7,19 +7,21 @@ async function checkAuthAndDisplayUser() {
       }
     });
 
-    if (response.ok) {
-      const { user } = await response.json();
+    const data = await response.json();
+
+    if (response.ok && data.isAuthenticated) {
+      // const { user } = await response.json();
       const isMobile = window.innerWidth <= 768;
       
       // Отображаем информацию о пользователе
       if (isMobile) {
         const authStatusDiv_phone = document.getElementById('authStatus-phone');
-        authStatusDiv_phone.innerHTML = `${user.name} ${user.surname}`;
+        authStatusDiv_phone.innerHTML = `${data.user.name} ${data.user.surname}`;
         document.getElementById('account-phone').href = 'User_Account.html';
       }
       else {
         const authStatusDiv = document.getElementById('authStatus');
-        authStatusDiv.innerHTML = `${user.name} ${user.surname}`;
+        authStatusDiv.innerHTML = `${data.user.name} ${data.user.surname}`;
         document.getElementById('account').href = 'User_Account.html';
       }
     } else {
