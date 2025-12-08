@@ -144,6 +144,7 @@ button {
   font-family: 'IBM Plex Sans';
   font-size: 22px;
   color:#FFFFFF;
+  cursor: pointer;
 }
 
 .forbutt {
@@ -160,16 +161,16 @@ button {
     align-items: center;
     justify-content: center;
     color:#ffffff;
-    margin-top: 25px;
 }
 
         
 .butt {
-
+    font-family: 'IBM Plex Sans';
     width: 400px;
-    margin: 0 10px 20px 10px;
+    margin: 10px 10px 30px 10px;
     display: flex;
     justify-content: center;
+    cursor: pointer;
 }
 a {
     text-decoration: none;

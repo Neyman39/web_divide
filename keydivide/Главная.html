@@ -5,11 +5,12 @@
 	<title>KeyDivide</title>
 	<link rel="stylesheet" href="assets/css/navpanel.css">
   	<link rel="stylesheet" href="assets/css/navpanel_phone.css">
-	<link rel="stylesheet" href="assets/css/Главная copy.css">
-  	<link rel="stylesheet" href="assets/css/Главная-phone.css">
+	<link rel="stylesheet" href="assets/css/Главная страница/Главная copy.css">
+  	<link rel="stylesheet" href="assets/css/Главная страница/Главная-phone.css">
 	<link rel="stylesheet" href="assets/css/footer.css">
   	<link rel="stylesheet" href="assets/css/footer_phone.css">
   	<link rel="stylesheet" href="assets/css/services-filt.css">
+    <link rel="stylesheet" href="assets/css/Главная страница/product-card.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
@@ -20,60 +21,9 @@
 
 <body>
 
-<header class="header">
-    <div class="container">
-        <div class="header__inner">
-            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
+<header id="nav_header"></header>
+<header id="header-phone"></header>
 
-            <nav class="nav">
-                <ul>
-                    <li class="_link"><a class="nav__link" href="#keyboards">Клавиатуры</a></li>
-                    <li class="_link"><a class="nav__link" href="#services">Услуги</a></li>
-                    <li class="_link"><a class="nav__link" href="#aboutus">О нас</a></li>
-                    <li class="_link"><a class="nav__link" href="#">Соцсети</a>
-                        <ul class="url">
-                            <li class="two_link" style="margin-top: 10px;"><a class="url__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
-                            <li class="two_link"><a class="url__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
-                            <li class="two_link"><a class="url__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
-                        </ul>
-                    </li>					
-                </ul>   
-            </nav>
-        </div>
-        <!-- Блок для приветствия -->   
-		    <div style="flex-direction: row; display: flex; align-items: center;">
-          <div id="authStatus"></div>
-		    	<a class="ikon" id="account" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-		    	<a class="ikon" href="Корзина.html" title="Корзина"><div class="prod_count">1</div><img src="assets/images/корзина.png" width="26" height="26"></a>
-		    </div>
-    </div>
-</header>
-
-<header class="header_phone">
-    <div class="container">
-        <div class="header__inner">
-            <nav class="nav">
-                <ul>
-                    <li class="_link"><a class="nav__link" href="#" style="font-size: 30px;">=</a>
-                        <ul class="url">
-                            <li class="two_link"><a class="nav__link" href="Главная.html#keyboards">Клавиатуры</a></li>
-                            <li class="two_link"><a class="nav__link" href="Главная.html#services">Услуги</a></li>
-                            <li class="two_link"><a class="nav__link" href="Главная.html#aboutus">О нас</a></li>
-                            <li class="two_link" style="margin-top: 10px;"><a class="nav__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
-                            <li class="two_link"><a class="nav__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
-                            <li class="two_link"><a class="nav__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
-                        </ul>
-                    </li>					
-                </ul>   
-            </nav>
-            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
-            <div>
-    		    <a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-    		    <a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
-    	    </div>
-        </div>
-    </div>
-</header>
 	
 <div class="container_k">
 	<div class="welcome-banner">
@@ -90,7 +40,7 @@
 
 <div class="container_usl">
     <a name="keyboards"></a>
-    <div id="klaviatura">
+    <div class="klaviatura">
         <div class="filter">
             <div style="width: 180px;"></div>
             <div id="SM2"><h3> Клавиатуры </h3></div>
@@ -110,7 +60,7 @@
     </div>
     <a name="services"></a>
 
-    <div id="klaviatura">
+    <div class="klaviatura">
         <div class="filter">
             <div style="width: 180px;"></div>
             <div id="SM2"><h3> Услуги </h3></div>
@@ -160,55 +110,25 @@
   </div>
 </div>
 
-<div class="footer">
-    <div class="footbox">
-        <div class="line"></div>
-        <div class="colums">
-            <div class="col1">
-                <h1>KeyDivide</h1>
-                <p>made by people for people</p>
-            </div>
-            <div class="colinfo">
-                <div class="col2">
-                    <h1 class="coltitle">Магазин</h1>
-                    <p class="coltext"><a href="#keyboards">Клавиатуры</a></p>
-                    <p class="coltext"><a href="#services">Услуги</a></p>
-                </div>
-                <div class="col3">
-                    <h1 class="coltitle">Соцсети</h1>
-                    <a href="https://discord.gg/PKZ8ejUB8Z" target="_blank"><p class="coltext">Discord</p></a>
-                    <a href="https://vk.com/cacao_keyboards" target="_blank"><p class="coltext">Вконтакте</p></a>
-                    <a href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank"><p class="coltext">YouTube</p></a>  
-                </div>
-                <div class="col4">
-                    <h1 class="coltitle">Инфо</h1>
-                    <p class="coltext"><a href="#aboutus">О нас</a></p>
-                </div>
-                <div class="col5">
-                    <h1 class="coltitle">Контакты</h1>
-                    <p>По поводу интересующих вопросов или предложений пишите нам в Discord или of_cacaoboards@mail.ru</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="by">
-        <div class="byby">
-            <p>©CacaoBoards All Rights Reserved</p>
-            <p>Designed with ❤️ by neyman</p>
-        </div>
-    </div>
-</div>
+<footer id="footer"></footer>
 
-<script src="check_authorization.js"></script>
-
-  
+<script src="assets/scripts/initMobileNavigation.js"></script>
+<script src="assets/scripts/check_authorization.js"></script>
+<script src="assets/scripts/components.js"></script>
+<script>
+    // Загружаем компоненты при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        loadComponent('nav_header', 'nav_header');
+        loadComponent('header-phone', 'header-phone');
+        loadComponent('footer', 'footer');
+        initMobileNavigation();
+    });
+</script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', async () => {
-      await checkAuthAndDisplayUser();
-    });
+
    
-    let currentFilter = 'all'; // по умолчанию
+let currentFilter = 'all'; // по умолчанию
 
 // Функция открытия/закрытия выпадающего списка
 function toggleFilterDropdown() {
@@ -241,40 +161,40 @@ async function displayProducts() {
   productContainer.innerHTML = '';
 
   try {
-    // Запрашиваем данные с сервера
-    const response = await fetch('http://localhost:5000/api/products');
+    const response = await fetch('/api/products');
     if (!response.ok) throw new Error('Ошибка загрузки товаров');
     
     let products = await response.json();
 
-    // Применяем фильтр
     if (currentFilter === 'asc') {
-      products.sort((a, b) => a.price - b.price); // по возрастанию
+      products.sort((a, b) => a.price - b.price);
     } else if (currentFilter === 'desc') {
-      products.sort((a, b) => b.price - a.price); // по убыванию
+      products.sort((a, b) => b.price - a.price);
     }
     // 'all' — без сортировки, просто как есть
 
-    // Отрисовка товаров
     products.forEach(product => {
-      const in_card1 = document.createElement('a');
-      in_card1.classList.add('in_card1');
-      in_card1.href = product.link || '#';
+      const prod_card = document.createElement('a');
+      prod_card.classList.add('product-card');
+      prod_card.href = product.link || `product.html?id=${product.id}`;
 
       const productImg = document.createElement('img');
       productImg.src = product.img || 'assets/images/default.jpg';
       productImg.alt = product.name;
-      in_card1.appendChild(productImg);
+      productImg.classList.add('product-card__img');
+      prod_card.appendChild(productImg);
 
-      const productName = document.createElement('h4');
+      const productName = document.createElement('h3');
       productName.textContent = product.name;
-      in_card1.appendChild(productName);
+      productName.classList.add('product-card__name');
+      prod_card.appendChild(productName);
 
-      const productPrice = document.createElement('h5');
-      productPrice.textContent = `${product.price} ₽`;
-      in_card1.appendChild(productPrice);
+      const productPrice = document.createElement('h4');
+      productPrice.textContent = `${Math.round(product.price)} ₽`;
+      productPrice.classList.add('product-card__price');
+      prod_card.appendChild(productPrice);
 
-      productContainer.appendChild(in_card1);
+      productContainer.appendChild(prod_card);
     });
   } catch (error) {
     console.error('Ошибка:', error);
@@ -283,87 +203,57 @@ async function displayProducts() {
 }
 
 document.addEventListener('DOMContentLoaded', displayProducts);
+
+// // Функция для отображения товаров из БД
+// async function displayProducts() {
+//   const productContainer = document.querySelector('.product-container');
+//   productContainer.innerHTML = '';
+
+//   try {
+//     // Запрашиваем данные с сервера
+//     const response = await fetch('http://localhost:5000/api/products');
+//     if (!response.ok) throw new Error('Ошибка загрузки товаров');
+    
+//     let products = await response.json();
+
+//     // Применяем фильтр
+//     if (currentFilter === 'asc') {
+//       products.sort((a, b) => a.price - b.price); // по возрастанию
+//     } else if (currentFilter === 'desc') {
+//       products.sort((a, b) => b.price - a.price); // по убыванию
+//     }
+//     // 'all' — без сортировки, просто как есть
+
+//     // Отрисовка товаров
+//     products.forEach(product => {
+//       const in_card1 = document.createElement('a');
+//       in_card1.classList.add('in_card1');
+//       in_card1.href = product.link || '#';
+
+//       const productImg = document.createElement('img');
+//       productImg.src = product.img || 'assets/images/default.jpg';
+//       productImg.alt = product.name;
+//       in_card1.appendChild(productImg);
+
+//       const productName = document.createElement('h4');
+//       productName.textContent = product.name;
+//       in_card1.appendChild(productName);
+
+//       const productPrice = document.createElement('h5');
+//       productPrice.textContent = `${product.price} ₽`;
+//       in_card1.appendChild(productPrice);
+
+//       productContainer.appendChild(in_card1);
+//     });
+//   } catch (error) {
+//     console.error('Ошибка:', error);
+//     productContainer.innerHTML = '<p>Не удалось загрузить товары. Попробуйте позже.</p>';
+//   }
+// }
+
+// document.addEventListener('DOMContentLoaded', displayProducts);
 </script>
 <script src="services-fil.js"></script>
-
-<script src="scriptTest.js"></script>
-
-
-<script>
-  // Строки, которые будут "печататься" в терминале
-  const lines = [
-  "> INITIALIZING KEYDIVIDE v2.1...",
-  "  [OK] Memory check",
-  "  [OK] Keyboard driver loaded",
-  "  [INFO] Hot-swap module: active",
-  "  [INFO] RGB lighting: disabled",
-  "> Scanning firmware...",
-  "  [OK] All devices ready",
-  " ",
-  "　　　　　／フ---/フ",
-  "　　　　　| 　_　 _|",
-  "　 　　　／`ミ _x 彡",
-  "　　 　 /　　　 　 |",
-  "　　　 /　 ヽ　　 ﾉ",
-  "　／￣|　　 |　|　|",
-  "　| (￣ヽ＿_ヽ_)_)",
-  "　＼二つ",
-  "> SYSTEM READY. WELCOME, USER."
-  ];
-
-  const terminal1 = document.getElementById('terminal1');
-  const cursor = document.querySelector('.cursor');
-
-  let lineIndex = 0;
-  let charIndex = 0;
-  let currentLine = '';
-
-  // Функция, имитирующая печать текста
-  function typeLine() {
-      if (lineIndex >= lines.length) {
-        // Завершаем анимацию
-        setTimeout(() => {
-          document.getElementById('terminal-screen').style.display = 'none'; // none
-          const main = document.getElementById('main-content');
-          main.style.display = 'block'; // block
-          setTimeout(() => {
-              main.style.opacity = '1'; // 1
-          }, 100);
-        }, 500);
-        return;
-      }
-
-const currentLine = lines[lineIndex];
-
-// Формируем текущий текст: уже напечатанное + новый символ
-const printed = currentLine.substring(0, charIndex + 1);
-
-// Очищаем терминал и вставляем всё с новым курсором
-terminal.innerHTML = lines
-  .slice(0, lineIndex) // Все предыдущие строки
-  .map(line => line + '<br>')
-  .join('') +
-  printed + // Текущая строка — до текущего символа
-  '<span class="cursor">█</span>'; // Курсор в конце
-
-charIndex++;
-
-if (charIndex === currentLine.length) {
-  charIndex = 0;
-  lineIndex++;
-  if (lineIndex == 6) {
-      setTimeout(typeLine, 1000);
-  }
-  else setTimeout(typeLine, Math.random() * 200 + 50); // Задержка между строками
-} 
-else setTimeout(typeLine, 15 + Math.random() * 15); // Быстрая печать
-}
-
-  // Запуск анимации при загрузке
-  document.addEventListener('DOMContentLoaded', async () => {
-    await typeLine();
-  });
-</script>
 
 </body>
 </html>
