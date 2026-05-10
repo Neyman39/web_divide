@@ -73,6 +73,8 @@ function typeLine() {
     else setTimeout(typeLine, 5 + Math.random() * 5); // Быстрая печать
 }
 
+window.typeLine = typeLine;
+
 // Запуск анимации при загрузке
   // document.addEventListener('DOMContentLoaded', async () => {
   //   await typeLine();
