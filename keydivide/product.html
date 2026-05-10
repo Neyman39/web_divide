@@ -419,55 +419,48 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCartButton();
 });
 
-// Функция для кнопки корзины (адаптированная под новые данные)
+// Функция для кнопки корзины (работа с сервером)
 function setupCartButton() {
     document.getElementById('addToCartBtn')?.addEventListener('click', async () => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
+            window.location.href = 'Авторизация.html';
+            return;
+        }
+
+        const productId = getProductIdFromUrl();
+
+        // Определяем выбранный свитч по активной кнопке (рамка rgb(255,122,105))
+        const activeButton = document.querySelector('.config-button[style*="rgb(255, 122, 105)"]');
+        let switchId = null;
+        if (activeButton) {
+            switchId = activeButton.getAttribute('data-config');
+        }
+
+        // Количество пока фиксированное = 1, позже можно добавить счётчик
+        const quantity = 1;
+
         try {
-            const response = await fetch('http://localhost:5000/check-auth', {
-                headers: {
-                    'Authorization': localStorage.getItem('authToken') || ''
-                }
+            const response = await fetch('/api/cart/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: parseInt(userId),
+                    productId: productId,
+                    switchId: switchId || null,
+                    quantity: quantity
+                })
             });
-        
+
+            const data = await response.json();
             if (!response.ok) {
-                alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
-                window.location.href = 'Авторизация.html';
-                return;
+                throw new Error(data.error || 'Ошибка при добавлении в корзину');
             }
-        
-            const { user } = await response.json();
-            const productName = document.getElementById('productName').textContent;
-            const priceText = document.getElementById('productPrice').textContent;
-            const price = parseFloat(priceText.replace(/[^\d.-]/g, ''));
-            
-            // Получаем выбранный свитч
-            const selectedSwitchButton = document.querySelector('.config-button[style*="rgb(255, 122, 105)"]');
-            const selectedSwitch = selectedSwitchButton ? selectedSwitchButton.querySelector('.swbox').textContent.trim() : '';
-            
-            const cartKey = `cart_${user.name}`;
-            let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
-            
-            const existingItem = cart.find(item => 
-                item.productName === productName && item.selectedSwitch === selectedSwitch
-            );
-            
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({
-                    productName: productName,
-                    selectedSwitch: selectedSwitch,
-                    price: price,
-                    quantity: 1,
-                    productId: getProductIdFromUrl()
-                });
-            }
-            
-            localStorage.setItem(cartKey, JSON.stringify(cart));
             alert('Товар добавлен в корзину!');
-        } catch (error) {
-            console.error('Ошибка:', error);
-            alert('Произошла ошибка при добавлении в корзину');
+        } catch (err) {
+            console.error('Ошибка:', err);
+            alert('Ошибка: ' + err.message);
         }
     });
 }

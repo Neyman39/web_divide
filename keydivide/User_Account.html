@@ -106,78 +106,115 @@
 </div>
 
 <script>
+  // Вспомогательная функция получения userId
+  function getUserId() {
+    return localStorage.getItem('userId');
+  }
 
+  // Форматирование даты
+  function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    return d.toLocaleString('ru-RU');
+  }
+
+  function getStatusText(status) {
+  const statuses = {
+    'pending': 'Ожидает обработки',
+    'confirmed': 'Подтверждён',
+    'cancelled': 'Отменён'
+  };
+  return statuses[status] || status; // fallback на английский, если статус неизвестен
+}
 
   window.onload = async function () {
-    
-    const response = await fetch('http://localhost:5000/check-auth', {
-        headers: {
-          'Authorization': localStorage.getItem('authToken') || ''
-        }
-    });
-
-    //const usernameKey = localStorage.getItem('username');
-
-    if (!response.ok) {
+    const userId = getUserId();
+    if (!userId) {
       alert('Пожалуйста, войдите в аккаунт.');
       window.location.href = 'Авторизация.html';
       return;
     }
 
-    //const user = JSON.parse(localStorage.getItem(`user_${usernameKey}`));
-    const { user } = await response.json();
-
-    if (!user) {
-      alert('Данные пользователя не найдены.');
-      return;
+    // Загружаем данные пользователя (можно из localStorage, но для надёжности через API)
+    try {
+      const userResp = await fetch('http://localhost:5000/check-auth', {
+        headers: { 'Authorization': localStorage.getItem('authToken') || '' }
+      });
+      if (!userResp.ok) throw new Error('not authenticated');
+      const { user } = await userResp.json();
+      document.getElementById('username').textContent = user.name || user.login;
+      document.getElementById('userphone').textContent = `Телефон: ${user.phone || '-'}`;
+      document.getElementById('useremail').textContent = `Email: ${user.email || '-'}`;
+      document.getElementById('useraddress').textContent = `Адрес: ${user.address || '-'}`;
+    } catch (e) {
+      // fallback из localStorage
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      document.getElementById('username').textContent = userData.name || userData.login || 'Пользователь';
+      document.getElementById('useremail').textContent = `Email: ${userData.email || '-'}`;
     }
 
-    document.getElementById('username').textContent = user.name || usernameKey;
-    document.getElementById('userphone').textContent = `Телефон: ${user.phone || '-'}`;
-    document.getElementById('useremail').textContent = `Email: ${user.email || '-'}`;
-    document.getElementById('useraddress').textContent = `Адрес: ${user.address || '-'}`;
-
-    const orders = JSON.parse(localStorage.getItem(`orders_${user.name}`)) || [];
+    // Загружаем заказы с сервера
     const ordersSection = document.getElementById('ordersSection');
+    try {
+      const resp = await fetch(`http://localhost:5000/api/orders?userId=${userId}`);
+      if (!resp.ok) throw new Error('Ошибка загрузки заказов');
+      const orders = await resp.json();
 
-    if (orders.length === 0) {
-      ordersSection.innerHTML = `<div class="empty-orders">У вас пока нет заказов.</div>`;
-      return;
+      if (orders.length === 0) {
+        ordersSection.innerHTML = `<div class="empty-orders">У вас пока нет заказов.</div>`;
+        return;
+      }
+
+      let html = '';
+      orders.forEach(order => {
+        const orderDate = formatDate(order.created_at);
+        html += `
+          <div class="order-card" style="margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; padding: 15px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <strong>Заказ №${order.id}</strong>
+              <span style="color: gray;">${orderDate}</span>
+              <span>Статус: <em>${getStatusText(order.status)}</em></span>
+            </div>
+            <table style="width:100%; border-collapse: collapse;">
+              <tr>
+                <th>Товар</th>
+                <th>Переключатель</th>
+                <th>Количество</th>
+                <th>Цена за шт.</th>
+                <th>Сумма</th>
+              </tr>`;
+        order.items.forEach(item => {
+          const itemTotal = (parseFloat(item.unit_price) * item.quantity).toLocaleString('ru-RU');
+          html += `
+              <tr>
+                <td>${item.product_name || 'Товар'}</td>
+                <td>${item.switch_name || '-'}</td>
+                <td>${item.quantity}</td>
+                <td>${parseFloat(item.unit_price).toLocaleString('ru-RU')} ₽</td>
+                <td>${itemTotal} ₽</td>
+              </tr>`;
+        });
+        html += `
+            </table>
+            <div style="text-align: right; margin-top: 5px; font-weight: bold;">
+              Итого: ${order.total.toLocaleString('ru-RU')} ₽
+            </div>
+          </div>`;
+      });
+      ordersSection.innerHTML = html;
+    } catch (err) {
+      console.error(err);
+      ordersSection.innerHTML = `<div class="empty-orders">Ошибка при загрузке заказов: ${err.message}</div>`;
     }
-
-    let tableHTML = `<table>
-      <tr>
-        <th>Товар</th>
-        <th>Переключатель</th>
-        <th>Количество</th>
-        <th>Сумма</th>
-      </tr>`;
-
-    orders.forEach(order => {
-      const total = (order.price || 0) * (order.quantity || 1);
-      tableHTML += `
-        <tr>
-          <td>${order.productName || 'Товар'}</td>
-          <td>${order.switchName || '-'}</td>
-          <td>${order.quantity || 1}</td>
-          <td>${total.toLocaleString('ru-RU')} ₽</td>
-        </tr>
-      `;
-    });
-
-    tableHTML += '</table>';
-    ordersSection.innerHTML = tableHTML;
   };
 
-  // Функция выхода из системы
-  document.getElementById('logoutBtn').addEventListener('click', logout);
-  function logout() {
+  // Выход из системы
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('userId');
     localStorage.removeItem('authToken');
     localStorage.removeItem('userData');
     alert('Вы вышли из аккаунта.');
     window.location.href = 'Главная.html';
-  }
-  
+  });
 </script>
 
 </body>

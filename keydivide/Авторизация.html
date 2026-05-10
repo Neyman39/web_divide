@@ -68,10 +68,11 @@
     const data = await response.json();
     
     if (response.ok) {
-      // Авторизация успешна
-      localStorage.setItem('authToken', login); // Используем login как простой токен
-      localStorage.setItem('userData', JSON.stringify(data.user));
-      typeLine();
+    // Авторизация успешна
+    localStorage.setItem('authToken', login);
+    localStorage.setItem('userData', JSON.stringify(data.user));
+    localStorage.setItem('userId', data.user.id);  
+    typeLine();
     } else {
       errorMessage.textContent = data.error || 'Ошибка авторизации';
     }

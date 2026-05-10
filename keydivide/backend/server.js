@@ -30,7 +30,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'shop_test',
-  password: '1234',
+  password: 'admin',
   port: 5432,
 });
 
@@ -439,6 +439,340 @@ app.get('/api/products/:id/switches', async (req, res) => {
       if (client) {
           client.release();
       }
+  }
+});
+
+// ================== КОРЗИНА ==================
+
+// Получить корзину пользователя (по user_id, временно передаётся в query)
+app.get('/api/cart', async (req, res) => {
+  const userId = req.query.userId;
+  if (!userId) return res.status(400).json({ error: 'userId is required' });
+
+  try {
+    const query = `
+      SELECT 
+        ci.id,
+        ci.product_id,
+        ci.switch_id,
+        ci.quantity,
+        ci.unit_price,
+        p.name AS product_name,
+        s.name AS switch_name
+      FROM cart_items ci
+      JOIN products_demo p ON ci.product_id = p.id
+      LEFT JOIN switches s ON ci.switch_id = s.id
+      WHERE ci.user_id = $1
+      ORDER BY ci.added_at
+    `;
+    const { rows } = await pool.query(query, [userId]);
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching cart:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Добавить в корзину
+app.post('/api/cart/add', async (req, res) => {
+  const { userId, productId, switchId, quantity } = req.body;
+  if (!userId || !productId || quantity == null || quantity < 1) {
+    return res.status(400).json({ error: 'userId, productId и quantity > 0 обязательны' });
+  }
+
+  try {
+    // Проверим наличие товара на складе
+    const stockQuery = 'SELECT stock, base_price, base_switch_id, switch_count FROM products_demo WHERE id = $1';
+    const stockResult = await pool.query(stockQuery, [productId]);
+    if (stockResult.rows.length === 0) return res.status(404).json({ error: 'Product not found' });
+
+    const product = stockResult.rows[0];
+    const availableStock = product.stock;
+
+    // Считаем, сколько уже зарезервировано пользователем в корзине этого товара
+    const currentCartQuery = `
+      SELECT COALESCE(SUM(quantity), 0) as in_cart
+      FROM cart_items
+      WHERE user_id = $1 AND product_id = $2
+    `;
+    const currentCartResult = await pool.query(currentCartQuery, [userId, productId]);
+    const inCart = parseInt(currentCartResult.rows[0].in_cart);
+
+    if (inCart + quantity > availableStock) {
+      return res.status(400).json({ 
+        error: `Недостаточно товара на складе. Доступно: ${availableStock - inCart}` 
+      });
+    }
+
+    // Рассчитаем цену с учётом выбранного свитча
+    let unitPrice = parseFloat(product.base_price);
+    if (switchId) {
+      const switchQuery = 'SELECT price_per_switch FROM switches WHERE id = $1';
+      const switchResult = await pool.query(switchQuery, [switchId]);
+      if (switchResult.rows.length === 0) return res.status(404).json({ error: 'Switch not found' });
+      const pricePerSwitch = parseFloat(switchResult.rows[0].price_per_switch);
+      // Цена = базовая цена + (цена_свитча * количество_свитчей)
+      unitPrice = parseFloat(product.base_price) + (pricePerSwitch * parseFloat(product.switch_count));
+    } else {
+      // Если свитч не указан, используем базовый свитч продукта
+      if (product.base_switch_id) {
+        const defaultSwitchQuery = 'SELECT price_per_switch FROM switches WHERE id = $1';
+        const defaultSwitchResult = await pool.query(defaultSwitchQuery, [product.base_switch_id]);
+        if (defaultSwitchResult.rows.length > 0) {
+          const pricePerSwitch = parseFloat(defaultSwitchResult.rows[0].price_per_switch);
+          unitPrice = parseFloat(product.base_price) + (pricePerSwitch * parseFloat(product.switch_count));
+        }
+      }
+    }
+
+    // Добавим в корзину
+    const insertQuery = `
+      INSERT INTO cart_items (user_id, product_id, switch_id, quantity, unit_price)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *
+    `;
+    const { rows } = await pool.query(insertQuery, [
+      userId, 
+      productId, 
+      switchId || null, 
+      quantity, 
+      unitPrice
+    ]);
+    res.status(201).json(rows[0]);
+  } catch (err) {
+    console.error('Error adding to cart:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Обновить количество товара в корзине
+app.put('/api/cart/update/:id', async (req, res) => {
+  const cartItemId = parseInt(req.params.id);
+  const { quantity } = req.body;
+  if (!quantity || quantity < 0) return res.status(400).json({ error: 'quantity >= 0 required' });
+
+  try {
+    if (quantity === 0) {
+      // Удаляем позицию
+      const deleteQuery = 'DELETE FROM cart_items WHERE id = $1 RETURNING *';
+      const { rows } = await pool.query(deleteQuery, [cartItemId]);
+      if (rows.length === 0) return res.status(404).json({ error: 'Cart item not found' });
+      return res.json({ message: 'Item removed', item: rows[0] });
+    }
+
+    // Получаем текущий элемент корзины
+    const cartItem = await pool.query('SELECT * FROM cart_items WHERE id = $1', [cartItemId]);
+    if (cartItem.rows.length === 0) return res.status(404).json({ error: 'Cart item not found' });
+
+    const item = cartItem.rows[0];
+    
+    // Проверяем остаток на складе
+    const stockQuery = 'SELECT stock FROM products_demo WHERE id = $1';
+    const stockResult = await pool.query(stockQuery, [item.product_id]);
+    const availableStock = stockResult.rows[0].stock;
+
+    // Сколько этого товара уже в корзине у пользователя, исключая текущий элемент
+    const otherCartQuery = `
+      SELECT COALESCE(SUM(quantity), 0) as in_cart
+      FROM cart_items
+      WHERE user_id = $1 AND product_id = $2 AND id != $3
+    `;
+    const otherCartResult = await pool.query(otherCartQuery, [item.user_id, item.product_id, cartItemId]);
+    const otherInCart = parseInt(otherCartResult.rows[0].in_cart);
+
+    if (otherInCart + quantity > availableStock) {
+      return res.status(400).json({ 
+        error: `Недостаточно товара. Доступно: ${availableStock - otherInCart}` 
+      });
+    }
+
+    // Обновляем количество
+    const updateQuery = 'UPDATE cart_items SET quantity = $1 WHERE id = $2 RETURNING *';
+    const { rows } = await pool.query(updateQuery, [quantity, cartItemId]);
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Error updating cart:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Удалить позицию из корзины
+app.delete('/api/cart/remove/:id', async (req, res) => {
+  const cartItemId = parseInt(req.params.id);
+  try {
+    const { rows } = await pool.query('DELETE FROM cart_items WHERE id = $1 RETURNING *', [cartItemId]);
+    if (rows.length === 0) return res.status(404).json({ error: 'Cart item not found' });
+    res.json({ message: 'Item removed', item: rows[0] });
+  } catch (err) {
+    console.error('Error removing from cart:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ================== ОФОРМЛЕНИЕ ЗАКАЗА ==================
+
+app.post('/api/orders', async (req, res) => {
+  const { userId } = req.body;
+  if (!userId) return res.status(400).json({ error: 'userId обязателен' });
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN'); // начало транзакции
+
+    // 1. Получаем корзину пользователя
+    const cartQuery = `
+      SELECT 
+        ci.id AS cart_item_id,
+        ci.product_id,
+        ci.switch_id,
+        ci.quantity,
+        ci.unit_price,
+        p.stock,
+        p.name AS product_name
+      FROM cart_items ci
+      JOIN products_demo p ON ci.product_id = p.id
+      WHERE ci.user_id = $1
+      ORDER BY ci.id
+    `;
+    const cartResult = await client.query(cartQuery, [userId]);
+    const cartItems = cartResult.rows;
+
+    if (cartItems.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Корзина пуста' });
+    }
+
+    // 2. Проверяем, хватает ли остатков для каждой позиции
+    for (const item of cartItems) {
+      if (item.quantity > item.stock) {
+        await client.query('ROLLBACK');
+        return res.status(400).json({
+          error: `Недостаточно товара "${item.product_name}". Доступно: ${item.stock}, запрошено: ${item.quantity}`
+        });
+      }
+    }
+
+    // 3. Вычисляем общую сумму заказа
+    const total = cartItems.reduce(
+      (sum, item) => sum + parseFloat(item.unit_price) * item.quantity,
+      0
+    );
+
+    // 4. Создаём заказ
+    const orderQuery = `
+      INSERT INTO orders (user_id, total, status)
+      VALUES ($1, $2, 'pending')
+      RETURNING id, total, status, created_at
+    `;
+    const orderResult = await client.query(orderQuery, [userId, total.toFixed(2)]);
+    const order = orderResult.rows[0];
+
+    // 5. Переносим позиции корзины → order_items и уменьшаем stock
+    const orderItemsQuery = `
+      INSERT INTO order_items (order_id, product_id, switch_id, quantity, unit_price)
+      VALUES ($1, $2, $3, $4, $5)
+    `;
+
+    for (const item of cartItems) {
+      // Добавляем в order_items
+      await client.query(orderItemsQuery, [
+        order.id,
+        item.product_id,
+        item.switch_id,
+        item.quantity,
+        item.unit_price
+      ]);
+
+      // Уменьшаем stock у продукта
+      await client.query(
+        'UPDATE products_demo SET stock = stock - $1 WHERE id = $2',
+        [item.quantity, item.product_id]
+      );
+    }
+
+    // 6. Очищаем корзину пользователя
+    await client.query('DELETE FROM cart_items WHERE user_id = $1', [userId]);
+
+    await client.query('COMMIT'); // завершаем транзакцию
+
+    // 7. Возвращаем заказ с позициями
+    const orderDetailsQuery = `
+      SELECT 
+        oi.id,
+        oi.product_id,
+        p.name AS product_name,
+        s.name AS switch_name,
+        oi.quantity,
+        oi.unit_price,
+        (oi.quantity * oi.unit_price) AS subtotal
+      FROM order_items oi
+      JOIN products_demo p ON oi.product_id = p.id
+      LEFT JOIN switches s ON oi.switch_id = s.id
+      WHERE oi.order_id = $1
+      ORDER BY oi.id
+    `;
+    const itemsResult = await client.query(orderDetailsQuery, [order.id]);
+
+    res.status(201).json({
+      order: {
+        id: order.id,
+        user_id: userId,
+        total: parseFloat(order.total),
+        status: order.status,
+        created_at: order.created_at
+      },
+      items: itemsResult.rows
+    });
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error('Error creating order:', err);
+    res.status(500).json({ error: 'Ошибка при создании заказа' });
+  } finally {
+    client.release();
+  }
+});
+
+// Получить заказы пользователя
+app.get('/api/orders', async (req, res) => {
+  const userId = req.query.userId;
+  if (!userId) return res.status(400).json({ error: 'userId обязателен' });
+
+  try {
+    // Все заказы пользователя с основной информацией
+    const ordersQuery = `
+      SELECT id, total, status, created_at
+      FROM orders
+      WHERE user_id = $1
+      ORDER BY created_at DESC
+    `;
+    const { rows: orders } = await pool.query(ordersQuery, [userId]);
+
+    // Для каждого заказа подгружаем состав
+    const result = [];
+    for (const order of orders) {
+      const itemsQuery = `
+        SELECT oi.quantity, oi.unit_price,
+               p.name AS product_name,
+               s.name AS switch_name
+        FROM order_items oi
+        JOIN products_demo p ON oi.product_id = p.id
+        LEFT JOIN switches s ON oi.switch_id = s.id
+        WHERE oi.order_id = $1
+      `;
+      const { rows: items } = await pool.query(itemsQuery, [order.id]);
+      result.push({
+        id: order.id,
+        total: parseFloat(order.total),
+        status: order.status,
+        created_at: order.created_at,
+        items: items
+      });
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.error('Error fetching orders:', err);
+    res.status(500).json({ error: 'Ошибка получения заказов' });
   }
 });
 
