@@ -52,7 +52,7 @@
               }
             }
         },
-        "/register": {
+        "/api/register": {
             "post": {
               "summary": "Регистрация нового пользователя",
               "requestBody": {

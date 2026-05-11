@@ -124,169 +124,163 @@
 <!-- возможно это скрипт нужен для оформления заказа -->
 <!-- <script src="modalw.js"></script> -->
 <script src="assets/scripts/check_authorization.js"></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-      await checkAuthAndDisplayUser();
-      // setupCartButton(); видимо спустя много переделок эта функция потерялась
-    });
-  // Функция отрисовки корзины
-  async function renderCart() {
+    await checkAuthAndDisplayUser();
+    // Загружаем корзину с сервера
+    await renderServerCart();
+});
+
+// Получаем userId из localStorage (сохраняется при авторизации)
+function getUserId() {
+    return localStorage.getItem('userId');
+}
+
+async function renderServerCart() {
     const cartContainer = document.getElementById('cartContainer');
+    const orderBtn = document.getElementById('orderBtn');
+    const userId = getUserId();
 
-    const response = await fetch('http://localhost:5000/check-auth', {
-      headers: {
-        'Authorization': localStorage.getItem('authToken') || ''
-      }
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.isAuthenticated) {
-      cartContainer.innerHTML = `
-        <p>Пожалуйста, 
-          <a href="Авторизация.html" style="color: black; text-decoration: none; font-weight: bold;">войдите</a>, 
-          чтобы просмотреть корзину.
-        </p>`;
+    if (!userId) {
+        cartContainer.innerHTML = `
+            <p>Пожалуйста, <a href="Авторизация.html" style="color: black; text-decoration: none; font-weight: bold;">войдите</a>, чтобы просмотреть корзину.</p>`;
         if (orderBtn) orderBtn.style.display = 'none';
-      return;
+        return;
     }
 
-    const cartKey = `cart_${data.user.name}`;
-    let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+    try {
+        const response = await fetch(`http://localhost:5000/api/cart?userId=${userId}`);
+        if (!response.ok) throw new Error('Ошибка загрузки корзины');
+        const cart = await response.json();
 
-    if (cart.length === 0) {
-      cartContainer.innerHTML = `
-        <div class="nonein">
-          <p>В корзине пока пусто, но в каталоге есть интересные клавиатуры</p>
-          <a href="Главная.html#keyboards" class="button">Перейти к выбору</a>
-        </div>
-      `;
-      if (orderBtn) orderBtn.style.display = 'none'; // Скрыть кнопку
-      return;
+        if (cart.length === 0) {
+            cartContainer.innerHTML = `
+                <div class="nonein">
+                    <p>В корзине пока пусто, но в каталоге есть интересные клавиатуры</p>
+                    <a href="Главная.html#keyboards" class="button">Перейти к выбору</a>
+                </div>`;
+            if (orderBtn) orderBtn.style.display = 'none';
+            return;
+        }
+
+        let totalPrice = 0;
+        let html = '<h2>Ваша корзина:</h2><ul class="cart-list" style="list-style:none; padding:0;">';
+
+        cart.forEach((item) => {
+            const itemTotal = parseFloat(item.unit_price) * item.quantity;
+            totalPrice += itemTotal;
+
+            html += `
+                <li style="border-bottom:1px solid #ccc; padding:10px 0; display:flex; align-items:center; justify-content: space-between;">
+                    <div>
+                        <strong>${item.product_name || 'Товар'}</strong><br/>
+                        ${item.switch_name ? `<em>Переключатель: ${item.switch_name}</em><br/>` : ''}
+                        Цена за шт: ${parseFloat(item.unit_price).toLocaleString('ru-RU')} ₽
+                    </div>
+                    <div style="display:flex; align-items:center;">
+                        <button data-id="${item.id}" class="btn-decrease" style="margin-right:5px;">−</button>
+                        <span style="width:30px; text-align:center;">${item.quantity}</span>
+                        <button data-id="${item.id}" class="btn-increase" style="margin-left:5px;">+</button>
+                        <button data-id="${item.id}" class="btn-remove" style="margin-left:15px; color:red;" title="Удалить">🗑️</button>
+                    </div>
+                    <div style="min-width:80px; text-align:right;">
+                        <strong>${itemTotal.toLocaleString('ru-RU')} ₽</strong>
+                    </div>
+                </li>`;
+        });
+
+        html += `</ul>`;
+        html += `<p style="font-weight:bold; margin-top:10px;">Общая сумма: ${totalPrice.toLocaleString('ru-RU')} ₽</p>`;
+
+        cartContainer.innerHTML = html;
+        if (orderBtn) orderBtn.style.display = 'block';
+
+        // Навешиваем обработчики кнопок
+        document.querySelectorAll('.btn-increase').forEach(button => {
+            button.onclick = async () => {
+                const id = button.getAttribute('data-id');
+                const item = cart.find(i => i.id == id);
+                await updateCartItem(id, item.quantity + 1);
+            };
+        });
+
+        document.querySelectorAll('.btn-decrease').forEach(button => {
+            button.onclick = async () => {
+                const id = button.getAttribute('data-id');
+                const item = cart.find(i => i.id == id);
+                if (item.quantity > 1) {
+                    await updateCartItem(id, item.quantity - 1);
+                } else {
+                    if (confirm('Удалить товар из корзины?')) {
+                        await removeCartItem(id);
+                    }
+                }
+            };
+        });
+
+        document.querySelectorAll('.btn-remove').forEach(button => {
+            button.onclick = async () => {
+                const id = button.getAttribute('data-id');
+                if (confirm('Удалить товар из корзины?')) {
+                    await removeCartItem(id);
+                }
+            };
+        });
+    } catch (err) {
+        console.error(err);
+        cartContainer.innerHTML = `<p style="color:red">Ошибка загрузки корзины: ${err.message}</p>`;
+    }
+}
+
+async function updateCartItem(itemId, newQuantity) {
+    try {
+        const response = await fetch(`http://localhost:5000/api/cart/update/${itemId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ quantity: newQuantity })
+        });
+        if (!response.ok) throw new Error('Ошибка обновления');
+        await renderServerCart();
+    } catch (err) {
+        alert('Ошибка: ' + err.message);
+    }
+}
+
+async function removeCartItem(itemId) {
+    try {
+        const response = await fetch(`http://localhost:5000/api/cart/remove/${itemId}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) throw new Error('Ошибка удаления');
+        await renderServerCart();
+    } catch (err) {
+        alert('Ошибка: ' + err.message);
+    }
+}
+
+// Обработчик кнопки "Заказать"
+document.getElementById('orderBtn').onclick = async () => {
+    const userId = getUserId();
+    if (!userId) {
+        alert('Пожалуйста, войдите или зарегистрируйтесь для оформления заказа.');
+        window.location.href = 'Авторизация.html';
+        return;
     }
 
-    let totalPrice = 0;
-    let html = '<h2>Ваша корзина:</h2><ul class="cart-list" style="list-style:none; padding:0;">';
-
-    cart.forEach((item, index) => {
-      const itemTotal = (item.price || 0) * (item.quantity || 1);
-      totalPrice += itemTotal;
-
-      html += `
-        <li style="border-bottom:1px solid #ccc; padding:10px 0; display:flex; align-items:center; justify-content: space-between;">
-          <div>
-            <strong>${item.productName || 'Товар'}</strong><br/>
-            ${item.switchName ? `<em>Переключатель: ${item.switchName}</em><br/>` : ''}
-            Цена за шт: ${item.price ? item.price.toLocaleString('ru-RU') + ' ₽' : '–'}
-          </div>
-          <div style="display:flex; align-items:center;">
-            <button data-index="${index}" class="btn-decrease" style="margin-right:5px;">−</button>
-            <span style="width:30px; text-align:center;">${item.quantity || 1}</span>
-            <button data-index="${index}" class="btn-increase" style="margin-left:5px;">+</button>
-            <button data-index="${index}" class="btn-remove" style="margin-left:15px; color:red;" title="Удалить">🗑️</button>
-          </div>
-          <div style="min-width:80px; text-align:right;">
-            <strong>${itemTotal.toLocaleString('ru-RU')} ₽</strong>
-          </div>
-        </li>
-      `;
-    });
-
-    html += `</ul>`;
-    html += `<p style="font-weight:bold; margin-top:10px;">Общая сумма: ${totalPrice.toLocaleString('ru-RU')} ₽</p>`;
-
-    // html += `<div style="margin-top: 20px; text-align: center;">
-    //   <button id="orderBtn" class="button" style="padding: 10px 20px; font-size: 16px;">Заказать</button>
-    // </div>`;
-
-    cartContainer.innerHTML = html;
-    
-    if (orderBtn) orderBtn.style.display = 'block'; // Показать кнопку
-    // Навешиваем обработчики на кнопки
-    cartContainer.querySelectorAll('.btn-increase').forEach(button => {
-      button.onclick = () => {
-        const idx = +button.getAttribute('data-index');
-        cart[idx].quantity = (cart[idx].quantity || 1) + 1;
-        localStorage.setItem(cartKey, JSON.stringify(cart));
-        renderCart();
-      };
-    });
-
-    cartContainer.querySelectorAll('.btn-decrease').forEach(button => {
-      button.onclick = () => {
-        const idx = +button.getAttribute('data-index');
-        if ((cart[idx].quantity || 1) > 1) {
-          cart[idx].quantity -= 1;
-          localStorage.setItem(cartKey, JSON.stringify(cart));
-          renderCart();
-        } else {
-          // Можно предложить удалить товар, если количество 1 и нажата кнопка "−"
-          if (confirm('Удалить товар из корзины?')) {
-            cart.splice(idx, 1);
-            localStorage.setItem(cartKey, JSON.stringify(cart));
-            renderCart();
-          }
-        }
-      };
-    });
-
-    cartContainer.querySelectorAll('.btn-remove').forEach(button => {
-      button.onclick = () => {
-        const idx = +button.getAttribute('data-index');
-        if (confirm('Удалить товар из корзины?')) {
-          cart.splice(idx, 1);
-          localStorage.setItem(cartKey, JSON.stringify(cart));
-          renderCart();
-        }
-      };
-    });
-  }
-
-  window.onload = renderCart;
-
-
-  // Обработчик для кнопки "Заказать"
-  document.getElementById('orderBtn').onclick = async () => {
-
-    const response = await fetch('http://localhost:5000/check-auth', {
-        headers: {
-          'Authorization': localStorage.getItem('authToken') || ''
-        }
-    });
-
-    if (!response.ok) {
-      alert('Пожалуйста, войдите или зарегистрируйтесь для оформления заказа.');
-      window.location.href = 'Авторизация.html';
-      return;
+    try {
+        const response = await fetch('http://localhost:5000/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: parseInt(userId) })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Ошибка при создании заказа');
+        alert(`Заказ оформлен! Номер заказа: ${data.order.id}, сумма: ${parseFloat(data.order.total).toLocaleString('ru-RU')} ₽`);
+        window.location.href = 'User_Account.html';
+    } catch (err) {
+        alert('Ошибка оформления заказа: ' + err.message);
     }
-
-    const { user } = await response.json();
-
-  const cartKey = `cart_${user.name}`;
-  const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
-
-  if (cart.length === 0) {
-    alert('Корзина пуста.');
-    return;
-  }
-
-  // Добавляем товары в заказы
-  const orderKey = `orders_${user.name}`;
-  const existingOrders = JSON.parse(localStorage.getItem(orderKey)) || [];
-
-  const updatedOrders = [...existingOrders, ...cart];
-  localStorage.setItem(orderKey, JSON.stringify(updatedOrders));
-
-  // Очищаем корзину
-  localStorage.removeItem(cartKey);
-
-  alert(`Спасибо за заказ! Вы заказали ${cart.length} товаров на сумму ${cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0).toLocaleString('ru-RU')} ₽`);
-
-  // Перенаправляем в профиль
-  window.location.href = 'User_Account.html';
 };
-  
 </script>
 
 </body>
