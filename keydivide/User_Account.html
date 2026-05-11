@@ -117,101 +117,136 @@
     return d.toLocaleString('ru-RU');
   }
 
+  // Получение текста статуса на русском
   function getStatusText(status) {
-  const statuses = {
-    'pending': 'Ожидает обработки',
-    'confirmed': 'Подтверждён',
-    'cancelled': 'Отменён'
-  };
-  return statuses[status] || status; // fallback на английский, если статус неизвестен
-}
+    const statuses = {
+      'pending': 'Ожидает обработки',
+      'confirmed': 'Подтверждён',
+      'cancelled': 'Отменён'
+    };
+    return statuses[status] || status;
+  }
 
   window.onload = async function () {
-    const userId = getUserId();
-    if (!userId) {
-      alert('Пожалуйста, войдите в аккаунт.');
-      window.location.href = 'Авторизация.html';
-      return;
-    }
-
-    // Загружаем данные пользователя (можно из localStorage, но для надёжности через API)
     try {
-      const userResp = await fetch('http://localhost:5000/check-auth', {
-        headers: { 'Authorization': localStorage.getItem('authToken') || '' }
+      // Проверяем авторизацию через JWT (credentials: 'include' для куки)
+      const authResp = await fetch('/check-auth', {
+        credentials: 'include'
       });
-      if (!userResp.ok) throw new Error('not authenticated');
-      const { user } = await userResp.json();
-      document.getElementById('username').textContent = user.name || user.login;
-      document.getElementById('userphone').textContent = `Телефон: ${user.phone || '-'}`;
-      document.getElementById('useremail').textContent = `Email: ${user.email || '-'}`;
-      document.getElementById('useraddress').textContent = `Адрес: ${user.address || '-'}`;
-    } catch (e) {
-      // fallback из localStorage
-      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-      document.getElementById('username').textContent = userData.name || userData.login || 'Пользователь';
-      document.getElementById('useremail').textContent = `Email: ${userData.email || '-'}`;
-    }
 
-    // Загружаем заказы с сервера
-    const ordersSection = document.getElementById('ordersSection');
-    try {
-      const resp = await fetch(`http://localhost:5000/api/orders?userId=${userId}`);
-      if (!resp.ok) throw new Error('Ошибка загрузки заказов');
-      const orders = await resp.json();
-
-      if (orders.length === 0) {
-        ordersSection.innerHTML = `<div class="empty-orders">У вас пока нет заказов.</div>`;
+      if (!authResp.ok) {
+        alert('Пожалуйста, войдите в аккаунт.');
+        window.location.href = 'Авторизация.html';
         return;
       }
 
-      let html = '';
-      orders.forEach(order => {
-        const orderDate = formatDate(order.created_at);
-        html += `
-          <div class="order-card" style="margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; padding: 15px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-              <strong>Заказ №${order.id}</strong>
-              <span style="color: gray;">${orderDate}</span>
-              <span>Статус: <em>${getStatusText(order.status)}</em></span>
-            </div>
-            <table style="width:100%; border-collapse: collapse;">
-              <tr>
-                <th>Товар</th>
-                <th>Переключатель</th>
-                <th>Количество</th>
-                <th>Цена за шт.</th>
-                <th>Сумма</th>
-              </tr>`;
-        order.items.forEach(item => {
-          const itemTotal = (parseFloat(item.unit_price) * item.quantity).toLocaleString('ru-RU');
-          html += `
-              <tr>
-                <td>${item.product_name || 'Товар'}</td>
-                <td>${item.switch_name || '-'}</td>
-                <td>${item.quantity}</td>
-                <td>${parseFloat(item.unit_price).toLocaleString('ru-RU')} ₽</td>
-                <td>${itemTotal} ₽</td>
-              </tr>`;
+      const { user } = await authResp.json();
+      
+      if (!user) {
+        alert('Данные пользователя не найдены.');
+        window.location.href = 'Авторизация.html';
+        return;
+      }
+
+      // Заполняем профиль пользователя
+      document.getElementById('username').textContent = user.name || user.login || 'Пользователь';
+      document.getElementById('userphone').textContent = `Телефон: ${user.phone || '-'}`;
+      document.getElementById('useremail').textContent = `Email: ${user.email || '-'}`;
+      document.getElementById('useraddress').textContent = `Адрес: ${user.address || '-'}`;
+
+      // Загружаем заказы с сервера
+      const ordersSection = document.getElementById('ordersSection');
+      
+      try {
+        const ordersResp = await fetch(`/api/orders?userId=${user.id}`, {
+          credentials: 'include'
         });
-        html += `
-            </table>
-            <div style="text-align: right; margin-top: 5px; font-weight: bold;">
-              Итого: ${order.total.toLocaleString('ru-RU')} ₽
-            </div>
-          </div>`;
-      });
-      ordersSection.innerHTML = html;
-    } catch (err) {
-      console.error(err);
-      ordersSection.innerHTML = `<div class="empty-orders">Ошибка при загрузке заказов: ${err.message}</div>`;
+        
+        if (!ordersResp.ok) throw new Error('Ошибка загрузки заказов');
+        
+        const orders = await ordersResp.json();
+
+        if (!orders || orders.length === 0) {
+          ordersSection.innerHTML = `<div class="empty-orders">У вас пока нет заказов.</div>`;
+          return;
+        }
+
+        let html = '';
+        orders.forEach(order => {
+          const orderDate = formatDate(order.created_at);
+          html += `
+            <div class="order-card" style="margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; padding: 15px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <strong>Заказ №${order.id}</strong>
+                <span style="color: gray;">${orderDate}</span>
+                <span>Статус: <em>${getStatusText(order.status)}</em></span>
+              </div>
+              <table style="width:100%; border-collapse: collapse;">
+                <tr>
+                  <th>Товар</th>
+                  <th>Переключатель</th>
+                  <th>Количество</th>
+                  <th>Цена за шт.</th>
+                  <th>Сумма</th>
+                </tr>`;
+          
+          if (order.items && order.items.length > 0) {
+            order.items.forEach(item => {
+              const itemTotal = (parseFloat(item.unit_price) * item.quantity).toLocaleString('ru-RU');
+              html += `
+                <tr>
+                  <td>${item.product_name || 'Товар'}</td>
+                  <td>${item.switch_name || '-'}</td>
+                  <td>${item.quantity}</td>
+                  <td>${parseFloat(item.unit_price).toLocaleString('ru-RU')} ₽</td>
+                  <td>${itemTotal} ₽</td>
+                </tr>`;
+            });
+          }
+          
+          html += `
+              </table>
+              <div style="text-align: right; margin-top: 5px; font-weight: bold;">
+                Итого: ${order.total ? order.total.toLocaleString('ru-RU') : '0'} ₽
+              </div>
+            </div>`;
+        });
+        
+        ordersSection.innerHTML = html;
+        
+      } catch (ordersErr) {
+        console.error('Ошибка загрузки заказов:', ordersErr);
+        ordersSection.innerHTML = `<div class="empty-orders">Ошибка при загрузке заказов: ${ordersErr.message}</div>`;
+      }
+
+    } catch (authErr) {
+      console.error('Ошибка авторизации:', authErr);
+      alert('Ошибка при проверке авторизации.');
+      window.location.href = 'Авторизация.html';
     }
   };
 
   // Выход из системы
-  document.getElementById('logoutBtn').addEventListener('click', () => {
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    try {
+      await fetch('/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (e) {
+      console.error('Ошибка при выходе:', e);
+    }
+    
+    // Очищаем локальное хранилище
     localStorage.removeItem('userId');
     localStorage.removeItem('authToken');
     localStorage.removeItem('userData');
+    
+    // Очищаем все корзины пользователя
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('cart_')) localStorage.removeItem(key);
+    });
+    
     alert('Вы вышли из аккаунта.');
     window.location.href = 'Главная.html';
   });

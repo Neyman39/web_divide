@@ -45,7 +45,7 @@
       </div>
     </div>
   </div>
-<script>
+<!-- <script>
   document.getElementById('loginForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   
@@ -81,7 +81,7 @@
     errorMessage.textContent = 'Ошибка соединения с сервером';
   }
 });
-</script>
+</script> -->
 
 
 <script>
@@ -98,6 +98,68 @@
     }
   }
 </script>
+
+<script>
+  /**
+   * Обработчик формы входа
+   * Работает с JWT + httpOnly cookie (не использует localStorage для токенов)
+   */
+  document.getElementById('loginForm')?.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const login = document.getElementById('login')?.value.trim();
+    const password = document.getElementById('password')?.value.trim();
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Валидация
+    if (!login || !password) {
+      showError('Логин и пароль обязательны');
+      return;
+    }
+
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ login, password }),
+        credentials: 'include' // 🔹 Важно: отправляем/получаем cookie
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // ✅ Авторизация успешна
+        // Токены уже в httpOnly cookie — не сохраняем в localStorage!
+        
+        // Сохраняем только данные пользователя для отображения (опционально)
+        if (data.user) {
+          localStorage.setItem('userData', JSON.stringify(data.user));
+        }
+
+        // 🎬 Запускаем анимацию терминала
+        if (typeof typeLine === 'function') {
+          typeLine();
+        }
+
+        // Перенаправление (раскомментируйте при необходимости)
+        // setTimeout(() => {
+        //   window.location.href = 'Главная.html';
+        // }, 1000);
+
+      } else {
+        // ❌ Ошибка авторизации
+        showError(data.error || 'Ошибка входа');
+      }
+
+    } catch (error) {
+      console.error('🔐 Login error:', error);
+      showError('Ошибка соединения с сервером');
+    }
+  });
+</script>
+
 <script src="./assets/scripts/welcome_terminal.js"></script>
 
 </body>

@@ -462,13 +462,11 @@
     function setupCartButton() {
         document.getElementById('addToCartBtn')?.addEventListener('click', async () => {
             try {
-                // Проверяем авторизацию
-                const response = await fetch('http://localhost:5000/check-auth', {
-                    headers: {
-                        'Authorization': localStorage.getItem('authToken') || ''
-                    }
+                // Проверяем авторизацию с cookie
+                const response = await fetch('/check-auth', {
+                    credentials: 'include'  // ← важно!
                 });
-            
+
                 if (!response.ok) {
                     alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
                     window.location.href = 'Авторизация.html';
@@ -488,7 +486,7 @@
                 const productDescription = "Маленькая клавиатура даже без ряда цифр, с ортолинейным строением..."; // или динамически
             
                 // Ключ корзины для этого пользователя
-                const cartKey = `cart_${user.name}`;
+                const cartKey = `cart_${user.id}`;
                 let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
             
                 // Можно хранить один товар или делать уникальный ключ для комбинации товара + цена — тут пример по имени
