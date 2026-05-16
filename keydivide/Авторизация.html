@@ -136,6 +136,7 @@
         // Сохраняем только данные пользователя для отображения (опционально)
         if (data.user) {
           localStorage.setItem('userData', JSON.stringify(data.user));
+          localStorage.setItem('userId', data.user.id);
         }
 
         // 🎬 Запускаем анимацию терминала

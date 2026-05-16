@@ -422,12 +422,28 @@ document.addEventListener('DOMContentLoaded', () => {
 // Функция для кнопки корзины (работа с сервером)
 function setupCartButton() {
     document.getElementById('addToCartBtn')?.addEventListener('click', async () => {
+
+        const response = await fetch('/check-auth', {
+            credentials: 'include' // ← Важно: отправляет cookie автоматически
+        });
+
         const userId = localStorage.getItem('userId');
-        if (!userId) {
+        if (!response.ok) {
+                alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
+                window.location.href = 'Авторизация.html';
+                return;
+        }
+
+        const data = await response.json();
+            
+        // 🔹 Проверяем, что пользователь авторизован
+        if (!data.isAuthenticated || !data.user) {
             alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
             window.location.href = 'Авторизация.html';
             return;
         }
+
+        const user = data.user;
 
         const productId = getProductIdFromUrl();
 

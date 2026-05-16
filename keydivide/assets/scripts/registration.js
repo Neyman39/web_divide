@@ -52,6 +52,7 @@
           // Токены теперь в httpOnly cookie, не сохраняем в localStorage!
           // Просто сохраняем данные пользователя для отображения
           localStorage.setItem('userData', JSON.stringify(data.user));
+          localStorage.setItem('userId', data.user.id);
         
           // Показываем сообщение
           messageEl.textContent = 'Регистрация успешна!';
