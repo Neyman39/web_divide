@@ -45,7 +45,76 @@
     </div>
   </div>
     
-<script src="./assets/scripts/registration.js"></script>
+<script>
+  function isValidEmail(email) {
+    // Простое, но достаточно надёжное регулярное выражение для email
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  }
+      
+  document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+  
+    const login = document.getElementById('login').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const surname = document.getElementById('surname').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const password2 = document.getElementById('password2').value.trim();
+
+    const messageEl = document.getElementById('message');
+
+    if (!isValidEmail(email)) {
+      messageEl.textContent = 'Некорректный формат email';
+      messageEl.style.color = 'red';
+      return;
+    }
+  
+    if (password !== password2) {
+      messageEl.textContent = 'Пароли не совпадают';
+      messageEl.style.color = 'red';
+      return;
+    }
+  
+    try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            login,
+            email,
+            surname,
+            name,
+            password
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Регистрация успешна
+          localStorage.setItem('authToken', data.login);
+          localStorage.setItem('userData', JSON.stringify(data));
+          typeLine();
+          // window.location.href = 'Главная.html';
+        } 
+        
+        else {
+          document.getElementById('message').textContent = data.error || 'Ошибка регистрации';
+          document.getElementById('message').style.color = 'red';
+        }
+    } 
+    catch (error) {
+      console.error('Ошибка:', error);
+      console.error('Тип ошибки:', error.name);
+      console.error('Сообщение:', error.message);
+      document.getElementById('message').textContent = 'Ошибка соединения с сервером: ' + error.message;
+      document.getElementById('message').style.color = 'red';
+    }
+    });
+</script>
 <script src="./assets/scripts/welcome_terminal.js"></script>
 </body>
 </html>
