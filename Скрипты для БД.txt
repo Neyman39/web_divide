@@ -240,3 +240,34 @@ CREATE TABLE IF NOT EXISTS order_items (
     quantity INT NOT NULL,
     unit_price DECIMAL(10,2) NOT NULL
 );
+
+-- 4 ДОБАВЛЯЕМ ОСТАТКИ ДЛЯ СВИТЧЕЙ
+
+ALTER TABLE switches ADD COLUMN IF NOT EXISTS stock INT NOT NULL DEFAULT 10;
+
+-- ======== ПЕРЕВОДИМ ЦЕНЫ В КОПЕЙКИ ========
+-- 1. products_demo.base_price (DECIMAL(10,2) -> INTEGER)
+ALTER TABLE products_demo 
+  ALTER COLUMN base_price TYPE INT USING (base_price * 100);
+
+-- 2. switches.price_per_switch (DECIMAL(6,2) -> INTEGER)
+ALTER TABLE switches 
+  ALTER COLUMN price_per_switch TYPE INT USING (price_per_switch * 100);
+
+-- 3. cart_items.unit_price (DECIMAL(10,2) -> INTEGER)
+ALTER TABLE cart_items 
+  ALTER COLUMN unit_price TYPE INT USING (unit_price * 100);
+
+-- 4. orders.total (DECIMAL(10,2) -> INTEGER)
+ALTER TABLE orders 
+  ALTER COLUMN total TYPE INT USING (total * 100);
+
+-- 5. order_items.unit_price (DECIMAL(10,2) -> INTEGER)
+ALTER TABLE order_items 
+  ALTER COLUMN unit_price TYPE INT USING (unit_price * 100);
+
+-- Проверим, что всё прошло успешно
+SELECT id, name, base_price FROM products_demo;
+SELECT id, name, price_per_switch, stock FROM switches;
+SELECT * FROM cart_items;
+SELECT * FROM orders;

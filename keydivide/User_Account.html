@@ -105,6 +105,7 @@
     </div>
 </div>
 
+<script src="assets/scripts/formatPrice.js"></script>
 <script>
   // Вспомогательная функция получения userId
   function getUserId() {
@@ -192,14 +193,13 @@
           
           if (order.items && order.items.length > 0) {
             order.items.forEach(item => {
-              const itemTotal = (parseFloat(item.unit_price) * item.quantity).toLocaleString('ru-RU');
               html += `
                 <tr>
                   <td>${item.product_name || 'Товар'}</td>
                   <td>${item.switch_name || '-'}</td>
                   <td>${item.quantity}</td>
-                  <td>${parseFloat(item.unit_price).toLocaleString('ru-RU')} ₽</td>
-                  <td>${itemTotal} ₽</td>
+                  <td>${formatPriceRub(item.unit_price)}</td>
+                  <td>${formatPriceRub(item.unit_price * item.quantity)}</td>
                 </tr>`;
             });
           }
@@ -207,7 +207,7 @@
           html += `
               </table>
               <div style="text-align: right; margin-top: 5px; font-weight: bold;">
-                Итого: ${order.total ? order.total.toLocaleString('ru-RU') : '0'} ₽
+                Итого: ${order.total ? formatPriceRub(order.total) : '0 ₽'}
               </div>
             </div>`;
         });
