@@ -10,6 +10,7 @@ const productRoutes = require('./routes/product_rout');
 const cartRoutes = require('./routes/cart_rout');
 const orderRoutes = require('./routes/order_rout');
 const userRoutes = require('./routes/user_rout');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
@@ -38,5 +39,7 @@ app.use(productRoutes);
 app.use(cartRoutes);
 app.use(orderRoutes);
 app.use(userRoutes);
+
+app.use(errorHandler);
 
 module.exports = app;

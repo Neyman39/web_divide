@@ -116,6 +116,7 @@
 <script src="assets/scripts/check_authorization.js"></script>
 <script src="assets/scripts/components.js"></script>
 <script src="assets/scripts/formatPrice.js"></script>
+<script src="assets/scripts/productCatalogCache.js"></script>
 <script>
     // Загружаем компоненты при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
@@ -156,46 +157,57 @@ function applyFilter(filter) {
   displayProducts();
 }
 
-// Функция для отображения товаров из БД
-async function displayProducts() {
+// Функция для отображения товаров из БД (с кэшем в localStorage)
+function renderProducts(products) {
   const productContainer = document.querySelector('.product-container');
   productContainer.innerHTML = '';
 
+  let sorted = [...products];
+
+  if (currentFilter === 'asc') {
+    sorted.sort((a, b) => a.price - b.price);
+  } else if (currentFilter === 'desc') {
+    sorted.sort((a, b) => b.price - a.price);
+  }
+
+  sorted.forEach(product => {
+    const prod_card = document.createElement('a');
+    prod_card.classList.add('product-card');
+    prod_card.href = product.link || `product.html?id=${product.id}`;
+
+    const productImg = document.createElement('img');
+    productImg.src = product.img || 'assets/images/default.jpg';
+    productImg.alt = product.name;
+    productImg.classList.add('product-card__img');
+    prod_card.appendChild(productImg);
+
+    const productName = document.createElement('h3');
+    productName.textContent = product.name;
+    productName.classList.add('product-card__name');
+    prod_card.appendChild(productName);
+
+    const productPrice = document.createElement('h4');
+    productPrice.textContent = formatPriceRub(product.price);
+    productPrice.classList.add('product-card__price');
+    prod_card.appendChild(productPrice);
+
+    productContainer.appendChild(prod_card);
+  });
+}
+
+async function displayProducts() {
+  const productContainer = document.querySelector('.product-container');
+
   try {
-    const response = await fetch('/api/products');
-    if (!response.ok) throw new Error('Ошибка загрузки товаров');
-    
-    let products = await response.json();
-
-    if (currentFilter === 'asc') {
-      products.sort((a, b) => a.price - b.price);
-    } else if (currentFilter === 'desc') {
-      products.sort((a, b) => b.price - a.price);
-    }
-    // 'all' — без сортировки, просто как есть
-
-    products.forEach(product => {
-      const prod_card = document.createElement('a');
-      prod_card.classList.add('product-card');
-      prod_card.href = product.link || `product.html?id=${product.id}`;
-
-      const productImg = document.createElement('img');
-      productImg.src = product.img || 'assets/images/default.jpg';
-      productImg.alt = product.name;
-      productImg.classList.add('product-card__img');
-      prod_card.appendChild(productImg);
-
-      const productName = document.createElement('h3');
-      productName.textContent = product.name;
-      productName.classList.add('product-card__name');
-      prod_card.appendChild(productName);
-
-      const productPrice = document.createElement('h4');
-      productPrice.textContent = formatPriceRub(product.price);
-      productPrice.classList.add('product-card__price');
-      prod_card.appendChild(productPrice);
-
-      productContainer.appendChild(prod_card);
+    await ProductCatalogCache.loadProducts({
+      onUpdated(products, meta) {
+        renderProducts(products);
+        if (meta.fromCache && !meta.isFresh) {
+          console.info('Каталог показан из кэша, идёт обновление с сервера…');
+        } else if (meta.fromCache) {
+          console.info('Каталог загружен из кэша браузера');
+        }
+      },
     });
   } catch (error) {
     console.error('Ошибка:', error);
