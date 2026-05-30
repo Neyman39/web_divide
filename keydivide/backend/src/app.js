@@ -10,6 +10,8 @@ const productRoutes = require('./routes/product_rout');
 const cartRoutes = require('./routes/cart_rout');
 const orderRoutes = require('./routes/order_rout');
 const userRoutes = require('./routes/user_rout');
+const switchRoutes = require('./routes/switch_rout');
+const uploadRoutes = require('./routes/upload_rout');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -39,6 +41,8 @@ app.use(productRoutes);
 app.use(cartRoutes);
 app.use(orderRoutes);
 app.use(userRoutes);
+app.use(switchRoutes);
+app.use(uploadRoutes);
 
 app.use(errorHandler);
 

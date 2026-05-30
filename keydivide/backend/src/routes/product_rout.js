@@ -41,4 +41,65 @@ router.post(
   })
 );
 
+router.get(
+  '/api/admin/products',
+  authenticateToken,
+  requireRole('admin'),
+  asyncHandler(async (req, res) => {
+    const products = await productService.getAllProducts();
+    res.json({ success: true, data: products });
+  })
+);
+
+router.get(
+  '/api/admin/products/:id',
+  authenticateToken,
+  requireRole('admin'),
+  asyncHandler(async (req, res) => {
+    const productId = parseInt(req.params.id, 10);
+    const product = await productService.getAdminProductById(productId);
+    res.json({ success: true, product });
+  })
+);
+
+router.post(
+  '/api/admin/products',
+  authenticateToken,
+  requireRole('admin'),
+  asyncHandler(async (req, res) => {
+    const product = await productService.createProduct(req.body);
+    res.status(201).json({
+      success: true,
+      message: 'Клавиатура успешно добавлена',
+      product,
+    });
+  })
+);
+
+router.put(
+  '/api/admin/products/:id',
+  authenticateToken,
+  requireRole('admin'),
+  asyncHandler(async (req, res) => {
+    const productId = parseInt(req.params.id, 10);
+    const product = await productService.updateProduct(productId, req.body);
+    res.json({
+      success: true,
+      message: 'Клавиатура обновлена',
+      product,
+    });
+  })
+);
+
+router.delete(
+  '/api/admin/products/:id',
+  authenticateToken,
+  requireRole('admin'),
+  asyncHandler(async (req, res) => {
+    const productId = parseInt(req.params.id, 10);
+    await productService.deleteProduct(productId);
+    res.json({ success: true, message: 'Клавиатура удалена' });
+  })
+);
+
 module.exports = router;

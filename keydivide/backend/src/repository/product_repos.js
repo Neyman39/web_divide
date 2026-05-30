@@ -1,4 +1,5 @@
 const pool = require('../config/db');
+const { syncSequence, syncSequences } = require('../utils/syncSequence');
 
 class ProductRepository {
   async findAll() {
@@ -82,7 +83,7 @@ class ProductRepository {
   async findAvailableSwitches(client, productId, switchCount, basePrice, baseSwitchId) {
     const query = `
       SELECT s.id, s.name, s.type, s.actuation_force, s.bottom_force,
-          s.tactile_force, s.travel_length, s.price_per_switch,
+          s.tactile_force, s.travel_length, s.price_per_switch, s.image_url,
           $1::decimal as switch_count,
           (s.price_per_switch * ($1::decimal)) as additional_price,
           ($2 + (s.price_per_switch * ($1::decimal))) as total_price,
@@ -175,12 +176,95 @@ class ProductRepository {
     );
   }
 
-  async insertProduct(client, { name, description, basePrice, switchCount, baseSwitchId }) {
+  async findAvailableSwitchIds(client, productId) {
     const { rows } = await client.query(
-      `INSERT INTO products_demo (name, description, base_price, switch_count, base_switch_id)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, name, base_price, switch_count, base_switch_id`,
-      [name, description || null, basePrice, switchCount, baseSwitchId]
+      `SELECT switch_id FROM product_available_switches
+       WHERE product_id = $1 ORDER BY display_order`,
+      [productId]
+    );
+    return rows.map((r) => r.switch_id);
+  }
+
+  async findAdminById(client, productId) {
+    const product = await this.findBasicById(client, productId);
+    if (!product) return null;
+
+    const [images, specifications, equipment, availableSwitchIds] = await Promise.all([
+      this.findImagesByProductId(client, productId),
+      this.findSpecificationsByProductId(client, productId),
+      this.findEquipmentByProductId(client, productId),
+      this.findAvailableSwitchIds(client, productId),
+    ]);
+
+    const stockRow = await client.query(
+      'SELECT stock FROM products_demo WHERE id = $1',
+      [productId]
+    );
+
+    return {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      base_price: parseFloat(product.base_price),
+      switch_count: product.switch_count,
+      base_switch_id: product.base_switch_id,
+      stock: stockRow.rows[0]?.stock ?? 0,
+      available_switch_ids: availableSwitchIds,
+      cover_image: images[0]
+        ? { url: images[0].image_url, alt_text: images[0].alt_text }
+        : null,
+      gallery_images: images.slice(1).map((img) => ({
+        url: img.image_url,
+        alt_text: img.alt_text,
+      })),
+      image_urls: images.map((img, index) => ({
+        url: img.image_url,
+        alt_text: img.alt_text,
+        sort_order: index + 1,
+      })),
+      specifications: specifications.map((spec, index) => ({
+        key: spec.spec_key,
+        value: spec.spec_value,
+        depends_on_switch: spec.depends_on_switch,
+        display_order: spec.display_order ?? index,
+      })),
+      equipment: equipment.map((eq) => eq.item_name),
+    };
+  }
+
+  async deleteProductRelations(client, productId) {
+    await client.query('DELETE FROM product_available_switches WHERE product_id = $1', [productId]);
+    await client.query('DELETE FROM product_specifications WHERE product_id = $1', [productId]);
+    await client.query('DELETE FROM product_equipment WHERE product_id = $1', [productId]);
+    await client.query('DELETE FROM product_images WHERE product_id = $1', [productId]);
+  }
+
+  async deleteProduct(client, productId) {
+    await this.deleteProductRelations(client, productId);
+    const { rowCount } = await client.query('DELETE FROM products_demo WHERE id = $1', [productId]);
+    return rowCount > 0;
+  }
+
+  async updateProductCore(client, productId, { name, description, basePrice, switchCount, baseSwitchId, stock }) {
+    const { rows } = await client.query(
+      `UPDATE products_demo
+       SET name = $1, description = $2, base_price = $3, switch_count = $4,
+           base_switch_id = $5, stock = $6
+       WHERE id = $7
+       RETURNING id, name, base_price, switch_count, base_switch_id, stock`,
+      [name, description || null, basePrice, switchCount, baseSwitchId, stock, productId]
+    );
+    return rows[0] || null;
+  }
+
+  async insertProduct(client, { name, description, basePrice, switchCount, baseSwitchId, stock = 0 }) {
+    await syncSequence('products_demo', client);
+
+    const { rows } = await client.query(
+      `INSERT INTO products_demo (name, description, base_price, switch_count, base_switch_id, stock)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, name, base_price, switch_count, base_switch_id, stock`,
+      [name, description || null, basePrice, switchCount, baseSwitchId, stock]
     );
     return rows[0];
   }
@@ -194,6 +278,8 @@ class ProductRepository {
   }
 
   async insertSpecification(client, productId, spec) {
+    await syncSequence('product_specifications', client);
+
     await client.query(
       `INSERT INTO product_specifications (product_id, spec_key, spec_value, depends_on_switch, display_order)
        VALUES ($1, $2, $3, $4, $5)`,
@@ -202,6 +288,8 @@ class ProductRepository {
   }
 
   async insertEquipment(client, productId, itemName, displayOrder) {
+    await syncSequence('product_equipment', client);
+
     await client.query(
       `INSERT INTO product_equipment (product_id, item_name, display_order)
        VALUES ($1, $2, $3)`,
@@ -210,6 +298,8 @@ class ProductRepository {
   }
 
   async insertImage(client, url, altText) {
+    await syncSequence('images', client);
+
     const { rows } = await client.query(
       'INSERT INTO images (image_url, alt_text) VALUES ($1, $2) RETURNING id',
       [url, altText || '']
@@ -218,6 +308,8 @@ class ProductRepository {
   }
 
   async linkProductImage(client, productId, imageId, sortOrder) {
+    await syncSequence('product_images', client);
+
     await client.query(
       'INSERT INTO product_images (product_id, image_id, sort_order) VALUES ($1, $2, $3)',
       [productId, imageId, sortOrder || 0]

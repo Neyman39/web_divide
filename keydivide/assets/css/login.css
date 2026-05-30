@@ -58,6 +58,395 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #c9302c;
 }
 
+.account-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.admin-btn {
+  background-color: #ff7a69;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.admin-btn:hover {
+  background-color: #e56a5a;
+}
+
+.admin-btn--submit {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.user-role {
+  color: #ff7a69;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.order-card {
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background: #fff;
+}
+
+.order-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.order-card__total {
+  text-align: right;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.switches-table-wrap {
+  width: 100%;
+  max-width: 1100px;
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
+}
+
+.admin-table th {
+  background-color: #f0f0f0;
+  white-space: nowrap;
+}
+
+.admin-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.admin-modal--open {
+  display: flex;
+}
+
+.admin-modal__window {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.admin-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  border: none;
+  background: none;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: #666;
+}
+
+.admin-modal__title {
+  margin-bottom: 16px;
+  font-size: 22px;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: #444;
+}
+
+.admin-form input,
+.admin-form select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.admin-form__error {
+  color: #c9302c;
+  font-size: 14px;
+}
+
+.admin-form__hint {
+  font-size: 13px;
+  color: #777;
+  margin: 4px 0 0;
+}
+
+.admin-image-preview {
+  margin: 10px 0;
+}
+
+.admin-image-preview img {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  object-fit: contain;
+  background: #f5f5f5;
+}
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.admin-tab {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  transition: all 0.2s;
+}
+
+.admin-tab--active {
+  background: #ff7a69;
+  border-color: #ff7a69;
+  color: #fff;
+}
+
+.admin-panel {
+  display: none;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.admin-panel--active {
+  display: block;
+}
+
+.admin-btn--small {
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+.admin-btn--danger {
+  background-color: #d9534f;
+}
+
+.admin-btn--danger:hover {
+  background-color: #c9302c;
+}
+
+.admin-modal--wide .admin-modal__window {
+  max-width: 720px;
+}
+
+.admin-form textarea {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 15px;
+  resize: vertical;
+}
+
+.admin-form__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.admin-fieldset {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 0;
+}
+
+.admin-fieldset legend {
+  padding: 0 6px;
+  font-weight: 600;
+}
+
+.admin-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.admin-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.admin-dynamic-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.admin-dynamic-row input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.keyboard-admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.keyboard-admin-card {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid #ddd;
+}
+
+.keyboard-admin-card__img {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #eee;
+}
+
+.keyboard-admin-card__body h3 {
+  margin-bottom: 6px;
+  font-size: 18px;
+}
+
+.keyboard-admin-card__price {
+  color: #666;
+  font-weight: 600;
+}
+
+.keyboard-admin-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.switches-table__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 120px;
+}
+
+.switch-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #eee;
+}
+
+.admin-gallery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.admin-gallery-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.admin-gallery-item img {
+  width: 64px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.admin-gallery-item span {
+  flex: 1;
+  font-size: 13px;
+  color: #555;
+  word-break: break-all;
+}
+
+@media (max-width: 700px) {
+  .keyboard-admin-card {
+    grid-template-columns: 1fr;
+  }
+
+  .keyboard-admin-card__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

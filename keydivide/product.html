@@ -251,7 +251,7 @@ function renderSwitches(switches) {
                     <div class="switch__inner">
                         <div class="switch__info">
                             <div class="switch__image">
-                                <img src="assets/images/${getSwitchImage(sw.name)}.png" alt="${sw.name}" width="80" height="80">
+                                <img src="${sw.image_url || `assets/images/${getSwitchImage(sw.name)}.png`}" alt="${sw.name}" width="80" height="80">
                             </div>
                             <div class="switch__title">
                                 <p class="switch__name">${sw.name}</p>

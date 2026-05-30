@@ -1,6 +1,7 @@
 const pool = require('../config/db');
 const productRepository = require('../repository/product_repos');
 const AppError = require('../utils/AppError');
+const { syncSequence } = require('../utils/syncSequence');
 
 class ProductService {
   async getAllProducts() {
@@ -47,6 +48,19 @@ class ProductService {
     }
   }
 
+  async getAdminProductById(productId) {
+    const client = await pool.connect();
+    try {
+      const product = await productRepository.findAdminById(client, productId);
+      if (!product) {
+        throw new AppError('Product not found', 404);
+      }
+      return product;
+    } finally {
+      client.release();
+    }
+  }
+
   async getProductSwitches(productId) {
     const client = await pool.connect();
     try {
@@ -76,6 +90,7 @@ class ProductService {
           tactile_force: sw.tactile_force,
           travel_length: sw.travel_length,
           price_per_switch: parseFloat(sw.price_per_switch),
+          image_url: sw.image_url,
           switch_count: parseInt(sw.switch_count, 10),
           additional_price: parseFloat(sw.additional_price),
           total_price: parseFloat(sw.total_price),
@@ -91,12 +106,22 @@ class ProductService {
     return productRepository.findAllSwitches();
   }
 
-  async createProduct(data) {
+  _validateProductPayload(data) {
+    const { name, base_price, base_switch_id } = data;
+
+    if (!name?.trim()) {
+      throw new AppError('Название и базовая цена обязательны');
+    }
+    if (base_price == null || Number(base_price) < 0) {
+      throw new AppError('Укажите корректную базовую цену');
+    }
+    if (!base_switch_id) {
+      throw new AppError('Необходимо выбрать переключатель по умолчанию');
+    }
+  }
+
+  async _saveProductRelations(client, productId, data) {
     const {
-      name,
-      description,
-      base_price,
-      switch_count,
       base_switch_id,
       available_switch_ids,
       specifications,
@@ -104,63 +129,65 @@ class ProductService {
       image_urls,
     } = data;
 
-    if (!name || !base_price) {
-      throw new AppError('Название и базовая цена обязательны');
+    if (Array.isArray(available_switch_ids) && available_switch_ids.length > 0) {
+      for (let i = 0; i < available_switch_ids.length; i++) {
+        await productRepository.insertAvailableSwitch(
+          client,
+          productId,
+          parseInt(available_switch_ids[i], 10),
+          i + 1
+        );
+      }
+    } else {
+      await productRepository.insertAvailableSwitch(
+        client,
+        productId,
+        parseInt(base_switch_id, 10),
+        1
+      );
     }
-    if (!base_switch_id) {
-      throw new AppError('Необходимо выбрать переключатель по умолчанию');
+
+    if (Array.isArray(specifications)) {
+      for (const spec of specifications) {
+        if (!spec.key?.trim()) continue;
+        await productRepository.insertSpecification(client, productId, spec);
+      }
     }
+
+    if (Array.isArray(equipment)) {
+      for (let i = 0; i < equipment.length; i++) {
+        const item = typeof equipment[i] === 'string' ? equipment[i] : equipment[i]?.item;
+        if (!item?.trim()) continue;
+        await productRepository.insertEquipment(client, productId, item.trim(), i + 1);
+      }
+    }
+
+    if (Array.isArray(image_urls)) {
+      for (const img of image_urls) {
+        if (!img.url?.trim()) continue;
+        const imageId = await productRepository.insertImage(client, img.url, img.alt_text);
+        await productRepository.linkProductImage(client, productId, imageId, img.sort_order);
+      }
+    }
+  }
+
+  async createProduct(data) {
+    this._validateProductPayload(data);
 
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
 
       const newProduct = await productRepository.insertProduct(client, {
-        name,
-        description,
-        basePrice: parseFloat(base_price),
-        switchCount: parseInt(switch_count, 10) || 60,
-        baseSwitchId: parseInt(base_switch_id, 10),
+        name: data.name.trim(),
+        description: data.description,
+        basePrice: parseFloat(data.base_price),
+        switchCount: parseInt(data.switch_count, 10) || 60,
+        baseSwitchId: parseInt(data.base_switch_id, 10),
+        stock: parseInt(data.stock, 10) || 0,
       });
 
-      const productId = newProduct.id;
-
-      if (Array.isArray(available_switch_ids) && available_switch_ids.length > 0) {
-        for (let i = 0; i < available_switch_ids.length; i++) {
-          await productRepository.insertAvailableSwitch(
-            client,
-            productId,
-            parseInt(available_switch_ids[i], 10),
-            i + 1
-          );
-        }
-      } else {
-        await productRepository.insertAvailableSwitch(
-          client,
-          productId,
-          parseInt(base_switch_id, 10),
-          1
-        );
-      }
-
-      if (Array.isArray(specifications)) {
-        for (const spec of specifications) {
-          await productRepository.insertSpecification(client, productId, spec);
-        }
-      }
-
-      if (Array.isArray(equipment)) {
-        for (let i = 0; i < equipment.length; i++) {
-          await productRepository.insertEquipment(client, productId, equipment[i], i + 1);
-        }
-      }
-
-      if (Array.isArray(image_urls)) {
-        for (const img of image_urls) {
-          const imageId = await productRepository.insertImage(client, img.url, img.alt_text);
-          await productRepository.linkProductImage(client, productId, imageId, img.sort_order);
-        }
-      }
+      await this._saveProductRelations(client, newProduct.id, data);
 
       await client.query('COMMIT');
 
@@ -170,6 +197,68 @@ class ProductService {
       };
     } catch (err) {
       await client.query('ROLLBACK');
+      throw err;
+    } finally {
+      client.release();
+    }
+  }
+
+  async updateProduct(productId, data) {
+    this._validateProductPayload(data);
+
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+
+      const updated = await productRepository.updateProductCore(client, productId, {
+        name: data.name.trim(),
+        description: data.description,
+        basePrice: parseFloat(data.base_price),
+        switchCount: parseInt(data.switch_count, 10) || 60,
+        baseSwitchId: parseInt(data.base_switch_id, 10),
+        stock: parseInt(data.stock, 10) || 0,
+      });
+
+      if (!updated) {
+        throw new AppError('Product not found', 404);
+      }
+
+      await productRepository.deleteProductRelations(client, productId);
+      await this._saveProductRelations(client, productId, data);
+
+      await client.query('COMMIT');
+
+      return {
+        ...updated,
+        link: `/product.html?id=${updated.id}`,
+      };
+    } catch (err) {
+      await client.query('ROLLBACK');
+      throw err;
+    } finally {
+      client.release();
+    }
+  }
+
+  async deleteProduct(productId) {
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      const deleted = await productRepository.deleteProduct(client, productId);
+      if (!deleted) {
+        throw new AppError('Product not found', 404);
+      }
+      await syncSequence('products_demo', client);
+      await client.query('COMMIT');
+      return { id: productId };
+    } catch (err) {
+      await client.query('ROLLBACK');
+      if (err.code === '23503') {
+        throw new AppError(
+          'Нельзя удалить клавиатуру: она используется в заказах или корзинах',
+          409
+        );
+      }
       throw err;
     } finally {
       client.release();
