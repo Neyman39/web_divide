@@ -108,6 +108,7 @@
 <script src="assets/scripts/initMobileNavigation.js"></script>
 <script src="assets/scripts/check_authorization.js"></script>
 <script src="assets/scripts/components.js"></script>
+<script src="assets/scripts/formatPrice.js"></script>
 <script>
     // Загружаем компоненты при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
@@ -177,7 +178,7 @@ function renderProductPage(data) {
     // Основная информация
     document.getElementById('productName').textContent = data.name;
     document.getElementById('productDescription').textContent = data.description;
-    document.getElementById('productPrice').textContent = `${Math.round(data.current_price)} ₽`;
+    document.getElementById('productPrice').textContent = formatPriceRub(data.current_price);
     document.getElementById('terminalTitle').textContent = `${data.name} Info.json`;
 
     // Изображения
@@ -332,7 +333,7 @@ function setupEventListeners(data) {
             const newPrice = this.getAttribute('data-price');
             
             // Обновляем цену
-            document.getElementById('productPrice').textContent = `${Math.round(newPrice)} ₽`;
+            document.getElementById('productPrice').textContent = formatPriceRub(newPrice);
             
             // Обновляем рамки кнопок
             document.querySelectorAll('.config-button').forEach(btn => {

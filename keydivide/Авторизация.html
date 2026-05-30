@@ -130,16 +130,13 @@
       const data = await response.json();
 
       if (response.ok) {
-        // ✅ Авторизация успешна
-        // Токены уже в httpOnly cookie — не сохраняем в localStorage!
         
-        // Сохраняем только данные пользователя для отображения (опционально)
+        // Сохраняем только данные пользователя для отображения
         if (data.user) {
           localStorage.setItem('userData', JSON.stringify(data.user));
           localStorage.setItem('userId', data.user.id);
         }
 
-        // 🎬 Запускаем анимацию терминала
         if (typeof typeLine === 'function') {
           typeLine();
         }
@@ -150,8 +147,7 @@
         // }, 1000);
 
       } else {
-        // ❌ Ошибка авторизации
-        showError(data.error || 'Ошибка входа');
+        errorMessage.textContent = data.error || 'Неверный логин или пароль'; 
       }
 
     } catch (error) {

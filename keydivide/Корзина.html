@@ -124,6 +124,7 @@
 <!-- возможно это скрипт нужен для оформления заказа -->
 <!-- <script src="modalw.js"></script> -->
 <script src="assets/scripts/check_authorization.js"></script>
+<script src="assets/scripts/formatPrice.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     await checkAuthAndDisplayUser();
@@ -167,7 +168,7 @@ async function renderServerCart() {
         let html = '<h2>Ваша корзина:</h2><ul class="cart-list" style="list-style:none; padding:0;">';
 
         cart.forEach((item) => {
-            const itemTotal = parseFloat(item.unit_price) * item.quantity;
+            const itemTotal = Number(item.unit_price) * item.quantity;
             totalPrice += itemTotal;
 
             html += `
@@ -175,7 +176,7 @@ async function renderServerCart() {
                     <div>
                         <strong>${item.product_name || 'Товар'}</strong><br/>
                         ${item.switch_name ? `<em>Переключатель: ${item.switch_name}</em><br/>` : ''}
-                        Цена за шт: ${parseFloat(item.unit_price).toLocaleString('ru-RU')} ₽
+                        Цена за шт: ${formatPriceRub(item.unit_price)}
                     </div>
                     <div style="display:flex; align-items:center;">
                         <button data-id="${item.id}" class="btn-decrease" style="margin-right:5px;">−</button>
@@ -184,13 +185,13 @@ async function renderServerCart() {
                         <button data-id="${item.id}" class="btn-remove" style="margin-left:15px; color:red;" title="Удалить">🗑️</button>
                     </div>
                     <div style="min-width:80px; text-align:right;">
-                        <strong>${itemTotal.toLocaleString('ru-RU')} ₽</strong>
+                        <strong>${formatPriceRub(itemTotal)}</strong>
                     </div>
                 </li>`;
         });
 
         html += `</ul>`;
-        html += `<p style="font-weight:bold; margin-top:10px;">Общая сумма: ${totalPrice.toLocaleString('ru-RU')} ₽</p>`;
+        html += `<p style="font-weight:bold; margin-top:10px;">Общая сумма: ${formatPriceRub(totalPrice)}</p>`;
 
         cartContainer.innerHTML = html;
         if (orderBtn) orderBtn.style.display = 'block';
@@ -267,15 +268,24 @@ document.getElementById('orderBtn').onclick = async () => {
         return;
     }
 
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
+    const orderData = {
+        userId: localStorage.getItem('userId'),
+        userEmail: userData.email,        // ← берём email из сохранённых данных
+        userName: userData.name,          // ← опционально: имя для персонализации
+        userLogin: userData.login         // ← опционально
+    };
+
     try {
         const response = await fetch('http://localhost:5000/api/orders', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: parseInt(userId) })
+            body: JSON.stringify(orderData)
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Ошибка при создании заказа');
-        alert(`Заказ оформлен! Номер заказа: ${data.order.id}, сумма: ${parseFloat(data.order.total).toLocaleString('ru-RU')} ₽`);
+        alert(`Заказ оформлен! Номер заказа: ${data.order.id}, сумма: ${formatPriceRub(data.order.total)}`);
         window.location.href = 'User_Account.html';
     } catch (err) {
         alert('Ошибка оформления заказа: ' + err.message);

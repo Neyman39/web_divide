@@ -115,6 +115,7 @@
 <script src="assets/scripts/initMobileNavigation.js"></script>
 <script src="assets/scripts/check_authorization.js"></script>
 <script src="assets/scripts/components.js"></script>
+<script src="assets/scripts/formatPrice.js"></script>
 <script>
     // Загружаем компоненты при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
@@ -190,7 +191,7 @@ async function displayProducts() {
       prod_card.appendChild(productName);
 
       const productPrice = document.createElement('h4');
-      productPrice.textContent = `${Math.round(product.price)} ₽`;
+      productPrice.textContent = formatPriceRub(product.price);
       productPrice.classList.add('product-card__price');
       prod_card.appendChild(productPrice);
 
