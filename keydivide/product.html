@@ -108,6 +108,8 @@
 <script src="assets/scripts/initMobileNavigation.js"></script>
 <script src="assets/scripts/check_authorization.js"></script>
 <script src="assets/scripts/components.js"></script>
+<script src="assets/scripts/formatPrice.js"></script>
+<script src="assets/scripts/productPageCache.js"></script>
 <script>
     // Загружаем компоненты при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
@@ -125,20 +127,24 @@ function getProductIdFromUrl() {
     return urlParams.get('id') || 1; // По умолчанию ID 1, если не указан
 }
 
-// Основная функция загрузки данных продукта
+// Основная функция загрузки данных продукта (с кэшем в localStorage)
 async function loadProductData() {
     const productId = getProductIdFromUrl();
     
     try {
-        const response = await fetch(`/api/products/${productId}`);
-        if (!response.ok) {
-            throw new Error('Product not found');
-        }
-        
-        const productData = await response.json();
-        renderProductPage(productData);
+        await ProductPageCache.loadProduct(productId, {
+            onUpdated(productData, meta) {
+                renderProductPage(productData);
+                if (meta.fromCache) {
+                    console.info(
+                        meta.isFresh
+                            ? `Товар #${productId} загружен из кэша браузера`
+                            : `Товар #${productId} показан из кэша, идёт обновление…`
+                    );
+                }
+            },
+        });
 
-         // Затем загружаем свитчи отдельно
         await loadSwitchesData(productId);
         
     } catch (error) {
@@ -147,24 +153,24 @@ async function loadProductData() {
     }
 }
 
-// Загрузка данных о свитчах
+// Загрузка данных о свитчах (с кэшем в localStorage)
 async function loadSwitchesData(productId) {
     try {
-        const switchesResponse = await fetch(`/api/products/${productId}/switches`);
-        if (!switchesResponse.ok) {
-            throw new Error('Switches not found');
-        }
-        
-        currentSwitchesData = await switchesResponse.json();
-        renderSwitches(currentSwitchesData.available_switches);
-        setupEventListeners(currentSwitchesData);
-        
-        // // Устанавливаем свитч по умолчанию
-        // const defaultSwitch = currentSwitchesData.available_switches.find(sw => sw.is_default);
-        // if (defaultSwitch) {
-        //     selectedSwitchId = defaultSwitch.id;
-        //     updatePriceDisplay(defaultSwitch.total_price);
-        // }
+        await ProductPageCache.loadSwitches(productId, {
+            onUpdated(switchesData, meta) {
+                currentSwitchesData = switchesData;
+                renderSwitches(currentSwitchesData?.available_switches || []);
+                setupEventListeners(currentSwitchesData);
+
+                if (meta.fromCache) {
+                    console.info(
+                        meta.isFresh
+                            ? `Переключатели для #${productId} загружены из кэша`
+                            : `Переключатели для #${productId} обновляются в фоне…`
+                    );
+                }
+            },
+        });
         
     } catch (error) {
         console.error('Error loading switches:', error);
@@ -177,7 +183,7 @@ function renderProductPage(data) {
     // Основная информация
     document.getElementById('productName').textContent = data.name;
     document.getElementById('productDescription').textContent = data.description;
-    document.getElementById('productPrice').textContent = `${Math.round(data.current_price)} ₽`;
+    document.getElementById('productPrice').textContent = formatPriceRub(data.current_price);
     document.getElementById('terminalTitle').textContent = `${data.name} Info.json`;
 
     // Изображения
@@ -228,7 +234,7 @@ function renderSwitches(switches) {
     const container = document.getElementById('switchesContainer');
     container.innerHTML = '';
 
-    if (switches.length === 0) {
+    if (!Array.isArray(switches) || switches.length === 0) {
         container.innerHTML = '<p>Нет доступных переключателей</p>';
         return;
     }
@@ -245,7 +251,7 @@ function renderSwitches(switches) {
                     <div class="switch__inner">
                         <div class="switch__info">
                             <div class="switch__image">
-                                <img src="assets/images/${getSwitchImage(sw.name)}.png" alt="${sw.name}" width="80" height="80">
+                                <img src="${sw.image_url || `assets/images/${getSwitchImage(sw.name)}.png`}" alt="${sw.name}" width="80" height="80">
                             </div>
                             <div class="switch__title">
                                 <p class="switch__name">${sw.name}</p>
@@ -324,29 +330,33 @@ function changeMainImage(src, alt, index) {
 }
 
 // Настройка обработчиков событий
-function setupEventListeners(data) {
-    // Обработчики для кнопок переключателей
+let sliderControlsInitialized = false;
+
+function setupSwitchButtonListeners(data) {
     document.querySelectorAll('.config-button').forEach(button => {
         button.addEventListener('click', function() {
             const switchId = this.getAttribute('data-config');
             const newPrice = this.getAttribute('data-price');
             
-            // Обновляем цену
-            document.getElementById('productPrice').textContent = `${Math.round(newPrice)} ₽`;
+            document.getElementById('productPrice').textContent = formatPriceRub(newPrice);
             
-            // Обновляем рамки кнопок
             document.querySelectorAll('.config-button').forEach(btn => {
                 btn.style.border = '1.5px solid rgb(96, 96, 96)';
             });
             this.style.border = '1.5px solid rgb(255, 122, 105)';
             
-            // Обновляем спецификацию "Переключатели"
             updateSwitchSpecification(switchId, data.available_switches);
         });
     });
-    
-    // Обработчики для слайдера
-    setupSliderControls();
+}
+
+function setupEventListeners(data) {
+    setupSwitchButtonListeners(data);
+
+    if (!sliderControlsInitialized) {
+        setupSliderControls();
+        sliderControlsInitialized = true;
+    }
 }
 
 // Обновление спецификации переключателей
@@ -422,12 +432,28 @@ document.addEventListener('DOMContentLoaded', () => {
 // Функция для кнопки корзины (работа с сервером)
 function setupCartButton() {
     document.getElementById('addToCartBtn')?.addEventListener('click', async () => {
+
+        const response = await fetch('/check-auth', {
+            credentials: 'include' // ← Важно: отправляет cookie автоматически
+        });
+
         const userId = localStorage.getItem('userId');
-        if (!userId) {
+        if (!response.ok) {
+                alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
+                window.location.href = 'Авторизация.html';
+                return;
+        }
+
+        const data = await response.json();
+            
+        // 🔹 Проверяем, что пользователь авторизован
+        if (!data.isAuthenticated || !data.user) {
             alert('Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину.');
             window.location.href = 'Авторизация.html';
             return;
         }
+
+        const user = data.user;
 
         const productId = getProductIdFromUrl();
 

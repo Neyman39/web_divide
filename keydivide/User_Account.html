@@ -13,33 +13,8 @@
 </head>
 <body>
 
-<header class="header">
-    <div class="container">
-        <div class="header__inner">
-            <div><a class="header__logo" href="Главная.html">KeyDivide</a></div>
-
-            <nav class="nav">
-                <ul>
-                    <li class="_link"><a class="nav__link" href="Главная.html#keyboards">Клавиатуры</a></li>
-                    <li class="_link"><a class="nav__link" href="Главная.html#services">Услуги</a></li>
-                    <li class="_link"><a class="nav__link" href="Главная.html#aboutus">О нас</a></li>
-                    <li class="_link"><a class="nav__link" href="#">Соцсети</a>
-                        <ul class="url">
-                            <li class="two_link" style="margin-top: 10px;"><a class="url__link" href="https://discord.gg/PKZ8ejUB8Z" target="_blank">Discord</a></li>
-                            <li class="two_link"><a class="url__link" href="https://vk.com/cacao_keyboards" target="_blank">Вконтакте</a></li>
-                            <li class="two_link"><a class="url__link" href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank">YouTube</a></li>
-                        </ul>
-                    </li>					
-                </ul>   
-            </nav>
-        </div>
-       
-		<div>
-			<a class="ikon" href="Авторизация.html" title="Профиль"><img src="assets/images/аккаунт.png" width="26" height="24"></a>
-			<a class="ikon" href="Корзина.html" title="Корзина"><img src="assets/images/корзина.png" width="26" height="26"></a>
-		</div>
-    </div>
-</header>
+<header id="nav_header"></header>
+<header id="header-phone"></header>
 
 <div class="box">
   <div class="user_card">
@@ -50,168 +25,224 @@
         <p id="userphone"></p>
         <p id="useremail"></p>
         <p id="useraddress"></p>
+        <p id="userrole" class="user-role admin-only" style="display:none"></p>
       </div>
     </div>
     <div class="orders_info">
-      <p><button id="logoutBtn" class="logout">Выйти</button></p>
+      <div class="account-actions">
+        <button type="button" id="addSwitchBtn" class="admin-btn admin-only" style="display:none">Добавить свитч</button>
+        <button type="button" id="addKeyboardBtn" class="admin-btn admin-only" style="display:none">Добавить клавиатуру</button>
+        <button type="button" id="logoutBtn" class="logout">Выйти</button>
+      </div>
     </div>
   </div>
 
-  <div class="myorders">
-    <h2 style="text-align:center; margin-bottom: 5px;">Мои заказы</h2>
+  <!-- Обычный пользователь -->
+  <div class="myorders" id="userOrdersSection">
+    <h2 class="section-title">Мои заказы</h2>
     <div id="ordersSection">
       <div class="empty-orders">У вас пока нет заказов.</div>
     </div>
   </div>
-  
+
+  <!-- Админ: вкладки -->
+  <div class="myorders admin-only" id="adminPanel" style="display:none">
+    <nav class="admin-tabs" id="adminTabs">
+      <button type="button" class="admin-tab admin-tab--active" data-tab="orders">История заказов</button>
+      <button type="button" class="admin-tab" data-tab="switches">Свитчи</button>
+      <button type="button" class="admin-tab" data-tab="keyboards">Клавиатуры</button>
+    </nav>
+
+    <div class="admin-panel admin-panel--active" id="adminOrdersPanel" data-panel="orders">
+      <div id="adminOrdersSection">
+        <div class="empty-orders">Загрузка заказов…</div>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="adminSwitchesPanel" data-panel="switches">
+      <div id="switchesSection">
+        <div class="empty-orders">Загрузка…</div>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="adminKeyboardsPanel" data-panel="keyboards">
+      <div id="keyboardsSection">
+        <div class="empty-orders">Загрузка…</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="footer">
-    <div class="footbox">
-        <div class="line"></div>
-        <div class="colums">
-            <div class="col1">
-                <h1>KeyDivide</h1>
-                <p>made by people for people</p>
-            </div>
-            <div class="colinfo">
-                <div class="col2">
-                    <h1 class="coltitle">Магазин</h1>
-                    <p class="coltext"><a href="#keyboards">Клавиатуры</a></p>
-                    <p class="coltext"><a href="#services">Услуги</a></p>
-                </div>
-                <div class="col3">
-                    <h1 class="coltitle">Соцсети</h1>
-                    <a href="https://discord.gg/PKZ8ejUB8Z" target="_blank"><p class="coltext">Discord</p></a>
-                    <a href="https://vk.com/cacao_keyboards" target="_blank"><p class="coltext">Вконтакте</p></a>
-                    <a href="https://www.youtube.com/@cacaoboards7930/featured" target="_blank"><p class="coltext">YouTube</p></a>  
-                </div>
-                <div class="col4">
-                    <h1 class="coltitle">Инфо</h1>
-                    <p class="coltext"><a href="#aboutus">О нас</a></p>
-                </div>
-                <div class="col5">
-                    <h1 class="coltitle">Контакты</h1>
-                    <p>По поводу интересующих вопросов или предложениях пишите нам в Discord или of_cacaoboards@mail.ru</p>
-                </div>
-            </div>
+<!-- Модалка: свитч -->
+<div id="addSwitchModal" class="admin-modal admin-only" style="display:none" aria-hidden="true">
+  <div class="admin-modal__window" role="dialog" aria-labelledby="switchModalTitle">
+    <button type="button" id="closeSwitchModal" class="admin-modal__close" aria-label="Закрыть">&times;</button>
+    <h2 id="switchModalTitle" class="admin-modal__title">Добавить свитч</h2>
+    <form id="addSwitchForm" class="admin-form">
+      <input type="hidden" id="switchId" name="switch_id" value="">
+      <label>Название<input type="text" name="name" required maxlength="255"></label>
+      <label>Тип
+        <select name="type" required>
+          <option value="">Выберите тип</option>
+          <option value="линейный">Линейный</option>
+          <option value="тактильный">Тактильный</option>
+          <option value="линейные тихие">Линейные тихие</option>
+        </select>
+      </label>
+      <label>Сила срабатывания (г)<input type="number" name="actuation_force" required min="0" step="1"></label>
+      <label>Сила до упора (г)<input type="number" name="bottom_force" required min="0" step="1"></label>
+      <label>Сила тактильности (г)<input type="number" name="tactile_force" min="0" step="1"></label>
+      <label>Длина хода<input type="text" name="travel_length" required placeholder="3.5 мм"></label>
+      <label>Цена за штуку (₽)<input type="number" name="price_per_switch" required min="0" step="0.01"></label>
+      <label>На складе<input type="number" name="stock" required min="0" step="1" value="0"></label>
+      <fieldset class="admin-fieldset">
+        <legend>Фото свитча</legend>
+        <label>Изображение
+          <input type="file" id="switchImageFile" accept="image/jpeg,image/png,image/webp,image/gif">
+        </label>
+        <input type="hidden" id="existingSwitchImageUrl" value="">
+        <p class="admin-form__hint">Одно изображение, до 5 МБ</p>
+        <div id="switchImagePreview" class="admin-image-preview" hidden>
+          <img id="switchImagePreviewImg" src="" alt="Предпросмотр свитча">
         </div>
-    </div>
-    <div class="by">
-        <div class="byby">
-            <p>©CacaoBoards All Rights Reserved</p>
-            <p>Designed with ❤️ by neyman</p>
-        </div>
-    </div>
+      </fieldset>
+      <p id="switchFormError" class="admin-form__error" hidden></p>
+      <button type="submit" class="admin-btn admin-btn--submit">Сохранить</button>
+    </form>
+  </div>
 </div>
 
+<!-- Модалка: клавиатура -->
+<div id="keyboardModal" class="admin-modal admin-modal--wide admin-only" style="display:none">
+  <div class="admin-modal__window" role="dialog" aria-labelledby="keyboardModalTitle">
+    <button type="button" id="closeKeyboardModal" class="admin-modal__close" aria-label="Закрыть">&times;</button>
+    <h2 id="keyboardModalTitle" class="admin-modal__title">Добавить клавиатуру</h2>
+    <form id="keyboardForm" class="admin-form">
+      <input type="hidden" name="product_id" id="keyboardProductId" value="">
+      <label>Название<input type="text" name="name" required maxlength="255"></label>
+      <label>Описание<textarea name="description" rows="4" placeholder="Описание клавиатуры"></textarea></label>
+      <div class="admin-form__row">
+        <label>Базовая цена (₽)<input type="number" name="base_price" required min="0" step="0.01"></label>
+        <label>Кол-во свитчей<input type="number" name="switch_count" required min="1" step="1" value="60"></label>
+        <label>На складе<input type="number" name="stock" required min="0" step="1" value="0"></label>
+      </div>
+      <label>Свитч по умолчанию
+        <select name="base_switch_id" id="baseSwitchSelect" required></select>
+      </label>
+      <fieldset class="admin-fieldset">
+        <legend>Доступные свитчи</legend>
+        <div id="availableSwitchesList" class="admin-checkboxes"></div>
+      </fieldset>
+      <fieldset class="admin-fieldset">
+        <legend>Характеристики</legend>
+        <div id="specsList"></div>
+        <button type="button" id="addSpecRow" class="admin-btn admin-btn--small">+ Характеристика</button>
+      </fieldset>
+      <fieldset class="admin-fieldset">
+        <legend>Комплектация</legend>
+        <div id="equipmentList"></div>
+        <button type="button" id="addEquipmentRow" class="admin-btn admin-btn--small">+ Пункт</button>
+      </fieldset>
+      <fieldset class="admin-fieldset">
+        <legend>Обложка (главная)</legend>
+        <label>Фото для каталога и карточки
+          <input type="file" id="keyboardCoverFile" accept="image/jpeg,image/png,image/webp,image/gif">
+        </label>
+        <input type="hidden" id="existingCoverUrl" value="">
+        <p class="admin-form__hint">Отображается на главной и как первый слайд</p>
+        <div id="keyboardCoverPreview" class="admin-image-preview" hidden>
+          <img id="keyboardCoverPreviewImg" src="" alt="Обложка">
+        </div>
+        <label>Alt-текст обложки<input type="text" name="cover_alt" placeholder="Фото клавиатуры"></label>
+      </fieldset>
+      <fieldset class="admin-fieldset">
+        <legend>Карусель (доп. фото)</legend>
+        <label>Загрузить несколько фото
+          <input type="file" id="keyboardGalleryFiles" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+        </label>
+        <p class="admin-form__hint">Дополнительные слайды на странице товара</p>
+        <div id="existingGalleryList" class="admin-gallery-list"></div>
+      </fieldset>
+      <p id="keyboardFormError" class="admin-form__error" hidden></p>
+      <button type="submit" class="admin-btn admin-btn--submit">Сохранить</button>
+    </form>
+  </div>
+</div>
+
+<footer id="footer"></footer>
+
+<script src="assets/scripts/initMobileNavigation.js"></script>
+<script src="assets/scripts/check_authorization.js"></script>
+<script src="assets/scripts/components.js"></script>
+<script src="assets/scripts/formatPrice.js"></script>
+<script src="assets/scripts/productCatalogCache.js"></script>
+<script src="assets/scripts/adminAccount.js"></script>
 <script>
-  // Вспомогательная функция получения userId
-  function getUserId() {
-    return localStorage.getItem('userId');
-  }
+  document.addEventListener('DOMContentLoaded', function () {
+    loadComponent('nav_header', 'nav_header');
+    loadComponent('footer', 'footer');
+    loadComponent('header-phone', 'header-phone');
+    initMobileNavigation();
+  });
 
-  // Форматирование даты
   function formatDate(dateStr) {
-    const d = new Date(dateStr);
-    return d.toLocaleString('ru-RU');
+    return new Date(dateStr).toLocaleString('ru-RU');
   }
 
   function getStatusText(status) {
-  const statuses = {
-    'pending': 'Ожидает обработки',
-    'confirmed': 'Подтверждён',
-    'cancelled': 'Отменён'
-  };
-  return statuses[status] || status; // fallback на английский, если статус неизвестен
-}
+    const statuses = {
+      pending: 'Ожидает обработки',
+      confirmed: 'Подтверждён',
+      cancelled: 'Отменён',
+    };
+    return statuses[status] || status;
+  }
 
   window.onload = async function () {
-    const userId = getUserId();
-    if (!userId) {
-      alert('Пожалуйста, войдите в аккаунт.');
-      window.location.href = 'Авторизация.html';
-      return;
-    }
-
-    // Загружаем данные пользователя (можно из localStorage, но для надёжности через API)
     try {
-      const userResp = await fetch('http://localhost:5000/check-auth', {
-        headers: { 'Authorization': localStorage.getItem('authToken') || '' }
-      });
-      if (!userResp.ok) throw new Error('not authenticated');
-      const { user } = await userResp.json();
-      document.getElementById('username').textContent = user.name || user.login;
-      document.getElementById('userphone').textContent = `Телефон: ${user.phone || '-'}`;
-      document.getElementById('useremail').textContent = `Email: ${user.email || '-'}`;
-      document.getElementById('useraddress').textContent = `Адрес: ${user.address || '-'}`;
-    } catch (e) {
-      // fallback из localStorage
-      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-      document.getElementById('username').textContent = userData.name || userData.login || 'Пользователь';
-      document.getElementById('useremail').textContent = `Email: ${userData.email || '-'}`;
-    }
+      const authResp = await fetch('/check-auth', { credentials: 'include' });
+      const authData = await authResp.json();
 
-    // Загружаем заказы с сервера
-    const ordersSection = document.getElementById('ordersSection');
-    try {
-      const resp = await fetch(`http://localhost:5000/api/orders?userId=${userId}`);
-      if (!resp.ok) throw new Error('Ошибка загрузки заказов');
-      const orders = await resp.json();
-
-      if (orders.length === 0) {
-        ordersSection.innerHTML = `<div class="empty-orders">У вас пока нет заказов.</div>`;
+      if (!authResp.ok || !authData.isAuthenticated || !authData.user) {
+        alert('Пожалуйста, войдите в аккаунт.');
+        window.location.href = 'Авторизация.html';
         return;
       }
 
-      let html = '';
-      orders.forEach(order => {
-        const orderDate = formatDate(order.created_at);
-        html += `
-          <div class="order-card" style="margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; padding: 15px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-              <strong>Заказ №${order.id}</strong>
-              <span style="color: gray;">${orderDate}</span>
-              <span>Статус: <em>${getStatusText(order.status)}</em></span>
-            </div>
-            <table style="width:100%; border-collapse: collapse;">
-              <tr>
-                <th>Товар</th>
-                <th>Переключатель</th>
-                <th>Количество</th>
-                <th>Цена за шт.</th>
-                <th>Сумма</th>
-              </tr>`;
-        order.items.forEach(item => {
-          const itemTotal = (parseFloat(item.unit_price) * item.quantity).toLocaleString('ru-RU');
-          html += `
-              <tr>
-                <td>${item.product_name || 'Товар'}</td>
-                <td>${item.switch_name || '-'}</td>
-                <td>${item.quantity}</td>
-                <td>${parseFloat(item.unit_price).toLocaleString('ru-RU')} ₽</td>
-                <td>${itemTotal} ₽</td>
-              </tr>`;
-        });
-        html += `
-            </table>
-            <div style="text-align: right; margin-top: 5px; font-weight: bold;">
-              Итого: ${order.total.toLocaleString('ru-RU')} ₽
-            </div>
-          </div>`;
-      });
-      ordersSection.innerHTML = html;
-    } catch (err) {
-      console.error(err);
-      ordersSection.innerHTML = `<div class="empty-orders">Ошибка при загрузке заказов: ${err.message}</div>`;
+      const user = authData.user;
+
+      document.getElementById('username').textContent = user.name || user.login || 'Пользователь';
+      document.getElementById('userphone').textContent = `Телефон: ${user.phone || '—'}`;
+      document.getElementById('useremail').textContent = `Email: ${user.email || '—'}`;
+      document.getElementById('useraddress').textContent = `Адрес: ${user.address || '—'}`;
+
+      if (user.role === 'admin') {
+        document.getElementById('userrole').textContent = 'Роль: администратор';
+        document.getElementById('userrole').style.display = '';
+        document.getElementById('addSwitchModal').style.display = '';
+        document.getElementById('keyboardModal').style.display = '';
+      }
+
+      initAccountPage(user);
+    } catch (authErr) {
+      console.error('Ошибка авторизации:', authErr);
+      alert('Ошибка при проверке авторизации.');
+      window.location.href = 'Авторизация.html';
     }
   };
 
-  // Выход из системы
-  document.getElementById('logoutBtn').addEventListener('click', () => {
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    try {
+      await fetch('/logout', { method: 'POST', credentials: 'include' });
+    } catch (e) {
+      console.error('Ошибка при выходе:', e);
+    }
     localStorage.removeItem('userId');
     localStorage.removeItem('authToken');
     localStorage.removeItem('userData');
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith('cart_')) localStorage.removeItem(key);
+    });
     alert('Вы вышли из аккаунта.');
     window.location.href = 'Главная.html';
   });

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test --test-reporter=spec tests/**/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,8 @@
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "multer": "^2.1.1",
+    "nodemailer": "^8.0.8",
     "pg": "^8.16.3"
   }
 }

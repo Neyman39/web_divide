@@ -197,6 +197,17 @@ option{
   position: relative;
 }
 
+.filter-container--switch .filter-btn {
+  width: 220px;
+}
+
+.catalog-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 18px;
+  padding: 24px 0;
+}
+
 .filter-btn {
   display: flex;
   flex-direction: row;

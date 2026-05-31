@@ -42,10 +42,21 @@
     <a name="keyboards"></a>
     <div class="klaviatura">
         <div class="filter">
-            <div style="width: 180px;"></div>
+            <div class="filter-container filter-container--switch">
+                <button type="button" class="filter-btn" onclick="toggleSwitchTypeDropdown()">
+                    <span class="filter-text switch-type-filter-text">Все типы свитчей</span>
+                    <img src="assets/images/n-стрелка.png" alt="" width="12" height="12">
+                </button>
+                <div class="filter-dropdown switch-type-filter-dropdown">
+                    <div class="filter-option" onclick="applySwitchTypeFilter('all')">Все типы свитчей</div>
+                    <div class="filter-option" onclick="applySwitchTypeFilter('линейный')">Линейные</div>
+                    <div class="filter-option" onclick="applySwitchTypeFilter('тактильный')">Тактильные</div>
+                    <div class="filter-option" onclick="applySwitchTypeFilter('линейные тихие')">Линейные тихие</div>
+                </div>
+            </div>
             <div id="SM2"><h3> Клавиатуры </h3></div>
             <div class="filter-container">
-                <button class="filter-btn" onclick="toggleFilterDropdown()"> <span class="filter-text">Рекомендуемые</span><img src="assets/images/n-стрелка.png" alt="" width="12" height="12"></button>
+                <button type="button" class="filter-btn" onclick="toggleFilterDropdown()"> <span class="filter-text sort-filter-text">Рекомендуемые</span><img src="assets/images/n-стрелка.png" alt="" width="12" height="12"></button>
                 <div class="filter-dropdown">
                     <div class="filter-option" onclick="applyFilter('all')">Рекомендуемые</div>
                     <div class="filter-option" onclick="applyFilter('asc')">По возрастанию цены</div>
@@ -115,6 +126,8 @@
 <script src="assets/scripts/initMobileNavigation.js"></script>
 <script src="assets/scripts/check_authorization.js"></script>
 <script src="assets/scripts/components.js"></script>
+<script src="assets/scripts/formatPrice.js"></script>
+<script src="assets/scripts/productCatalogCache.js"></script>
 <script>
     // Загружаем компоненты при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
@@ -128,11 +141,40 @@
 <script>
 
    
-let currentFilter = 'all'; // по умолчанию
+let currentFilter = 'all';
+let currentSwitchTypeFilter = 'all';
 
-// Функция открытия/закрытия выпадающего списка
+const switchTypeFilterTextMap = {
+  all: 'Все типы свитчей',
+  'линейный': 'Линейные',
+  'тактильный': 'Тактильные',
+  'линейные тихие': 'Линейные тихие',
+};
+
+function closeAllFilterDropdowns() {
+  document.querySelectorAll('.filter-dropdown').forEach((el) => el.classList.remove('active'));
+}
+
 function toggleFilterDropdown() {
-  document.querySelector('.filter-dropdown').classList.toggle('active');
+  const dropdown = document.querySelector('.klaviatura .filter-container:not(.filter-container--switch) .filter-dropdown');
+  const isOpen = dropdown.classList.contains('active');
+  closeAllFilterDropdowns();
+  if (!isOpen) dropdown.classList.add('active');
+}
+
+function toggleSwitchTypeDropdown() {
+  const dropdown = document.querySelector('.switch-type-filter-dropdown');
+  const isOpen = dropdown.classList.contains('active');
+  closeAllFilterDropdowns();
+  if (!isOpen) dropdown.classList.add('active');
+}
+
+function applySwitchTypeFilter(switchType) {
+  currentSwitchTypeFilter = switchType;
+  document.querySelector('.switch-type-filter-text').textContent =
+    switchTypeFilterTextMap[switchType] || 'Все типы свитчей';
+  closeAllFilterDropdowns();
+  displayProducts();
 }
 
 // Функция применения фильтра
@@ -146,55 +188,101 @@ function applyFilter(filter) {
     'desc': 'По убыванию цены'
   };
 
-  document.querySelector('.filter-text').textContent = filterTextMap[filter] || 'Фильтр';
+  document.querySelector('.sort-filter-text').textContent = filterTextMap[filter] || 'Фильтр';
 
-  // Закрываем выпадающий список
-  document.querySelector('.filter-dropdown').classList.remove('active');
-
-  // Перезагружаем товары с новым фильтром
+  closeAllFilterDropdowns();
   displayProducts();
 }
 
-// Функция для отображения товаров из БД
-async function displayProducts() {
+function normalizeSwitchTypeGroup(type) {
+  if (!type) return null;
+  const value = String(type).toLowerCase().trim();
+  if (value.includes('тих')) return 'линейные тихие';
+  if (value.startsWith('линейн')) return 'линейный';
+  if (value.startsWith('тактильн')) return 'тактильный';
+  return value;
+}
+
+function getProductSwitchTypes(product) {
+  let types = product.switch_types;
+
+  if (typeof types === 'string') {
+    types = types
+      .replace(/^\{|\}$/g, '')
+      .split(',')
+      .map((t) => t.trim().replace(/^"|"$/g, ''))
+      .filter(Boolean);
+  }
+
+  if (Array.isArray(types) && types.length) {
+    return types;
+  }
+
+  return product.base_switch_type ? [product.base_switch_type] : [];
+}
+
+function productMatchesSwitchType(product) {
+  if (currentSwitchTypeFilter === 'all') return true;
+
+  const types = getProductSwitchTypes(product);
+  return types.some((type) => normalizeSwitchTypeGroup(type) === currentSwitchTypeFilter);
+}
+
+function renderProducts(products) {
   const productContainer = document.querySelector('.product-container');
   productContainer.innerHTML = '';
 
+  let sorted = products.filter(productMatchesSwitchType);
+
+  if (currentFilter === 'asc') {
+    sorted.sort((a, b) => a.price - b.price);
+  } else if (currentFilter === 'desc') {
+    sorted.sort((a, b) => b.price - a.price);
+  }
+
+  if (!sorted.length) {
+    productContainer.innerHTML = '<p class="catalog-empty">Нет клавиатур с выбранным типом свитчей.</p>';
+    return;
+  }
+
+  sorted.forEach(product => {
+    const prod_card = document.createElement('a');
+    prod_card.classList.add('product-card');
+    prod_card.href = product.link || `product.html?id=${product.id}`;
+
+    const productImg = document.createElement('img');
+    productImg.src = product.img || 'assets/images/default.jpg';
+    productImg.alt = product.name;
+    productImg.classList.add('product-card__img');
+    prod_card.appendChild(productImg);
+
+    const productName = document.createElement('h3');
+    productName.textContent = product.name;
+    productName.classList.add('product-card__name');
+    prod_card.appendChild(productName);
+
+    const productPrice = document.createElement('h4');
+    productPrice.textContent = formatPriceRub(product.price);
+    productPrice.classList.add('product-card__price');
+    prod_card.appendChild(productPrice);
+
+    productContainer.appendChild(prod_card);
+  });
+}
+
+async function displayProducts() {
+  const productContainer = document.querySelector('.product-container');
+
   try {
-    const response = await fetch('/api/products');
-    if (!response.ok) throw new Error('Ошибка загрузки товаров');
-    
-    let products = await response.json();
-
-    if (currentFilter === 'asc') {
-      products.sort((a, b) => a.price - b.price);
-    } else if (currentFilter === 'desc') {
-      products.sort((a, b) => b.price - a.price);
-    }
-    // 'all' — без сортировки, просто как есть
-
-    products.forEach(product => {
-      const prod_card = document.createElement('a');
-      prod_card.classList.add('product-card');
-      prod_card.href = product.link || `product.html?id=${product.id}`;
-
-      const productImg = document.createElement('img');
-      productImg.src = product.img || 'assets/images/default.jpg';
-      productImg.alt = product.name;
-      productImg.classList.add('product-card__img');
-      prod_card.appendChild(productImg);
-
-      const productName = document.createElement('h3');
-      productName.textContent = product.name;
-      productName.classList.add('product-card__name');
-      prod_card.appendChild(productName);
-
-      const productPrice = document.createElement('h4');
-      productPrice.textContent = `${Math.round(product.price)} ₽`;
-      productPrice.classList.add('product-card__price');
-      prod_card.appendChild(productPrice);
-
-      productContainer.appendChild(prod_card);
+    await ProductCatalogCache.loadProducts({
+      onUpdated(products, meta) {
+        renderProducts(products);
+        if (meta.fromCache && !meta.isFresh) {
+          console.info('Каталог показан из кэша, идёт обновление с сервера…');
+        } else if (meta.fromCache) {
+          console.info('Каталог загружен из кэша браузера');
+        }
+      },
     });
   } catch (error) {
     console.error('Ошибка:', error);
@@ -202,7 +290,14 @@ async function displayProducts() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', displayProducts);
+document.addEventListener('DOMContentLoaded', () => {
+  displayProducts();
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.filter-container')) {
+      closeAllFilterDropdowns();
+    }
+  });
+});
 
 // // Функция для отображения товаров из БД
 // async function displayProducts() {
