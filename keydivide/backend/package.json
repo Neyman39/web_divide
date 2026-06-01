@@ -15,6 +15,9 @@
     "express": "^5.1.0",
     "multer": "^2.1.1",
     "nodemailer": "^8.0.8",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "pg": "^8.16.3"
   }
 }

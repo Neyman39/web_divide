@@ -6,7 +6,8 @@ const {
   productPublicPath,
   switchPublicPath,
 } = require('../middleware/upload');
-const { authenticateToken, requireRole } = require('../middleware/auth');
+const passport = require('../middleware/passport');
+const { requireRole } = require('../middleware/auth');
 const AppError = require('../utils/AppError');
 
 const router = express.Router();
@@ -24,7 +25,7 @@ function handleUpload(multerSingle) {
 
 router.post(
   '/api/admin/upload/product-image',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   handleUpload(uploadProductImage.single),
   asyncHandler(async (req, res) => {
@@ -39,7 +40,7 @@ router.post(
 
 router.post(
   '/api/admin/upload/switch-image',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   handleUpload(uploadSwitchImage.single),
   asyncHandler(async (req, res) => {

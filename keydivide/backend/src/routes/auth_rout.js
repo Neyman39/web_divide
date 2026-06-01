@@ -3,7 +3,7 @@ const rateLimit = require('express-rate-limit');
 const asyncHandler = require('../utils/asyncHandler');
 const authService = require('../services/auth_service');
 const { generateTokens, setAuthCookies, clearAuthCookies } = require('../utils/authHelpers');
-const { authenticateToken, authenticateRefreshToken } = require('../middleware/auth');
+const passport = require('../middleware/passport');
 
 const router = express.Router();
 
@@ -31,54 +31,62 @@ router.post('/api/register', authLimiter, asyncHandler(async (req, res) => {
   });
 }));
 
-router.post('/login', authLimiter, asyncHandler(async (req, res) => {
-  const { login, password } = req.body;
-  if (!login || !password) {
-    return res.status(400).json({ error: 'Логин и пароль обязательны' });
-  }
-
-  const user = await authService.login({ login, password });
-  const { accessToken, refreshToken } = generateTokens(user);
-  setAuthCookies(res, accessToken, refreshToken);
-
-  res.json({
-    message: 'Авторизация успешна',
-    user: authService.formatPublicUser(user),
-  });
-}));
-
-router.post('/api/refresh', authenticateRefreshToken, asyncHandler(async (req, res) => {
-  try {
-    const user = await authService.refreshUser(req.user.userId);
+router.post(
+  '/login',
+  authLimiter,
+  passport.authenticate('local', { session: false }),
+  asyncHandler(async (req, res) => {
+    const user = req.user;
     const { accessToken, refreshToken } = generateTokens(user);
     setAuthCookies(res, accessToken, refreshToken);
 
     res.json({
-      message: 'Токены обновлены',
-      user: {
-        id: user.id,
-        login: user.login,
-        role: user.role,
-      },
+      message: 'Авторизация успешна',
+      user: authService.formatPublicUser(user),
     });
-  } catch (err) {
-    clearAuthCookies(res);
-    throw err;
-  }
-}));
+  })
+);
 
-router.get('/check-auth', authenticateToken, asyncHandler(async (req, res) => {
-  const user = await authService.checkAuth(req.user.userId);
-  if (!user) {
-    clearAuthCookies(res);
-    return res.json({ isAuthenticated: false, user: null });
-  }
+router.post(
+  '/api/refresh',
+  passport.authenticate('jwt-refresh', { session: false }),
+  asyncHandler(async (req, res) => {
+    try {
+      const user = await authService.refreshUser(req.user.id);
+      const { accessToken, refreshToken } = generateTokens(user);
+      setAuthCookies(res, accessToken, refreshToken);
 
-  res.json({
-    isAuthenticated: true,
-    user,
-  });
-}));
+      res.json({
+        message: 'Токены обновлены',
+        user: {
+          id: user.id,
+          login: user.login,
+          role: user.role,
+        },
+      });
+    } catch (err) {
+      clearAuthCookies(res);
+      throw err;
+    }
+  })
+);
+
+router.get(
+  '/check-auth',
+  passport.authenticate('jwt', { session: false }),
+  asyncHandler(async (req, res) => {
+    const user = await authService.checkAuth(req.user.id);
+    if (!user) {
+      clearAuthCookies(res);
+      return res.json({ isAuthenticated: false, user: null });
+    }
+
+    res.json({
+      isAuthenticated: true,
+      user,
+    });
+  })
+);
 
 router.post('/logout', (req, res) => {
   clearAuthCookies(res);

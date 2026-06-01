@@ -1,13 +1,14 @@
 const express = require('express');
 const asyncHandler = require('../utils/asyncHandler');
 const switchService = require('../services/switch_service');
-const { authenticateToken, requireRole } = require('../middleware/auth');
+const passport = require('../middleware/passport');
+const { requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
 router.get(
   '/api/admin/switches',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const switches = await switchService.getAllForAdmin();
@@ -17,7 +18,7 @@ router.get(
 
 router.get(
   '/api/admin/switches/:id',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const switchId = parseInt(req.params.id, 10);
@@ -28,7 +29,7 @@ router.get(
 
 router.post(
   '/api/admin/switches',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const created = await switchService.createSwitch(req.body);
@@ -42,7 +43,7 @@ router.post(
 
 router.put(
   '/api/admin/switches/:id',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const switchId = parseInt(req.params.id, 10);
@@ -57,7 +58,7 @@ router.put(
 
 router.delete(
   '/api/admin/switches/:id',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const switchId = parseInt(req.params.id, 10);

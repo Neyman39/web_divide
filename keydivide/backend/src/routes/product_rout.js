@@ -1,7 +1,8 @@
 const express = require('express');
 const asyncHandler = require('../utils/asyncHandler');
 const productService = require('../services/product_service');
-const { authenticateToken, requireRole } = require('../middleware/auth');
+const passport = require('../middleware/passport');
+const { requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -22,14 +23,14 @@ router.get('/api/products/:id/switches', asyncHandler(async (req, res) => {
   res.json(switches);
 }));
 
-router.get('/api/switches', authenticateToken, asyncHandler(async (req, res) => {
+router.get('/api/switches', passport.authenticate('jwt', { session: false }), asyncHandler(async (req, res) => {
   const data = await productService.getAllSwitches();
   res.json({ success: true, data });
 }));
 
 router.post(
   '/api/products',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const product = await productService.createProduct(req.body);
@@ -43,7 +44,7 @@ router.post(
 
 router.get(
   '/api/admin/products',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const products = await productService.getAllProducts();
@@ -53,7 +54,7 @@ router.get(
 
 router.get(
   '/api/admin/products/:id',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const productId = parseInt(req.params.id, 10);
@@ -64,7 +65,7 @@ router.get(
 
 router.post(
   '/api/admin/products',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const product = await productService.createProduct(req.body);
@@ -78,7 +79,7 @@ router.post(
 
 router.put(
   '/api/admin/products/:id',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const productId = parseInt(req.params.id, 10);
@@ -93,7 +94,7 @@ router.put(
 
 router.delete(
   '/api/admin/products/:id',
-  authenticateToken,
+  passport.authenticate('jwt', { session: false }),
   requireRole('admin'),
   asyncHandler(async (req, res) => {
     const productId = parseInt(req.params.id, 10);

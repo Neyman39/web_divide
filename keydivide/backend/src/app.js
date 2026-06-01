@@ -4,6 +4,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const swaggerUi = require('swagger-ui-express');
 const openapiSpec = require('../apidoc.json'); // Убедитесь, что путь верный
+const passport = require('./middleware/passport');
 
 const authRoutes = require('./routes/auth_rout');
 const productRoutes = require('./routes/product_rout');
@@ -21,6 +22,7 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, '../..')));
 
 // Swagger
